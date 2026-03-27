@@ -1,268 +1,108 @@
 "use client";
 
-import { useRef, useEffect, Suspense, useMemo } from "react";
-import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
-import {
-  TextureLoader,
-  ShaderMaterial,
-  DoubleSide,
-  Fog,
-  Vector2,
-  AdditiveBlending,
-} from "three";
-import { useScroll } from "framer-motion";
-import {
-  EffectComposer,
-  Bloom,
-  ChromaticAberration,
-  Vignette,
-} from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
+import { useRef, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const IMG = `${BASE}/images/generated/glacier-final-1.jpg`;
 
-/* ─── Depth layer shader — masks a vertical band with soft edges ─── */
-const layerVertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
+/*
+  6 layers in CSS 3D space using perspective + translateZ.
+  Each layer is the full image, masked to a vertical depth band.
+  Deeper layers (negative Z) move less with parallax.
+  Fog cards sit between image layers.
+*/
 
-const layerFragmentShader = `
-  uniform sampler2D uTexture;
-  uniform float uMaskTop;
-  uniform float uMaskBottom;
-  uniform float uFeather;
-  uniform float uBrightness;
-
-  varying vec2 vUv;
-
-  void main() {
-    vec4 tex = texture2D(uTexture, vUv);
-
-    // Vertical mask — visible between maskBottom and maskTop (UV space, 0=bottom 1=top)
-    float maskTop = smoothstep(uMaskTop + uFeather, uMaskTop, vUv.y);
-    float maskBottom = smoothstep(uMaskBottom - uFeather, uMaskBottom, vUv.y);
-    float mask = maskTop * maskBottom;
-
-    tex.rgb *= uBrightness;
-    tex.a = mask;
-
-    gl_FragColor = tex;
-  }
-`;
-
-/* ─── Single depth layer plane ─── */
-function DepthLayer({
-  z,
-  maskTop,
-  maskBottom,
-  feather,
-  brightness,
-  texture,
-}: {
-  z: number;
-  maskTop: number;
-  maskBottom: number;
-  feather: number;
-  brightness: number;
-  texture: any;
-}) {
-  const matRef = useRef<ShaderMaterial>(null);
-
-  const uniforms = useMemo(
-    () => ({
-      uTexture: { value: texture },
-      uMaskTop: { value: maskTop },
-      uMaskBottom: { value: maskBottom },
-      uFeather: { value: feather },
-      uBrightness: { value: brightness },
-    }),
-    [texture, maskTop, maskBottom, feather, brightness]
-  );
-
-  return (
-    <mesh position={[0, 0, z]} rotation={[0, 0, 0]}>
-      <planeGeometry args={[8.5, 11]} />
-      <shaderMaterial
-        ref={matRef}
-        vertexShader={layerVertexShader}
-        fragmentShader={layerFragmentShader}
-        uniforms={uniforms}
-        transparent
-        side={DoubleSide}
-        depthWrite={false}
-      />
-    </mesh>
-  );
+interface LayerConfig {
+  id: string;
+  type: "image" | "fog";
+  z: number; // translateZ depth
+  maskTop: string; // % from top where visible starts
+  maskBottom: string; // % from top where visible ends
+  feather: string; // gradient feather size
+  parallaxMultiplier: number; // mouse movement multiplier
+  scrollMultiplier: number; // scroll movement multiplier
+  opacity?: number;
 }
 
-/* ─── Fog card ─── */
-function FogCard({
-  z,
-  y,
-  opacity,
-  drift,
-  width,
-  height,
-}: {
-  z: number;
-  y: number;
-  opacity: number;
-  drift: number;
-  width?: number;
-  height?: number;
-}) {
-  const ref = useRef<any>(null);
+const layers: LayerConfig[] = [
+  // Layer 1: Sky (furthest back)
+  {
+    id: "sky",
+    type: "image",
+    z: -120,
+    maskTop: "0%",
+    maskBottom: "45%",
+    feather: "8%",
+    parallaxMultiplier: 0.3,
+    scrollMultiplier: 0.1,
+  },
+  // Fog between sky and mountain
+  {
+    id: "fog-1",
+    type: "fog",
+    z: -90,
+    maskTop: "25%",
+    maskBottom: "55%",
+    feather: "12%",
+    parallaxMultiplier: 0.4,
+    scrollMultiplier: 0.15,
+    opacity: 0.25,
+  },
+  // Layer 2: Mountain peak
+  {
+    id: "mountain",
+    type: "image",
+    z: -60,
+    maskTop: "28%",
+    maskBottom: "62%",
+    feather: "6%",
+    parallaxMultiplier: 0.55,
+    scrollMultiplier: 0.22,
+  },
+  // Fog between mountain and midground
+  {
+    id: "fog-2",
+    type: "fog",
+    z: -30,
+    maskTop: "45%",
+    maskBottom: "75%",
+    feather: "10%",
+    parallaxMultiplier: 0.7,
+    scrollMultiplier: 0.32,
+    opacity: 0.4,
+  },
+  // Layer 3: Mid terrain
+  {
+    id: "midground",
+    type: "image",
+    z: 0,
+    maskTop: "52%",
+    maskBottom: "82%",
+    feather: "6%",
+    parallaxMultiplier: 0.85,
+    scrollMultiplier: 0.42,
+  },
+  // Layer 4: Foreground (closest)
+  {
+    id: "foreground",
+    type: "image",
+    z: 60,
+    maskTop: "72%",
+    maskBottom: "100%",
+    feather: "5%",
+    parallaxMultiplier: 1.0,
+    scrollMultiplier: 0.55,
+  },
+];
 
-  useFrame((state) => {
-    if (ref.current) {
-      ref.current.position.x =
-        Math.sin(state.clock.elapsedTime * drift + z) * 0.5;
-      ref.current.material.opacity =
-        opacity + Math.sin(state.clock.elapsedTime * drift * 0.8) * 0.05;
-    }
-  });
-
-  return (
-    <mesh ref={ref} position={[0, y, z]}>
-      <planeGeometry args={[width || 14, height || 4]} />
-      <meshBasicMaterial
-        color="#181919"
-        transparent
-        opacity={opacity}
-        depthWrite={false}
-      />
-    </mesh>
-  );
-}
-
-/* ─── Scene environment ─── */
-function SceneEnv() {
-  const { scene } = useThree();
-  useMemo(() => {
-    scene.fog = new Fog("#181919", 6, 16);
-  }, [scene]);
-  return null;
-}
-
-/* ─── Camera with mouse orbit + scroll ─── */
-function OrbitalCamera({
-  mouseRef,
-  scrollRef,
-}: {
-  mouseRef: React.MutableRefObject<{ x: number; y: number }>;
-  scrollRef: React.MutableRefObject<number>;
-}) {
-  const smooth = useRef({ x: 0, y: 0 });
-
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    const sp = scrollRef.current;
-
-    // Smooth mouse
-    smooth.current.x += (mouseRef.current.x - smooth.current.x) * 0.03;
-    smooth.current.y += (mouseRef.current.y - smooth.current.y) * 0.03;
-
-    const mx = smooth.current.x;
-    const my = smooth.current.y;
-
-    // Camera orbits around the scene center
-    state.camera.position.x = mx * 1.2 + Math.sin(t * 0.025) * 0.06;
-    state.camera.position.y = my * -0.6 + Math.sin(t * 0.02) * 0.04;
-    state.camera.position.z = 5.5 + sp * -2.0;
-
-    // Look toward center with slight mouse influence
-    state.camera.lookAt(mx * 0.3, my * -0.1, -2);
-  });
-
-  return null;
-}
-
-/* ─── All layers assembled ─── */
-function GlacierLayers() {
-  const imgPath = `${BASE}/images/generated/glacier-final-1.jpg`;
-  const texture = useLoader(TextureLoader, imgPath);
-
-  /*
-    Image UV layout (0=bottom, 1=top):
-    1.0 ─── top of sky
-    0.85 ── sky/cloud boundary
-    0.65 ── mountain peak zone
-    0.45 ── mid terrain / base of mountain
-    0.25 ── foreground terrain
-    0.0 ─── bottom of image (dark foreground)
-
-    Layer 1 (furthest back): Sky — top portion
-    Layer 2: Mountain peak — upper-mid
-    Layer 3: Mid terrain — lower-mid
-    Layer 4 (closest): Foreground — bottom portion
-
-    Each layer shows the FULL image but masks to reveal only its band.
-    Behind each front layer, the back layers fill in the gap.
-  */
-
-  return (
-    <>
-      {/* Layer 1: Sky + atmosphere (furthest back, z=-4) */}
-      <DepthLayer
-        z={-4}
-        maskTop={1.0}
-        maskBottom={0.6}
-        feather={0.08}
-        brightness={1.0}
-        texture={texture}
-      />
-
-      {/* Fog card between sky and mountain */}
-      <FogCard z={-3.2} y={-0.8} opacity={0.2} drift={0.025} width={16} height={5} />
-
-      {/* Layer 2: Mountain peak (z=-2) */}
-      <DepthLayer
-        z={-2}
-        maskTop={0.72}
-        maskBottom={0.38}
-        feather={0.06}
-        brightness={1.05}
-        texture={texture}
-      />
-
-      {/* Fog card between mountain and midground */}
-      <FogCard z={-1.0} y={-1.5} opacity={0.35} drift={0.035} width={15} height={4} />
-
-      {/* Layer 3: Mid terrain (z=0) */}
-      <DepthLayer
-        z={0}
-        maskTop={0.48}
-        maskBottom={0.18}
-        feather={0.06}
-        brightness={0.95}
-        texture={texture}
-      />
-
-      {/* Fog card in foreground */}
-      <FogCard z={0.8} y={-2.0} opacity={0.55} drift={0.04} width={14} height={3.5} />
-
-      {/* Layer 4: Foreground (closest, z=1.5) */}
-      <DepthLayer
-        z={1.5}
-        maskTop={0.28}
-        maskBottom={0.0}
-        feather={0.05}
-        brightness={0.85}
-        texture={texture}
-      />
-    </>
-  );
-}
-
-/* ─── Main exported component ─── */
 export default function GlacierScene() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
-  const scrollRef = useRef(0);
+  const smoothRef = useRef({ x: 0, y: 0 });
+  const scrollVal = useRef(0);
+  const layerEls = useRef<(HTMLDivElement | null)[]>([]);
+  const rafRef = useRef(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -270,57 +110,125 @@ export default function GlacierScene() {
   });
 
   scrollYProgress.on("change", (v) => {
-    scrollRef.current = v;
+    scrollVal.current = v;
   });
 
   useEffect(() => {
-    const handle = (e: MouseEvent) => {
+    const handleMouse = (e: MouseEvent) => {
       mouseRef.current = {
         x: (e.clientX / window.innerWidth - 0.5) * 2,
         y: (e.clientY / window.innerHeight - 0.5) * 2,
       };
     };
-    window.addEventListener("mousemove", handle);
-    return () => window.removeEventListener("mousemove", handle);
+
+    const animate = () => {
+      // Smooth lerp
+      smoothRef.current.x +=
+        (mouseRef.current.x - smoothRef.current.x) * 0.035;
+      smoothRef.current.y +=
+        (mouseRef.current.y - smoothRef.current.y) * 0.035;
+
+      const mx = smoothRef.current.x;
+      const my = smoothRef.current.y;
+      const sp = scrollVal.current;
+
+      layers.forEach((layer, i) => {
+        const el = layerEls.current[i];
+        if (!el) return;
+
+        const px = mx * layer.parallaxMultiplier * -25;
+        const py = my * layer.parallaxMultiplier * -15;
+        const sy = sp * layer.scrollMultiplier * 200;
+
+        el.style.transform = `translateZ(${layer.z}px) translate(${px}px, ${py + sy}px)`;
+      });
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("mousemove", handleMouse);
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouse);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 z-0">
-      <Canvas
-        camera={{ position: [0, 0, 5.5], fov: 50, near: 0.1, far: 30 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: false }}
-        style={{ background: "#181919" }}
-      >
-        <Suspense fallback={null}>
-          <SceneEnv />
-          <OrbitalCamera mouseRef={mouseRef} scrollRef={scrollRef} />
-
-          <GlacierLayers />
-
-          <EffectComposer>
-            <Bloom
-              intensity={0.12}
-              luminanceThreshold={0.75}
-              luminanceSmoothing={0.5}
-              blendFunction={BlendFunction.ADD}
-            />
-            <ChromaticAberration
-              offset={new Vector2(0.0005, 0.0005)}
-              blendFunction={BlendFunction.NORMAL}
-            />
-            <Vignette
-              offset={0.25}
-              darkness={0.65}
-              blendFunction={BlendFunction.NORMAL}
-            />
-          </EffectComposer>
-        </Suspense>
-      </Canvas>
-
-      {/* Bottom fade to charcoal */}
+    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden">
+      {/* 3D perspective container */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-[20%] z-10 pointer-events-none"
+        className="absolute inset-0"
+        style={{
+          perspective: "800px",
+          perspectiveOrigin: "50% 40%",
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          {layers.map((layer, i) => (
+            <div
+              key={layer.id}
+              ref={(el) => {
+                layerEls.current[i] = el;
+              }}
+              className="absolute -inset-[15%] will-change-transform"
+              style={{
+                transform: `translateZ(${layer.z}px)`,
+                zIndex: i,
+              }}
+            >
+              {layer.type === "image" ? (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${IMG})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center top",
+                    maskImage: `linear-gradient(to bottom,
+                      transparent ${layer.maskTop},
+                      black calc(${layer.maskTop} + ${layer.feather}),
+                      black calc(${layer.maskBottom} - ${layer.feather}),
+                      transparent ${layer.maskBottom})`,
+                    WebkitMaskImage: `linear-gradient(to bottom,
+                      transparent ${layer.maskTop},
+                      black calc(${layer.maskTop} + ${layer.feather}),
+                      black calc(${layer.maskBottom} - ${layer.feather}),
+                      transparent ${layer.maskBottom})`,
+                  }}
+                />
+              ) : (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(to bottom,
+                      transparent ${layer.maskTop},
+                      rgba(24,25,25,${layer.opacity}) calc(${layer.maskTop} + ${layer.feather}),
+                      rgba(24,25,25,${layer.opacity}) calc(${layer.maskBottom} - ${layer.feather}),
+                      transparent ${layer.maskBottom})`,
+                  }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Vignette */}
+      <div
+        className="absolute inset-0 z-20 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 35%, transparent 30%, rgba(24,25,25,0.55) 100%)",
+        }}
+      />
+
+      {/* Bottom fade */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-[18%] z-20 pointer-events-none"
         style={{
           background: "linear-gradient(to bottom, transparent, #181919)",
         }}
