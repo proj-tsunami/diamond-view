@@ -18,6 +18,7 @@ import MagneticButton from "@/components/MagneticButton";
 import ParallaxLayer from "@/components/ParallaxLayer";
 import TiltCard from "@/components/TiltCard";
 import FloatingElement from "@/components/FloatingElement";
+import GlacierScene from "@/components/GlacierScene";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -143,33 +144,27 @@ function Hero() {
   return (
     <section
       ref={ref}
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative h-[130vh] flex items-center justify-center overflow-hidden bg-[#181919]"
     >
-      {/* Parallax background with hero image */}
-      <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${BASE}/images/generated/hero.jpg)` }}
-        />
-        <div className="absolute inset-0 bg-charcoal/60" />
-      </motion.div>
+      {/* 3D Glacier landscape */}
+      <GlacierScene />
 
       <motion.div
         style={{ opacity, y, scale }}
-        className="relative z-10 text-center px-6"
+        className="relative z-20 text-center px-6"
       >
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: "60px" }}
           transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="h-[1px] bg-cream/20 mx-auto mb-10"
+          className="h-[1px] bg-cream/15 mx-auto mb-10"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-cream/35 text-[11px] tracking-[0.5em] uppercase mb-10"
+          className="text-cream/30 text-[11px] tracking-[0.5em] uppercase mb-10"
         >
           Creative Production Studio
         </motion.p>
@@ -183,7 +178,7 @@ function Hero() {
               delay: 0.7,
               ease: [0.25, 0.1, 0.25, 1],
             }}
-            className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold leading-[0.85]"
+            className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold"
           >
             Diamond
           </motion.h1>
@@ -197,7 +192,7 @@ function Hero() {
               delay: 0.85,
               ease: [0.25, 0.1, 0.25, 1],
             }}
-            className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light leading-[0.85]"
+            className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light"
           >
             View
           </motion.h1>
@@ -207,7 +202,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.5 }}
-          className="text-cream/25 text-sm md:text-base font-light mt-12 tracking-[0.2em]"
+          className="text-cream/20 text-sm md:text-base font-light mt-12 tracking-[0.2em]"
         >
           Feeling in Motion
         </motion.p>
@@ -827,6 +822,8 @@ export default function HomeClient() {
     <SmoothScroll>
       <Navbar />
       <Hero />
+      {/* Dark to cream transition */}
+      <div className="h-40 bg-gradient-to-b from-[#181919] via-[#181919]/50 to-[#F4F3F1]" />
       <IntroStatement />
       <Portfolio />
       <Stats />
