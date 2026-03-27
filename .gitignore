@@ -33,6 +33,12 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# brand source files (keep local, not in repo)
+/DV_Brand_Media/
+
+# generation scripts output tracking
+/scripts/__pycache__/
+
 # vercel
 .vercel
 
