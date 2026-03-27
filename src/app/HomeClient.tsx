@@ -561,7 +561,7 @@ function Process() {
   return (
     <section id="process" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
       {/* Grid overlay — dark lines on light bg */}
-      <GridOverlay color="rgba(24,25,25,0.03)" />
+      <GridOverlay color="rgba(24,25,25,0.03)" crossColor="rgba(24,25,25,0.05)" />
 
       {/* Depth layers */}
       <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-cream-dark/30 to-transparent" />
