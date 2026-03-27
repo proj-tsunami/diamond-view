@@ -35,12 +35,18 @@ export default function DemoReel() {
             }}
           />
 
-          {/* Poster image */}
-          <img
-            src={`${BASE}/images/generated/hero.jpg`}
-            alt="Diamond View Demo Reel"
+          {/* Auto-looping video — muted, no controls */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster={`${BASE}/images/generated/hero.jpg`}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
+          >
+            {/* Replace src with your actual reel file */}
+            <source src={`${BASE}/video/demo-reel.mp4`} type="video/mp4" />
+          </video>
 
           {/* Subtle dark overlay */}
           <div className="absolute inset-0 bg-charcoal/30 group-hover:bg-charcoal/20 transition-colors duration-500" />
