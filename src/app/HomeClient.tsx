@@ -20,6 +20,10 @@ import TiltCard from "@/components/TiltCard";
 import FloatingElement from "@/components/FloatingElement";
 import GlacierScene from "@/components/GlacierScene";
 import SectionDivider from "@/components/SectionDivider";
+import GridOverlay from "@/components/GridOverlay";
+import ChromaticText from "@/components/ChromaticText";
+import CornerMarks from "@/components/CornerMarks";
+import CharReveal from "@/components/CharReveal";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -150,6 +154,12 @@ function Hero() {
       {/* 3D Glacier landscape */}
       <GlacierScene />
 
+      {/* Geometric grid overlay */}
+      <GridOverlay className="z-10" />
+
+      {/* Corner registration marks */}
+      <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
+
       <motion.div
         style={{ opacity, y, scale }}
         className="relative z-20 text-center px-6"
@@ -170,34 +180,20 @@ function Hero() {
           Creative Production Studio
         </motion.p>
 
-        <div className="overflow-hidden">
-          <motion.h1
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.7,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-            className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold"
-          >
-            Diamond
-          </motion.h1>
-        </div>
-        <div className="overflow-hidden">
-          <motion.h1
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.85,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-            className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light"
-          >
-            View
-          </motion.h1>
-        </div>
+        <ChromaticText
+          as="h1"
+          className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold"
+          intensity={3}
+        >
+          Diamond
+        </ChromaticText>
+        <ChromaticText
+          as="h1"
+          className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light"
+          intensity={3}
+        >
+          View
+        </ChromaticText>
 
         <motion.p
           initial={{ opacity: 0, y: 10 }}
@@ -444,6 +440,10 @@ function ParallaxBreak() {
 function Services() {
   return (
     <section id="capabilities" className="py-20 md:py-32 bg-charcoal relative overflow-hidden">
+      {/* Grid overlay */}
+      <GridOverlay />
+      <CornerMarks color="rgba(244,243,241,0.05)" size={20} />
+
       {/* Background depth elements */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,_rgba(244,243,241,0.02)_0%,_transparent_60%)]" />
 
@@ -558,6 +558,9 @@ function Services() {
 function Process() {
   return (
     <section id="process" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
+      {/* Grid overlay — dark lines on light bg */}
+      <GridOverlay color="rgba(24,25,25,0.03)" crossColor="rgba(24,25,25,0.04)" />
+
       {/* Depth layers */}
       <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-cream-dark/30 to-transparent" />
 
@@ -659,6 +662,9 @@ function Team() {
 
   return (
     <section ref={ref} className="py-20 md:py-32 bg-charcoal overflow-hidden relative">
+      {/* Grid overlay */}
+      <GridOverlay />
+
       {/* Parallax depth layer */}
       <motion.div
         style={{ y: bgY }}

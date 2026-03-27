@@ -108,3 +108,16 @@ a, button {
   background: var(--charcoal);
   opacity: 0.2;
 }
+
+/* Thin geometric accent line */
+.geo-line {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.08;
+}
+
+.geo-line-v {
+  width: 1px;
+  background: currentColor;
+  opacity: 0.08;
+}
