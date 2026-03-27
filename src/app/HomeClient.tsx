@@ -20,6 +20,7 @@ import TiltCard from "@/components/TiltCard";
 import FloatingElement from "@/components/FloatingElement";
 import GlacierScene from "@/components/GlacierScene";
 import SectionDivider from "@/components/SectionDivider";
+import DemoReel from "@/components/DemoReel";
 import GridOverlay from "@/components/GridOverlay";
 import ChromaticText from "@/components/ChromaticText";
 import CornerMarks from "@/components/CornerMarks";
@@ -559,7 +560,7 @@ function Process() {
   return (
     <section id="process" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
       {/* Grid overlay — dark lines on light bg */}
-      <GridOverlay color="rgba(24,25,25,0.03)" crossColor="rgba(24,25,25,0.04)" />
+      <GridOverlay color="rgba(24,25,25,0.03)" />
 
       {/* Depth layers */}
       <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-cream-dark/30 to-transparent" />
@@ -829,6 +830,7 @@ export default function HomeClient() {
     <SmoothScroll>
       <Navbar />
       <Hero />
+      <DemoReel />
       <SectionDivider />
       <IntroStatement />
       <Portfolio />
