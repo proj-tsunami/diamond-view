@@ -45,23 +45,28 @@ body {
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  line-height: 1.6;
 }
 
 /* Headings default to Owners */
 h1, h2, h3 {
   font-family: var(--font-heading), Arial, Helvetica, sans-serif;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
 }
 
-/* Display headings - Owners Wide, uppercase */
+/* Display headings - Owners Wide, uppercase, tight */
 .font-display {
   font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
+  line-height: 0.88;
 }
 
 /* Heading font - Owners */
 .font-heading {
   font-family: var(--font-owners), Arial, Helvetica, sans-serif;
+  letter-spacing: -0.015em;
 }
 
 /* Body font - Owners (standard, legible) */

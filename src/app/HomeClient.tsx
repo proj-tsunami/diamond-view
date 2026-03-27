@@ -136,9 +136,9 @@ function Hero() {
     offset: ["start start", "end start"],
   });
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 250]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
 
   return (
     <section
@@ -243,7 +243,7 @@ function Hero() {
 
 function IntroStatement() {
   return (
-    <section className="py-40 md:py-56 px-6 md:px-12 relative overflow-hidden">
+    <section className="py-24 md:py-36 px-6 md:px-12 relative overflow-hidden">
       {/* Floating decorative elements */}
       <FloatingElement
         className="absolute top-20 left-[8%] w-[1px] h-32 bg-charcoal/[0.04] hidden md:block"
@@ -262,7 +262,7 @@ function IntroStatement() {
         <div className="w-full h-full" />
       </FloatingElement>
 
-      <ParallaxLayer speed={-0.15} className="absolute top-10 right-[5%] hidden md:block">
+      <ParallaxLayer speed={-0.35} className="absolute top-10 right-[5%] hidden md:block">
         <div className="w-24 h-[1px] bg-charcoal/[0.06] rotate-45" />
       </ParallaxLayer>
 
@@ -275,7 +275,7 @@ function IntroStatement() {
 
         <ScrollRevealText
           as="h2"
-          className="text-charcoal font-heading text-3xl md:text-5xl lg:text-6xl font-medium leading-[1.15] tracking-tight text-center"
+          className="text-charcoal font-heading text-3xl md:text-5xl lg:text-6xl font-medium leading-[1.05] tracking-tight text-center"
         >
           An award-winning creative studio exploring what it means to create feeling through moving image — blending organic creativity with innovation in technology.
         </ScrollRevealText>
@@ -381,7 +381,7 @@ function Stats() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-24 md:py-32 border-y border-charcoal/8">
+    <section ref={ref} className="py-16 md:py-24 border-y border-charcoal/8">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, i) => (
@@ -418,7 +418,7 @@ function ParallaxBreak() {
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-25%", "25%"]);
   const textOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
   return (
@@ -447,16 +447,16 @@ function ParallaxBreak() {
 
 function Services() {
   return (
-    <section id="capabilities" className="py-32 md:py-48 bg-charcoal relative overflow-hidden">
+    <section id="capabilities" className="py-20 md:py-32 bg-charcoal relative overflow-hidden">
       {/* Background depth elements */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,_rgba(244,243,241,0.02)_0%,_transparent_60%)]" />
 
       {/* Parallax decorative lines */}
-      <ParallaxLayer speed={0.2} className="absolute top-[15%] left-[5%] hidden md:block">
-        <div className="w-[1px] h-48 bg-cream/[0.04]" />
+      <ParallaxLayer speed={0.4} className="absolute top-[15%] left-[5%] hidden md:block">
+        <div className="w-[1px] h-48 bg-cream/[0.05]" />
       </ParallaxLayer>
-      <ParallaxLayer speed={-0.3} className="absolute bottom-[20%] right-[8%] hidden md:block">
-        <div className="w-20 h-20 border border-cream/[0.03] rounded-full" />
+      <ParallaxLayer speed={-0.5} className="absolute bottom-[20%] right-[8%] hidden md:block">
+        <div className="w-20 h-20 border border-cream/[0.04] rounded-full" />
       </ParallaxLayer>
       <FloatingElement
         className="absolute top-[40%] right-[3%] hidden md:block"
@@ -477,7 +477,7 @@ function Services() {
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         {/* Header — asymmetric */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 mb-24 md:mb-36">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 mb-16 md:mb-24">
           <div className="md:col-span-5">
             <AnimatedSection>
               <p className="text-[10px] tracking-[0.3em] uppercase text-cream/20 mb-6">
@@ -561,15 +561,15 @@ function Services() {
 
 function Process() {
   return (
-    <section id="process" className="py-32 md:py-48 px-6 md:px-12 relative overflow-hidden">
+    <section id="process" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
       {/* Depth layers */}
       <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-cream-dark/30 to-transparent" />
 
-      <ParallaxLayer speed={0.15} className="absolute top-[10%] right-[6%] hidden md:block">
-        <div className="w-32 h-[1px] bg-charcoal/[0.05]" />
+      <ParallaxLayer speed={0.35} className="absolute top-[10%] right-[6%] hidden md:block">
+        <div className="w-32 h-[1px] bg-charcoal/[0.06]" />
       </ParallaxLayer>
-      <ParallaxLayer speed={-0.2} className="absolute bottom-[25%] left-[4%] hidden md:block">
-        <div className="w-12 h-12 border border-charcoal/[0.04] rotate-45" />
+      <ParallaxLayer speed={-0.4} className="absolute bottom-[25%] left-[4%] hidden md:block">
+        <div className="w-12 h-12 border border-charcoal/[0.05] rotate-45" />
       </ParallaxLayer>
       <FloatingElement
         className="absolute top-[50%] left-[8%] hidden md:block"
@@ -589,7 +589,7 @@ function Process() {
 
         <ScrollRevealText
           as="h2"
-          className="text-charcoal font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-24 md:mb-36 max-w-3xl"
+          className="text-charcoal font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-16 md:mb-24 max-w-3xl"
         >
           Four steps to extraordinary.
         </ScrollRevealText>
@@ -662,7 +662,7 @@ function Team() {
   const bgY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
-    <section ref={ref} className="py-32 md:py-48 bg-charcoal overflow-hidden relative">
+    <section ref={ref} className="py-20 md:py-32 bg-charcoal overflow-hidden relative">
       {/* Parallax depth layer */}
       <motion.div
         style={{ y: bgY }}
@@ -738,7 +738,7 @@ function Contact() {
   const lineWidth = useTransform(scrollYProgress, [0.3, 0.8], ["0%", "100%"]);
 
   return (
-    <section id="contact" ref={ref} className="py-32 md:py-48 px-6 md:px-12 relative">
+    <section id="contact" ref={ref} className="py-20 md:py-32 px-6 md:px-12 relative">
       <div className="max-w-7xl mx-auto">
         {/* Animated divider */}
         <motion.div
@@ -797,7 +797,7 @@ function Contact() {
         </div>
 
         {/* Footer */}
-        <div className="mt-40 pt-8 border-t border-charcoal/6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-24 pt-6 border-t border-charcoal/6 flex flex-col md:flex-row items-center justify-between gap-4">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
