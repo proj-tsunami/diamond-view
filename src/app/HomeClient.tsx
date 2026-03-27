@@ -21,6 +21,7 @@ import FloatingElement from "@/components/FloatingElement";
 import GlacierScene from "@/components/GlacierScene";
 import SectionDivider from "@/components/SectionDivider";
 import DemoReel from "@/components/DemoReel";
+import SideMargins from "@/components/SideMargins";
 import GridOverlay from "@/components/GridOverlay";
 import ChromaticText from "@/components/ChromaticText";
 import CornerMarks from "@/components/CornerMarks";
@@ -829,6 +830,7 @@ export default function HomeClient() {
   return (
     <SmoothScroll>
       <Navbar />
+      <SideMargins />
       <Hero />
       <DemoReel />
       <SectionDivider />

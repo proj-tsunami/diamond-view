@@ -1,21 +1,20 @@
 "use client";
 
 /*
-  Beveled glass grid overlay — 1:2 ratio cells with subtle
-  embossed highlight effect. Top-left edges catch light,
-  bottom-right edges are softer shadow. Like frosted glass panels.
+  Beveled glass grid — 1:1 large squares with chromatic
+  aberration glow on the embossed highlights. Halation effect
+  via layered colored glows offset slightly.
 */
 
 export default function GridOverlay({
-  color = "rgba(255,255,255,0.03)",
+  color = "rgba(255,255,255,0.025)",
   className = "",
 }: {
   color?: string;
   className?: string;
 }) {
-  // 1:2 ratio grid — 6 columns, 3 rows (each cell is wider than tall)
-  const cols = 6;
-  const rows = 3;
+  const cols = 4;
+  const rows = 4;
 
   return (
     <div className={`absolute inset-0 pointer-events-none overflow-hidden ${className}`}>
@@ -28,7 +27,7 @@ export default function GridOverlay({
         backgroundSize: `${100 / cols}% ${100 / rows}%`,
       }} />
 
-      {/* Beveled glass cells — each cell has an embossed highlight */}
+      {/* Beveled cells with chromatic aberration highlights */}
       {Array.from({ length: cols * rows }).map((_, i) => {
         const col = i % cols;
         const row = Math.floor(i / cols);
@@ -44,64 +43,97 @@ export default function GridOverlay({
               height: `${100 / rows}%`,
             }}
           >
-            {/* Top edge — bright highlight (light catching top bevel) */}
+            {/* ── Top edge bevel ── */}
+            {/* White core highlight */}
             <div
-              className="absolute top-0 left-[2px] right-[2px] h-[1px]"
+              className="absolute top-0 left-[4px] right-[4px] h-[1px]"
               style={{
-                background: "linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.06) 70%, transparent 95%)",
+                background: "linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.07) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.07) 75%, transparent 95%)",
+              }}
+            />
+            {/* Red channel — offset up-left (chromatic aberration) */}
+            <div
+              className="absolute left-[4px] right-[4px] h-[1px]"
+              style={{
+                top: "-1px",
+                background: "linear-gradient(90deg, transparent 10%, rgba(255,100,100,0.04) 30%, rgba(255,120,100,0.06) 50%, rgba(255,100,100,0.04) 70%, transparent 90%)",
+                filter: "blur(1px)",
+              }}
+            />
+            {/* Blue channel — offset down-right */}
+            <div
+              className="absolute left-[4px] right-[4px] h-[1px]"
+              style={{
+                top: "1px",
+                background: "linear-gradient(90deg, transparent 10%, rgba(100,100,255,0.04) 30%, rgba(100,120,255,0.06) 50%, rgba(100,100,255,0.04) 70%, transparent 90%)",
+                filter: "blur(1px)",
               }}
             />
 
-            {/* Left edge — medium highlight */}
+            {/* ── Left edge bevel ── */}
             <div
-              className="absolute top-[2px] left-0 bottom-[2px] w-[1px]"
+              className="absolute top-[4px] left-0 bottom-[4px] w-[1px]"
               style={{
-                background: "linear-gradient(180deg, transparent 5%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.05) 70%, transparent 95%)",
+                background: "linear-gradient(180deg, transparent 5%, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.06) 75%, transparent 95%)",
+              }}
+            />
+            {/* Red offset */}
+            <div
+              className="absolute top-[4px] bottom-[4px] w-[1px]"
+              style={{
+                left: "-1px",
+                background: "linear-gradient(180deg, transparent 10%, rgba(255,100,100,0.035) 30%, rgba(255,120,100,0.05) 50%, rgba(255,100,100,0.035) 70%, transparent 90%)",
+                filter: "blur(1px)",
+              }}
+            />
+            {/* Blue offset */}
+            <div
+              className="absolute top-[4px] bottom-[4px] w-[1px]"
+              style={{
+                left: "1px",
+                background: "linear-gradient(180deg, transparent 10%, rgba(100,100,255,0.035) 30%, rgba(100,120,255,0.05) 50%, rgba(100,100,255,0.035) 70%, transparent 90%)",
+                filter: "blur(1px)",
               }}
             />
 
-            {/* Bottom edge — subtle shadow (receding bevel) */}
+            {/* ── Bottom edge — softer ── */}
             <div
-              className="absolute bottom-0 left-[2px] right-[2px] h-[1px]"
+              className="absolute bottom-0 left-[4px] right-[4px] h-[1px]"
               style={{
-                background: "linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.02) 70%, transparent 95%)",
+                background: "linear-gradient(90deg, transparent 10%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.02) 70%, transparent 90%)",
               }}
             />
 
-            {/* Right edge — subtle shadow */}
+            {/* ── Right edge — softer ── */}
             <div
-              className="absolute top-[2px] right-0 bottom-[2px] w-[1px]"
+              className="absolute top-[4px] right-0 bottom-[4px] w-[1px]"
               style={{
-                background: "linear-gradient(180deg, transparent 5%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.02) 70%, transparent 95%)",
+                background: "linear-gradient(180deg, transparent 10%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.02) 70%, transparent 90%)",
               }}
             />
 
-            {/* Corner sheen — top-left brightest */}
+            {/* Corner sheen — top-left with halation glow */}
             <div
-              className="absolute top-0 left-0 w-3 h-3"
+              className="absolute top-0 left-0 w-5 h-5"
               style={{
-                background: "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)",
+                background: "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.07) 0%, transparent 60%)",
               }}
             />
-
-            {/* Corner sheen — top-right */}
             <div
-              className="absolute top-0 right-0 w-2 h-2"
+              className="absolute -top-[1px] -left-[1px] w-4 h-4"
               style={{
-                background: "radial-gradient(circle at 100% 0%, rgba(255,255,255,0.04) 0%, transparent 70%)",
+                background: "radial-gradient(circle at 0% 0%, rgba(200,180,255,0.04) 0%, transparent 60%)",
+                filter: "blur(2px)",
               }}
             />
           </div>
         );
       })}
 
-      {/* Cross marks at intersections */}
-      {Array.from({ length: (cols + 1) * (rows + 1) }).map((_, i) => {
-        const col = i % (cols + 1);
-        const row = Math.floor(i / (cols + 1));
-
-        // Skip edge crosses
-        if (col === 0 || col === cols || row === 0 || row === rows) return null;
+      {/* Cross marks at interior intersections */}
+      {Array.from({ length: (cols - 1) * (rows - 1) }).map((_, i) => {
+        const col = (i % (cols - 1)) + 1;
+        const row = Math.floor(i / (cols - 1)) + 1;
 
         return (
           <div
@@ -113,14 +145,8 @@ export default function GridOverlay({
               transform: "translate(-50%, -50%)",
             }}
           >
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{ width: "6px", height: "1px", background: "rgba(255,255,255,0.06)" }}
-            />
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{ width: "1px", height: "6px", background: "rgba(255,255,255,0.06)" }}
-            />
+            <div style={{ width: "6px", height: "1px", background: "rgba(255,255,255,0.05)", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
+            <div style={{ width: "1px", height: "6px", background: "rgba(255,255,255,0.05)", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
           </div>
         );
       })}
