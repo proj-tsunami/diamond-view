@@ -19,6 +19,8 @@ import ParallaxLayer from "@/components/ParallaxLayer";
 import TiltCard from "@/components/TiltCard";
 import FloatingElement from "@/components/FloatingElement";
 
+const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+
 /* ───────────────────────── DATA ───────────────────────── */
 
 const projects = [
@@ -26,37 +28,37 @@ const projects = [
     title: "Massey Minis",
     category: "Campaign",
     year: "2025",
-    image: "/images/generated/project-01.jpg",
+    image: `${BASE}/images/generated/project-01.jpg`,
   },
   {
     title: "Reliaquest",
     category: "Commercial",
     year: "2025",
-    image: "/images/generated/project-02.jpg",
+    image: `${BASE}/images/generated/project-02.jpg`,
   },
   {
     title: "Publix — Back to School",
     category: "Branded Content",
     year: "2024",
-    image: "/images/generated/project-03.jpg",
+    image: `${BASE}/images/generated/project-03.jpg`,
   },
   {
     title: "&Barr + SCCU",
     category: "Campaign",
     year: "2024",
-    image: "/images/generated/project-04.jpg",
+    image: `${BASE}/images/generated/project-04.jpg`,
   },
   {
     title: "&Barr + Massey Services",
     category: "Commercial",
     year: "2024",
-    image: "/images/generated/project-05.jpg",
+    image: `${BASE}/images/generated/project-05.jpg`,
   },
   {
     title: "Adidas + Bleacher Report",
     category: "Sports / Entertainment",
     year: "2023",
-    image: "/images/generated/project-06.jpg",
+    image: `${BASE}/images/generated/project-06.jpg`,
   },
 ];
 
@@ -147,7 +149,7 @@ function Hero() {
       <motion.div className="absolute inset-0" style={{ scale: bgScale }}>
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/generated/hero.jpg)" }}
+          style={{ backgroundImage: `url(${BASE}/images/generated/hero.jpg)` }}
         />
         <div className="absolute inset-0 bg-charcoal/60" />
       </motion.div>
@@ -424,7 +426,7 @@ function ParallaxBreak() {
       <motion.div style={{ y }} className="absolute inset-0 -top-[20%] -bottom-[20%]">
         <div
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/hero-mural.jpg)" }}
+          style={{ backgroundImage: `url(${BASE}/images/hero-mural.jpg)` }}
         />
         <div className="absolute inset-0 bg-charcoal/40" />
       </motion.div>

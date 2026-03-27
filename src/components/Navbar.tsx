@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
+const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+
 const navLinks = [
   { label: "Work", href: "#work" },
   { label: "Services", href: "#capabilities" },
@@ -41,7 +43,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="#" className="flex items-center gap-3">
             <Image
-              src={scrolled ? "/images/diamond-logo-dark.png" : "/images/diamond-logo-light.png"}
+              src={scrolled ? `${BASE}/images/diamond-logo-dark.png` : `${BASE}/images/diamond-logo-light.png`}
               alt="Diamond View"
               width={32}
               height={32}
