@@ -19,6 +19,7 @@ import ParallaxLayer from "@/components/ParallaxLayer";
 import TiltCard from "@/components/TiltCard";
 import FloatingElement from "@/components/FloatingElement";
 import GlacierScene from "@/components/GlacierScene";
+import SectionDivider from "@/components/SectionDivider";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -822,8 +823,7 @@ export default function HomeClient() {
     <SmoothScroll>
       <Navbar />
       <Hero />
-      {/* Dark to cream transition */}
-      <div className="h-40 bg-gradient-to-b from-[#181919] via-[#181919]/50 to-[#F4F3F1]" />
+      <SectionDivider from="#181919" to="#F4F3F1" />
       <IntroStatement />
       <Portfolio />
       <Stats />
