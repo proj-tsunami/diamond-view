@@ -823,7 +823,7 @@ export default function HomeClient() {
     <SmoothScroll>
       <Navbar />
       <Hero />
-      <SectionDivider from="#181919" to="#F4F3F1" />
+      <SectionDivider />
       <IntroStatement />
       <Portfolio />
       <Stats />
