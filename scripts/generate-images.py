@@ -6,7 +6,18 @@ import os
 import urllib.request
 import sys
 
-os.environ["REPLICATE_API_TOKEN"] = "REPLICATE_TOKEN_REMOVED"
+# Load token from .env file — never hardcode API keys
+from pathlib import Path
+env_path = Path(__file__).parent.parent / ".env"
+if env_path.exists():
+    for line in env_path.read_text().splitlines():
+        if line.startswith("REPLICATE_API_TOKEN="):
+            os.environ["REPLICATE_API_TOKEN"] = line.split("=", 1)[1].strip()
+            break
+
+if not os.environ.get("REPLICATE_API_TOKEN"):
+    print("Error: Set REPLICATE_API_TOKEN in .env file")
+    sys.exit(1)
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "images", "generated")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
