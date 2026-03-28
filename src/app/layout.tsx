@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import PageTransition from "@/components/PageTransition";
 
 const ownersWide = localFont({
   src: [
@@ -42,7 +43,9 @@ export default function RootLayout({
       lang="en"
       className={`${ownersWide.variable} ${owners.variable} antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   );
 }
