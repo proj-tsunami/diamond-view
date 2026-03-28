@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -31,7 +31,8 @@ import IceParticles from "@/components/IceParticles";
 import GSAPProvider from "@/components/GSAPProvider";
 import DistortionHover from "@/components/DistortionHover";
 import DotNav from "@/components/DotNav";
-import InkAccent from "@/components/InkAccent";
+import IntroAnimation from "@/components/IntroAnimation";
+import DiamondEdge from "@/components/DiamondEdge";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -221,13 +222,6 @@ function Hero() {
             in Motion
           </span>
 
-          {/* Sumi brush stroke underline */}
-          <img
-            src={`${BASE}/images/brush-stroke-underline.png`}
-            alt=""
-            className="w-32 md:w-40 h-auto mt-4 opacity-20 invert"
-            draggable={false}
-          />
         </motion.div>
       </motion.div>
 
@@ -285,8 +279,6 @@ function IntroStatement() {
       </ParallaxLayer>
 
       {/* Sumi ink accents */}
-      <InkAccent variant={3} className="top-[15%] right-[8%] hidden md:block" size={50} opacity={0.06} rotate={25} />
-      <InkAccent variant={1} className="bottom-[20%] left-[6%] hidden md:block" size={35} opacity={0.05} rotate={-15} />
 
       <div className="max-w-5xl mx-auto relative z-10">
         <AnimatedSection>
@@ -475,8 +467,6 @@ function Services() {
       <CornerMarks color="rgba(244,243,241,0.05)" size={20} />
 
       {/* Sumi ink accents — inverted for dark bg */}
-      <InkAccent variant={2} className="top-[10%] right-[10%] hidden md:block" size={45} opacity={0.08} dark rotate={40} />
-      <InkAccent variant={1} className="bottom-[15%] left-[12%] hidden md:block" size={30} opacity={0.06} dark rotate={-20} />
 
       {/* Background depth elements */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,_rgba(244,243,241,0.02)_0%,_transparent_60%)]" />
@@ -520,13 +510,6 @@ function Services() {
             >
               What We Do.
             </TextReveal>
-            {/* Sumi brush stroke underline */}
-            <img
-              src={`${BASE}/images/brush-stroke-underline.png`}
-              alt=""
-              className="w-28 md:w-36 h-auto mt-3 opacity-15 invert"
-              draggable={false}
-            />
           </div>
           <div className="md:col-span-7 flex items-end">
             <AnimatedSection delay={0.3}>
@@ -603,8 +586,6 @@ function Process() {
       <GridOverlay color="rgba(24,25,25,0.03)" crossColor="rgba(24,25,25,0.05)" />
 
       {/* Sumi ink accents */}
-      <InkAccent variant={2} className="top-[8%] left-[15%] hidden md:block" size={35} opacity={0.05} rotate={60} />
-      <InkAccent variant={3} className="bottom-[12%] right-[10%] hidden md:block" size={28} opacity={0.04} rotate={-30} />
 
       {/* Depth layers */}
       <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-cream-dark/30 to-transparent" />
@@ -731,12 +712,6 @@ function Team() {
             >
               Meet our team.
             </TextReveal>
-            <img
-              src={`${BASE}/images/brush-stroke-underline.png`}
-              alt=""
-              className="w-24 md:w-32 h-auto mt-3 opacity-12 invert"
-              draggable={false}
-            />
 
             <AnimatedSection delay={0.4}>
               <p className="text-cream/25 text-lg font-light leading-relaxed mt-10 max-w-lg">
@@ -876,25 +851,40 @@ function Contact() {
 /* ───────────────────── PAGE ───────────────────────────── */
 
 export default function HomeClient() {
+  const [introComplete, setIntroComplete] = useState(false);
+
   return (
     <GSAPProvider>
-    <SmoothScroll>
-      <CustomCursor />
-      <Navbar />
-      <SideMargins />
-      <DotNav />
-      <Hero />
-      <DemoReel />
-      <SectionDivider />
-      <IntroStatement />
-      <Portfolio />
-      <Stats />
-      <Services />
-      <ParallaxBreak />
-      <Process />
-      <Team />
-      <Contact />
-    </SmoothScroll>
+      {/* Branded intro animation */}
+      <IntroAnimation onComplete={() => setIntroComplete(true)} />
+
+      <SmoothScroll>
+        <CustomCursor />
+        <Navbar />
+        <SideMargins />
+        <DotNav />
+
+        {/* ─── Header group — sits on top of content below ─── */}
+        <div className="relative z-10">
+          <Hero />
+          <DemoReel />
+
+          {/* Diamond point bottom edge with drop shadow */}
+          <DiamondEdge color="#181919" />
+        </div>
+
+        {/* ─── Content sections — parallax out from underneath the header ─── */}
+        <div className="relative z-0 -mt-1">
+          <IntroStatement />
+          <Portfolio />
+          <Stats />
+          <Services />
+          <ParallaxBreak />
+          <Process />
+          <Team />
+          <Contact />
+        </div>
+      </SmoothScroll>
     </GSAPProvider>
   );
 }
