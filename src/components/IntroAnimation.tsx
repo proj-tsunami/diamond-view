@@ -13,21 +13,28 @@ const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
   - Entire cream panel wipes down with chevron shape, revealing demo reel behind
 */
 
+const hasPlayed = { current: false };
+
 export default function IntroAnimation({
   onComplete,
 }: {
   onComplete: () => void;
 }) {
-  const [phase, setPhase] = useState("idle");
+  const [phase, setPhase] = useState(() => {
+    if (hasPlayed.current) return "done";
+    return "idle";
+  });
 
   useEffect(() => {
-    // Small delay to ensure page is ready, then animate logo in
+    if (hasPlayed.current) {
+      onComplete();
+      return;
+    }
+    hasPlayed.current = true;
+
     const t0 = setTimeout(() => setPhase("logo-in"), 300);
-    // Hold logo
     const t1 = setTimeout(() => setPhase("hold"), 1100);
-    // Start wipe
     const t2 = setTimeout(() => setPhase("wipe"), 2400);
-    // Done
     const t3 = setTimeout(() => {
       setPhase("done");
       onComplete();
