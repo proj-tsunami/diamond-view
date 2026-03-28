@@ -27,6 +27,7 @@ export default function SectionDivider() {
         <img
           src={`${BASE}/images/mountain-edge.png`}
           alt=""
+          loading="lazy"
           className="w-full h-full object-cover object-top"
           draggable={false}
         />

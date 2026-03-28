@@ -77,6 +77,7 @@ export default function IntroAnimation({
           <img
             src={`${BASE}/images/diamond-logo-dark.png`}
             alt="Diamond View"
+            loading="eager"
             className="w-12 h-12 md:w-14 md:h-14"
             draggable={false}
           />

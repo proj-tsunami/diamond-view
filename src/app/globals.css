@@ -97,6 +97,42 @@ body::after {
   background-size: 256px 256px;
 }
 
+/* ── Reduced-motion accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable custom cursor */
+  * {
+    cursor: auto !important;
+  }
+
+  /* Kill all transitions and animations globally */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable parallax / floating elements */
+  [data-framer-motion], .will-change-transform {
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Disable the grain overlay animation */
+  body::after {
+    animation: none !important;
+  }
+
+  /* Disable smooth scroll library */
+  html.lenis, html.lenis body {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Selection color */
 ::selection {
   background: var(--charcoal);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   motion,
   useScroll,
@@ -144,9 +144,30 @@ const stats = [
 
 /* ───────────────────────── HERO ───────────────────────── */
 
+function useShowVideo() {
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    // Check reduced motion preference
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    // Check if mobile (coarse pointer = touch device)
+    const isMobile =
+      window.matchMedia("(pointer: coarse)").matches &&
+      window.innerWidth < 768;
+
+    setShowVideo(!prefersReducedMotion && !isMobile);
+  }, []);
+
+  return showVideo;
+}
+
 function Hero() {
   const reelRef = useRef(null);
   const mountainRef = useRef(null);
+  const showVideo = useShowVideo();
 
   const { scrollYProgress: reelScroll } = useScroll({
     target: reelRef,
@@ -170,16 +191,25 @@ function Hero() {
       <section ref={reelRef} className="relative h-[120vh] overflow-hidden">
         <motion.div style={{ opacity: reelOpacity, scale: reelScale }} className="sticky top-0 h-screen">
           <div className="relative w-full h-full overflow-hidden">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              poster={`${BASE}/images/generated/hero.jpg`}
-              className="w-full h-full object-cover"
-            >
-              <source src={`${BASE}/video/demo-reel.mp4`} type="video/mp4" />
-            </video>
+            {showVideo ? (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster={`${BASE}/images/generated/hero.jpg`}
+                className="w-full h-full object-cover"
+              >
+                <source src={`${BASE}/video/demo-reel.mp4`} type="video/mp4" />
+              </video>
+            ) : (
+              <img
+                src={`${BASE}/images/generated/hero.jpg`}
+                alt="Diamond View demo reel"
+                loading="eager"
+                className="w-full h-full object-cover"
+              />
+            )}
             <div className="absolute inset-0 bg-charcoal/30" />
 
             {/* Grid overlay */}

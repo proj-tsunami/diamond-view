@@ -13,9 +13,12 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
+const sectionIds = ["work", "capabilities", "process", "contact"];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +26,48 @@ export default function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Scroll-based active section detection
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    const visibleSections = new Map<string, number>();
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              visibleSections.set(id, entry.intersectionRatio);
+            } else {
+              visibleSections.delete(id);
+            }
+
+            // Pick the section with the highest visibility ratio
+            let best: string | null = null;
+            let bestRatio = 0;
+            visibleSections.forEach((ratio, sectionId) => {
+              if (ratio > bestRatio) {
+                bestRatio = ratio;
+                best = sectionId;
+              }
+            });
+            setActiveSection(best);
+          });
+        },
+        { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: "-80px 0px -20% 0px" }
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => {
+      observers.forEach((o) => o.disconnect());
+    };
   }, []);
 
   const textColor = scrolled ? "text-charcoal" : "text-cream";
@@ -56,17 +101,48 @@ export default function Navbar() {
             </span>
           </a>
 
-          {/* Desktop links */}
+          {/* Desktop links + CTA */}
           <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={`${textMuted} hover:${textColor} text-[11px] tracking-[0.15em] uppercase transition-colors duration-300`}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const sectionId = link.href.replace("#", "");
+              const isActive = activeSection === sectionId;
+
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`relative text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${
+                    isActive
+                      ? scrolled
+                        ? "text-charcoal"
+                        : "text-cream"
+                      : scrolled
+                      ? "text-charcoal/60"
+                      : "text-cream/60"
+                  }`}
+                >
+                  {link.label}
+                  {/* Active underline */}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-[1px] transition-all duration-300 ${
+                      scrolled ? "bg-charcoal" : "bg-cream"
+                    } ${isActive ? "w-full opacity-100" : "w-0 opacity-0"}`}
+                  />
+                </a>
+              );
+            })}
+
+            {/* CTA Button */}
+            <a
+              href="#contact"
+              className={`text-[11px] tracking-[0.15em] uppercase px-5 py-2.5 border transition-all duration-500 ${
+                scrolled
+                  ? "text-charcoal border-charcoal/20 hover:bg-charcoal hover:text-cream"
+                  : "text-cream border-cream/25 hover:bg-cream hover:text-charcoal"
+              }`}
+            >
+              Let&apos;s Talk
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -115,6 +191,17 @@ export default function Navbar() {
                   {link.label}
                 </motion.a>
               ))}
+              {/* Mobile CTA */}
+              <motion.a
+                href="#contact"
+                onClick={() => setMenuOpen(false)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1 }}
+                className="text-charcoal text-lg tracking-[0.15em] uppercase border border-charcoal/20 px-8 py-4 mt-4 hover:bg-charcoal hover:text-cream transition-all duration-300"
+              >
+                Let&apos;s Talk
+              </motion.a>
             </nav>
           </motion.div>
         )}

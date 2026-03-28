@@ -42,6 +42,7 @@ export default function DemoReel() {
             loop
             muted
             playsInline
+            preload="none"
             poster={`${BASE}/images/generated/hero.jpg`}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           >
