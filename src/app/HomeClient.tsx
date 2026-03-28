@@ -145,109 +145,126 @@ const stats = [
 /* ───────────────────────── HERO ───────────────────────── */
 
 function Hero() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
+  const reelRef = useRef(null);
+  const mountainRef = useRef(null);
+
+  const { scrollYProgress: reelScroll } = useScroll({
+    target: reelRef,
     offset: ["start start", "end start"],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
+
+  const { scrollYProgress: mountainScroll } = useScroll({
+    target: mountainRef,
+    offset: ["start start", "end start"],
+  });
+
+  const reelOpacity = useTransform(reelScroll, [0, 0.7, 1], [1, 1, 0]);
+  const reelScale = useTransform(reelScroll, [0, 1], [1, 0.95]);
+
+  const mtnTextOpacity = useTransform(mountainScroll, [0, 0.2, 0.6], [0, 1, 0.8]);
+  const mtnTextY = useTransform(mountainScroll, [0, 1], [60, -100]);
 
   return (
-    <section
-      ref={ref}
-      id="hero"
-      data-theme="dark"
-      className="relative h-[130vh] flex items-center justify-center overflow-hidden bg-[#181919]"
-    >
-      {/* 3D Glacier landscape */}
-      <GlacierScene />
+    <div id="hero" data-theme="dark" className="bg-[#181919]">
+      {/* ── Part 1: Demo Reel (full viewport) ── */}
+      <section ref={reelRef} className="relative h-[120vh] overflow-hidden">
+        <motion.div style={{ opacity: reelOpacity, scale: reelScale }} className="sticky top-0 h-screen">
+          <div className="relative w-full h-full overflow-hidden">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster={`${BASE}/images/generated/hero.jpg`}
+              className="w-full h-full object-cover"
+            >
+              <source src={`${BASE}/video/demo-reel.mp4`} type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-charcoal/30" />
 
-      {/* Ice dust particles */}
-      <IceParticles className="z-[5]" />
+            {/* Grid overlay */}
+            <GridOverlay className="z-10" />
 
-      {/* Geometric grid overlay */}
-      <GridOverlay className="z-10" />
+            {/* Play button */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-cream/20 flex items-center justify-center backdrop-blur-sm bg-charcoal/10 hover:border-cream/40 hover:scale-110 transition-all duration-500 cursor-pointer">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-cream/70 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
 
-      {/* Corner registration marks */}
-      <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
+            {/* Bottom gradient into mountain section */}
+            <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-b from-transparent to-[#181919] z-10 pointer-events-none" />
 
-      <motion.div
-        style={{ opacity, y, scale }}
-        className="relative z-20 text-center px-6"
-      >
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: "60px" }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="h-[1px] bg-cream/15 mx-auto mb-10"
-        />
-
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-cream/30 text-[11px] tracking-[0.5em] uppercase mb-10"
-        >
-          Creative Production Studio
-        </motion.p>
-
-        <ChromaticText
-          as="h1"
-          className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold"
-          intensity={3}
-        >
-          Diamond
-        </ChromaticText>
-        <ChromaticText
-          as="h1"
-          className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light"
-          intensity={3}
-        >
-          View
-        </ChromaticText>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1.5 }}
-          className="mt-14 flex flex-col items-center gap-0 relative"
-        >
-          <span className="text-cream/40 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
-            Feeling
-          </span>
-          <span className="text-cream/25 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
-            in Motion
-          </span>
-
+            {/* Scroll indicator */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
+              <span className="text-cream/15 text-[9px] tracking-[0.4em] uppercase">Scroll</span>
+              <div className="relative w-[1px] h-12 overflow-hidden">
+                <motion.div
+                  animate={{ y: ["-100%", "100%"] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/25 to-transparent"
+                />
+              </div>
+            </div>
+          </div>
         </motion.div>
-      </motion.div>
+      </section>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-4"
-      >
-        <span className="text-cream/15 text-[9px] tracking-[0.4em] uppercase">
-          Scroll
-        </span>
-        <div className="relative w-[1px] h-16 overflow-hidden">
+      {/* ── Part 2: Mountain landscape with branding ── */}
+      <section ref={mountainRef} className="relative h-[130vh] overflow-hidden">
+        <div className="sticky top-0 h-screen flex items-center justify-center">
+          {/* Glacier parallax background */}
+          <GlacierScene />
+
+          {/* Ice dust particles */}
+          <IceParticles className="z-[5]" />
+
+          {/* Grid overlay */}
+          <GridOverlay className="z-10" />
+
+          {/* Corner marks */}
+          <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
+
+          {/* Branding text */}
           <motion.div
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/30 to-transparent"
-          />
+            style={{ opacity: mtnTextOpacity, y: mtnTextY }}
+            className="relative z-20 text-center px-6"
+          >
+            <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
+
+            <p className="text-cream/30 text-[11px] tracking-[0.5em] uppercase mb-10">
+              Creative Production Studio
+            </p>
+
+            <ChromaticText
+              as="h1"
+              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold"
+              intensity={3}
+            >
+              Diamond
+            </ChromaticText>
+            <ChromaticText
+              as="h1"
+              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light"
+              intensity={3}
+            >
+              View
+            </ChromaticText>
+
+            <div className="mt-12 flex flex-col items-center gap-0">
+              <span className="text-cream/40 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
+                Feeling
+              </span>
+              <span className="text-cream/25 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
+                in Motion
+              </span>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
-    </section>
+      </section>
+    </div>
   );
 }
 
@@ -867,7 +884,6 @@ export default function HomeClient() {
         {/* ─── Header group — sits on top of content below ─── */}
         <div className="relative z-10">
           <Hero />
-          <DemoReel />
 
           {/* Diamond point bottom edge with drop shadow */}
           <DiamondEdge color="#181919" />

@@ -1,108 +1,93 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
-
-/*
-  Branded loading intro:
-  1. Cream screen with logo fades in
-  2. Diamond chevron shape wipes down to reveal content
-  3. Zoom-out transition
-*/
 
 export default function IntroAnimation({
   onComplete,
 }: {
   onComplete: () => void;
 }) {
-  const [phase, setPhase] = useState<string>("logo");
+  const [phase, setPhase] = useState("logo-in");
 
   useEffect(() => {
-    // Logo hold
-    const t1 = setTimeout(() => setPhase("wipe"), 1800);
-    // Wipe complete
-    const t2 = setTimeout(() => {
+    // Phase 1: Logo animates in
+    const t1 = setTimeout(() => setPhase("logo-hold"), 800);
+    // Phase 2: Hold on logo
+    const t2 = setTimeout(() => setPhase("wipe"), 2200);
+    // Phase 3: Wipe completes, remove overlay
+    const t3 = setTimeout(() => {
       setPhase("done");
       onComplete();
-    }, 3200);
+    }, 3600);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      clearTimeout(t3);
     };
   }, [onComplete]);
-
-  if (phase === "done") return null;
 
   return (
     <AnimatePresence>
       {phase !== "done" && (
         <motion.div
-          className="fixed inset-0 z-[9998] flex items-center justify-center"
+          className="fixed inset-0 z-[9998]"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
-          {/* Cream background */}
+          {/* Cream background — wipes away with chevron shape */}
           <motion.div
-            className="absolute inset-0 bg-[#F4F3F1]"
-            animate={
-              phase === "wipe"
-                ? { clipPath: "polygon(0 0, 100% 0, 100% 0%, 50% 0%, 0 0%)" }
-                : { clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 100%)" }
-            }
-            transition={{
-              duration: 1.2,
-              ease: [0.76, 0, 0.24, 1],
-            }}
-          />
-
-          {/* Diamond chevron wipe shape — reveals dark content behind */}
-          <motion.div
-            className="absolute inset-0"
-            initial={{ clipPath: "polygon(0 0, 100% 0, 100% 0%, 50% 0%, 0 0%)" }}
+            className="absolute inset-0 bg-[#F4F3F1] z-10"
             animate={
               phase === "wipe"
                 ? {
                     clipPath:
-                      "polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)",
+                      "polygon(0 0, 100% 0, 100% -10%, 50% 0%, 0 -10%)",
                   }
-                : {}
+                : {
+                    clipPath:
+                      "polygon(0 0, 100% 0, 100% 100%, 50% 115%, 0 100%)",
+                  }
             }
             transition={{
               duration: 1.2,
               ease: [0.76, 0, 0.24, 1],
             }}
-            style={{ background: "#181919" }}
           />
 
-          {/* Logo */}
+          {/* Logo — sits on the cream layer */}
           <motion.div
-            className="relative z-10 flex flex-col items-center gap-4"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="absolute inset-0 z-20 flex items-center justify-center"
             animate={
-              phase === "logo"
-                ? { opacity: 1, scale: 1 }
-                : { opacity: 0, scale: 0.95, y: -30 }
+              phase === "wipe"
+                ? { opacity: 0, y: -40, scale: 0.95 }
+                : phase === "logo-in"
+                ? { opacity: 0, y: 15, scale: 0.95 }
+                : { opacity: 1, y: 0, scale: 1 }
             }
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{
+              duration: phase === "wipe" ? 0.6 : 0.7,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
-            <img
-              src={`${BASE}/images/diamond-logo-dark.png`}
-              alt="Diamond View"
-              width={56}
-              height={56}
-              className="w-14 h-14"
-            />
-            <div className="flex flex-col items-center gap-0">
-              <span className="text-[#181919] font-display font-bold text-xl tracking-[0.1em]">
-                Diamond View
-              </span>
-              <span className="text-[#181919]/30 text-[9px] tracking-[0.3em] uppercase mt-1">
-                Creative Production
-              </span>
+            <div className="flex flex-col items-center gap-5">
+              <img
+                src={`${BASE}/images/diamond-logo-dark.png`}
+                alt="Diamond View"
+                className="w-12 h-12 md:w-14 md:h-14"
+                draggable={false}
+              />
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-[#181919] font-display font-bold text-lg md:text-xl tracking-[0.12em]">
+                  Diamond View
+                </span>
+                <span className="text-[#181919]/25 text-[9px] tracking-[0.35em] uppercase">
+                  Creative Production Studio
+                </span>
+              </div>
             </div>
           </motion.div>
         </motion.div>
