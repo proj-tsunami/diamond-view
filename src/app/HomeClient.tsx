@@ -31,49 +31,10 @@ import DistortionHover from "@/components/DistortionHover";
 import DotNav from "@/components/DotNav";
 import IntroAnimation from "@/components/IntroAnimation";
 import DiamondEdge from "@/components/DiamondEdge";
+import { projects } from "@/data/projects";
+import Link from "next/link";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
-
-/* ───────────────────────── DATA ───────────────────────── */
-
-const projects = [
-  {
-    title: "Massey Minis",
-    category: "Campaign",
-    year: "2025",
-    image: `${BASE}/images/generated/project-01.jpg`,
-  },
-  {
-    title: "Reliaquest",
-    category: "Commercial",
-    year: "2025",
-    image: `${BASE}/images/generated/project-02.jpg`,
-  },
-  {
-    title: "Publix — Back to School",
-    category: "Branded Content",
-    year: "2024",
-    image: `${BASE}/images/generated/project-03.jpg`,
-  },
-  {
-    title: "&Barr + SCCU",
-    category: "Campaign",
-    year: "2024",
-    image: `${BASE}/images/generated/project-04.jpg`,
-  },
-  {
-    title: "&Barr + Massey Services",
-    category: "Commercial",
-    year: "2024",
-    image: `${BASE}/images/generated/project-05.jpg`,
-  },
-  {
-    title: "Adidas + Bleacher Report",
-    category: "Sports / Entertainment",
-    year: "2023",
-    image: `${BASE}/images/generated/project-06.jpg`,
-  },
-];
 
 const services = [
   {
@@ -389,54 +350,53 @@ function Portfolio() {
       <HorizontalScroll>
         {projects.map((project, i) => (
           <motion.div
-            key={project.title}
+            key={project.slug}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.6 }}
-            className="group cursor-pointer flex-shrink-0 w-[80vw] md:w-[45vw] lg:w-[35vw]"
+            className="group flex-shrink-0 w-[80vw] md:w-[45vw] lg:w-[35vw]"
           >
-            <TiltCard intensity={6} className="relative aspect-[16/10] rounded-sm overflow-hidden">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.25, 0.1, 0.25, 1],
-                }}
-                className="w-full h-full relative"
-              >
-                {/* Project image with distortion + chromatic aberration */}
-                <DistortionHover
-                  src={project.image}
-                  alt={project.title}
-                  className="absolute inset-0"
+            <Link href={`/work/${project.slug}`} className="block cursor-pointer">
+              <TiltCard intensity={6} className="relative aspect-[16/10] rounded-sm overflow-hidden">
+                <motion.div
+                  layoutId={`project-hero-${project.slug}`}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{
+                    duration: 0.7,
+                    ease: [0.25, 0.1, 0.25, 1],
+                  }}
+                  className="w-full h-full relative"
+                >
+                  <DistortionHover
+                    src={project.cardImage}
+                    alt={project.title}
+                    className="absolute inset-0"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
+
+                  <span className="absolute top-6 right-6 text-cream/10 text-7xl md:text-8xl font-display font-black">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
+                    <p className="text-cream/50 text-[10px] tracking-[0.2em] uppercase mb-2">
+                      {project.category} — {project.year}
+                    </p>
+                    <h3 className="text-cream group-hover:text-cream/80 text-2xl md:text-3xl font-heading font-medium tracking-tight transition-colors duration-500">
+                      {project.title}
+                    </h3>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  whileHover={{ scaleX: 1 }}
+                  transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="absolute bottom-0 left-0 w-full h-[2px] bg-cream/40 origin-left"
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
-
-                {/* Project number watermark */}
-                <span className="absolute top-6 right-6 text-cream/10 text-7xl md:text-8xl font-display font-black">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
-                  <p className="text-cream/50 text-[10px] tracking-[0.2em] uppercase mb-2">
-                    {project.category} — {project.year}
-                  </p>
-                  <h3 className="text-cream group-hover:text-cream/80 text-2xl md:text-3xl font-heading font-medium tracking-tight transition-colors duration-500">
-                    {project.title}
-                  </h3>
-                </div>
-              </motion.div>
-
-              {/* Hover reveal line */}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="absolute bottom-0 left-0 w-full h-[2px] bg-cream/40 origin-left"
-              />
-            </TiltCard>
+              </TiltCard>
+            </Link>
           </motion.div>
         ))}
 
