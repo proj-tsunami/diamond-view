@@ -29,6 +29,7 @@ import CharReveal from "@/components/CharReveal";
 import CustomCursor from "@/components/CustomCursor";
 import IceParticles from "@/components/IceParticles";
 import GSAPProvider from "@/components/GSAPProvider";
+import DistortionHover from "@/components/DistortionHover";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -321,11 +322,11 @@ function Portfolio() {
                 }}
                 className="w-full h-full relative"
               >
-                {/* Project image */}
-                <img
+                {/* Project image with distortion + chromatic aberration */}
+                <DistortionHover
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0"
                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
