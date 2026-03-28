@@ -185,12 +185,45 @@ function Hero() {
             {/* Grid overlay */}
             <GridOverlay className="z-10" />
 
-            {/* Play button */}
+            {/* "Feeling in Motion" wordmark centered over reel */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-cream/20 flex items-center justify-center backdrop-blur-sm bg-charcoal/10 hover:border-cream/40 hover:scale-110 transition-all duration-500 cursor-pointer">
-                <svg className="w-5 h-5 md:w-6 md:h-6 text-cream/70 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+              <div className="group cursor-default relative">
+                {/* Chromatic aberration layers — visible on hover */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                    FEELING
+                  </span>
+                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                    IN MOTION
+                  </span>
+                </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                    FEELING
+                  </span>
+                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                    IN MOTION
+                  </span>
+                </div>
+
+                {/* Main wordmark */}
+                <div className="flex flex-col items-center gap-0">
+                  <span className="text-cream/50 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/70 transition-colors duration-500">
+                    FEELING
+                  </span>
+                  <span className="text-cream/30 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/50 transition-colors duration-500">
+                    IN MOTION
+                  </span>
+                </div>
+
+                {/* Bokeh blur around edges on hover */}
+                <div
+                  className="absolute -inset-12 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse at center, transparent 40%, rgba(244,243,241,0.03) 60%, rgba(244,243,241,0.06) 75%, transparent 90%)",
+                    filter: "blur(8px)",
+                  }}
+                />
               </div>
             </div>
 
@@ -253,14 +286,6 @@ function Hero() {
               View
             </ChromaticText>
 
-            <div className="mt-12 flex flex-col items-center gap-0">
-              <span className="text-cream/40 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
-                Feeling
-              </span>
-              <span className="text-cream/25 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
-                in Motion
-              </span>
-            </div>
           </motion.div>
         </div>
       </section>
@@ -476,118 +501,108 @@ function ParallaxBreak() {
 
 /* ───────────────────── SERVICES ────────────────────────── */
 
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: (typeof services)[0];
+  index: number;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <motion.div
+      className="group cursor-pointer"
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+    >
+      <div className="border-t border-cream/8 py-6 md:py-8">
+        {/* Header row — always visible */}
+        <div className="flex items-center gap-6 md:gap-10">
+          <span className="text-cream/10 text-4xl md:text-5xl font-display font-black group-hover:text-cream/20 transition-colors duration-500 w-16 md:w-20 flex-shrink-0">
+            {service.number}
+          </span>
+          <h3 className="text-cream font-heading text-xl md:text-2xl font-medium tracking-tight group-hover:text-cream/90 transition-colors duration-300 flex-1">
+            {service.title}
+          </h3>
+          <motion.div
+            animate={{ rotate: isExpanded ? 45 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="w-5 h-5 flex-shrink-0 flex items-center justify-center"
+          >
+            <span className="text-cream/20 text-xl font-light group-hover:text-cream/40 transition-colors duration-300">+</span>
+          </motion.div>
+        </div>
+
+        {/* Expandable content — slides out on hover */}
+        <motion.div
+          initial={false}
+          animate={{
+            height: isExpanded ? "auto" : 0,
+            opacity: isExpanded ? 1 : 0,
+          }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="overflow-hidden"
+        >
+          <div className="pt-6 pb-2 pl-[88px] md:pl-[120px] max-w-2xl">
+            <p className="text-cream/30 font-light leading-relaxed mb-5 text-sm md:text-base">
+              {service.description}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {service.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-cream/20 text-[10px] tracking-[0.15em] uppercase border border-cream/8 px-3 py-1.5 rounded-full group-hover:border-cream/12 transition-colors duration-300"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
 function Services() {
   return (
-    <section id="capabilities" data-theme="dark" className="py-20 md:py-32 bg-charcoal relative overflow-hidden">
-      {/* Grid overlay */}
+    <section id="capabilities" data-theme="dark" className="bg-charcoal relative overflow-hidden">
       <GridOverlay />
       <CornerMarks color="rgba(244,243,241,0.05)" size={20} />
 
-      {/* Sumi ink accents — inverted for dark bg */}
-
-      {/* Background depth elements */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,_rgba(244,243,241,0.02)_0%,_transparent_60%)]" />
-
-      {/* Parallax decorative lines */}
-      <ParallaxLayer speed={0.4} className="absolute top-[15%] left-[5%] hidden md:block">
-        <div className="w-[1px] h-48 bg-cream/[0.05]" />
-      </ParallaxLayer>
-      <ParallaxLayer speed={-0.5} className="absolute bottom-[20%] right-[8%] hidden md:block">
-        <div className="w-20 h-20 border border-cream/[0.04] rounded-full" />
-      </ParallaxLayer>
-      <FloatingElement
-        className="absolute top-[40%] right-[3%] hidden md:block"
-        duration={12}
-        distance={25}
-        delay={1}
-      >
-        <div className="w-2 h-2 bg-cream/[0.05] rounded-full" />
-      </FloatingElement>
-      <FloatingElement
-        className="absolute top-[60%] left-[3%] hidden md:block"
-        duration={9}
-        distance={18}
-        delay={3}
-      >
-        <div className="w-1.5 h-1.5 bg-cream/[0.04] rounded-full" />
-      </FloatingElement>
-
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        {/* Header — asymmetric */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 mb-16 md:mb-24">
-          <div className="md:col-span-5">
-            <AnimatedSection>
-              <p className="text-[10px] tracking-[0.3em] uppercase text-cream/20 mb-6">
-                What We Do
-              </p>
-            </AnimatedSection>
-            <TextReveal
-              as="h2"
-              className="text-cream font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95]"
-            >
-              What We Do.
-            </TextReveal>
-          </div>
-          <div className="md:col-span-7 flex items-end">
-            <AnimatedSection delay={0.3}>
-              <p className="text-cream/30 text-lg md:text-xl font-light leading-relaxed max-w-xl">
-                Diamond View is a story-driven creative studio that brings
-                concept, craft, technology, and production together — from first
-                idea to final pixel.
-              </p>
-            </AnimatedSection>
-          </div>
-        </div>
-
-        {/* Services — alternating layout */}
-        <div className="space-y-16 md:space-y-0">
-          {services.map((service, i) => {
-            const isEven = i % 2 === 0;
-            return (
-              <AnimatedSection
-                key={service.number}
-                delay={i * 0.1}
-                direction={isEven ? "left" : "right"}
-              >
-                <div className="border-t border-cream/8 py-12 md:py-20 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 group">
-                  {/* Number + Title */}
-                  <div
-                    className={`md:col-span-5 ${
-                      isEven ? "md:col-start-1" : "md:col-start-2"
-                    }`}
-                  >
-                    <span className="text-cream/10 text-6xl md:text-7xl font-display font-black block mb-4 group-hover:text-cream/15 transition-colors duration-700">
-                      {service.number}
-                    </span>
-                    <h3 className="text-cream font-heading text-2xl md:text-3xl font-medium tracking-tight">
-                      {service.title}
-                    </h3>
-                  </div>
-
-                  {/* Description + Tags */}
-                  <div
-                    className={`md:col-span-5 ${
-                      isEven ? "md:col-start-7" : "md:col-start-8"
-                    }`}
-                  >
-                    <p className="text-cream/30 font-light leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {service.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-cream/20 text-[10px] tracking-[0.15em] uppercase border border-cream/8 px-3 py-1.5 rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+        {/* Sticky header + scrollable cards layout */}
+        <div className="md:grid md:grid-cols-12 md:gap-16">
+          {/* Left column — sticky header */}
+          <div className="md:col-span-4 py-20 md:py-32">
+            <div className="md:sticky md:top-[30vh]">
+              <AnimatedSection>
+                <p className="text-[10px] tracking-[0.3em] uppercase text-cream/20 mb-6">
+                  What We Do
+                </p>
               </AnimatedSection>
-            );
-          })}
+              <TextReveal
+                as="h2"
+                className="text-cream font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[0.95]"
+              >
+                What We Do.
+              </TextReveal>
+              <AnimatedSection delay={0.3}>
+                <p className="text-cream/25 text-sm md:text-base font-light leading-relaxed mt-6 max-w-sm">
+                  From first idea to final pixel — concept, craft, technology,
+                  and production in one connected pipeline.
+                </p>
+              </AnimatedSection>
+            </div>
+          </div>
+
+          {/* Right column — service cards */}
+          <div className="md:col-span-8 py-20 md:py-32">
+            {services.map((service, i) => (
+              <ServiceCard key={service.number} service={service} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
