@@ -94,7 +94,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3">
+          <a href={isProjectPage ? `${BASE}/` : "#"} className="flex items-center gap-3">
             <Image
               src={scrolled ? `${BASE}/images/diamond-logo-dark.png` : `${BASE}/images/diamond-logo-light.png`}
               alt="Diamond View"
@@ -114,7 +114,7 @@ export default function Navbar() {
             {isProjectPage ? (
               <a
                 href={`${BASE}/`}
-                className={`text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${textMuted} hover:text-cream`}
+                className={`text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${textMuted} ${scrolled ? "hover:text-charcoal" : "hover:text-cream"}`}
               >
                 &larr; Back to Work
               </a>

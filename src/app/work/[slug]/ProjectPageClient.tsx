@@ -35,7 +35,7 @@ export default function ProjectPageClient({ slug }: ProjectPageClientProps) {
       <SideMargins />
       <Navbar />
 
-      <main>
+      <main data-theme="dark">
         <ProjectHero project={project} />
         <ProjectInfo project={project} />
         <ProjectGallery gallery={project.gallery} />
