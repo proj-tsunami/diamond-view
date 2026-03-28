@@ -19,8 +19,6 @@ import ParallaxLayer from "@/components/ParallaxLayer";
 import TiltCard from "@/components/TiltCard";
 import FloatingElement from "@/components/FloatingElement";
 import GlacierScene from "@/components/GlacierScene";
-import SectionDivider from "@/components/SectionDivider";
-import DemoReel from "@/components/DemoReel";
 import SideMargins from "@/components/SideMargins";
 import GridOverlay from "@/components/GridOverlay";
 import ChromaticText from "@/components/ChromaticText";
