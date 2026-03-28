@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSectionTheme } from "@/hooks/useSectionTheme";
 
 /*
   Sticky vertical dot navigation — sits on the left side.
@@ -20,7 +21,7 @@ const sections = [
 export default function DotNav() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [isDark, setIsDark] = useState(true);
+  const isDark = useSectionTheme();
   const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,15 +29,10 @@ export default function DotNav() {
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
 
-      // Subtle parallax on the nav itself
       if (navRef.current) {
         navRef.current.style.transform = `translateY(${scrollY * -0.03}px)`;
       }
 
-      // Dark/light detection
-      setIsDark(scrollY < vh * 1.5);
-
-      // Find active section
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i].id);
         if (el) {

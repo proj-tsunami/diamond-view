@@ -157,6 +157,7 @@ function Hero() {
     <section
       ref={ref}
       id="hero"
+      data-theme="dark"
       className="relative h-[130vh] flex items-center justify-center overflow-hidden bg-[#181919]"
     >
       {/* 3D Glacier landscape */}
@@ -251,7 +252,7 @@ function Hero() {
 
 function IntroStatement() {
   return (
-    <section className="py-24 md:py-36 px-6 md:px-12 relative overflow-hidden">
+    <section data-theme="light" className="py-24 md:py-36 px-6 md:px-12 relative overflow-hidden">
       {/* Floating decorative elements */}
       <FloatingElement
         className="absolute top-20 left-[8%] w-[1px] h-32 bg-charcoal/[0.04] hidden md:block"
@@ -296,7 +297,7 @@ function IntroStatement() {
 
 function Portfolio() {
   return (
-    <section id="work">
+    <section id="work" data-theme="light">
       {/* Section header */}
       <div className="px-6 md:px-12 pt-24 pb-8">
         <div className="max-w-7xl mx-auto">
@@ -389,7 +390,7 @@ function Stats() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-16 md:py-24 border-y border-charcoal/8">
+    <section ref={ref} data-theme="light" className="py-16 md:py-24 border-y border-charcoal/8">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, i) => (
@@ -430,7 +431,7 @@ function ParallaxBreak() {
   const textOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
   return (
-    <section ref={ref} className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+    <section ref={ref} data-theme="dark" className="relative h-[60vh] md:h-[70vh] overflow-hidden">
       <motion.div style={{ y }} className="absolute inset-0 -top-[20%] -bottom-[20%]">
         <div
           className="w-full h-full bg-cover bg-center"
@@ -455,7 +456,7 @@ function ParallaxBreak() {
 
 function Services() {
   return (
-    <section id="capabilities" className="py-20 md:py-32 bg-charcoal relative overflow-hidden">
+    <section id="capabilities" data-theme="dark" className="py-20 md:py-32 bg-charcoal relative overflow-hidden">
       {/* Grid overlay */}
       <GridOverlay />
       <CornerMarks color="rgba(244,243,241,0.05)" size={20} />
@@ -573,7 +574,7 @@ function Services() {
 
 function Process() {
   return (
-    <section id="process" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
+    <section id="process" data-theme="light" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
       {/* Grid overlay — dark lines on light bg */}
       <GridOverlay color="rgba(24,25,25,0.03)" crossColor="rgba(24,25,25,0.05)" />
 
@@ -677,7 +678,7 @@ function Team() {
   const bgY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
-    <section ref={ref} className="py-20 md:py-32 bg-charcoal overflow-hidden relative">
+    <section ref={ref} data-theme="dark" className="py-20 md:py-32 bg-charcoal overflow-hidden relative">
       {/* Grid overlay */}
       <GridOverlay />
 
@@ -756,7 +757,7 @@ function Contact() {
   const lineWidth = useTransform(scrollYProgress, [0.3, 0.8], ["0%", "100%"]);
 
   return (
-    <section id="contact" ref={ref} className="py-20 md:py-32 px-6 md:px-12 relative">
+    <section id="contact" ref={ref} data-theme="light" className="py-20 md:py-32 px-6 md:px-12 relative">
       <div className="max-w-7xl mx-auto">
         {/* Animated divider */}
         <motion.div

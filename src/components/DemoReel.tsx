@@ -19,6 +19,7 @@ export default function DemoReel() {
   return (
     <section
       ref={sectionRef}
+      data-theme="dark"
       className="relative bg-[#181919]"
     >
       {/* Gradient blend from hero above into the reel */}
