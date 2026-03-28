@@ -510,7 +510,7 @@ function ParallaxBreak() {
       <motion.div style={{ y }} className="absolute inset-0 -top-[20%] -bottom-[20%]">
         <div
           className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${BASE}/images/hero-mural.jpg)` }}
+          style={{ backgroundImage: `url(${BASE}/images/generated/hero.jpg)` }}
         />
         <div className="absolute inset-0 bg-charcoal/40" />
       </motion.div>

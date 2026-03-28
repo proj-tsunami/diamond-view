@@ -16,9 +16,6 @@ export default function IntroAnimation({
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    if (ranRef.current) return;
-    ranRef.current = true;
-
     const t0 = setTimeout(() => setPhase("logo-in"), 300);
     const t1 = setTimeout(() => setPhase("hold"), 1100);
     const t2 = setTimeout(() => setPhase("wipe"), 2400);
