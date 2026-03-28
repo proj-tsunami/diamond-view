@@ -30,6 +30,7 @@ import CustomCursor from "@/components/CustomCursor";
 import IceParticles from "@/components/IceParticles";
 import GSAPProvider from "@/components/GSAPProvider";
 import DistortionHover from "@/components/DistortionHover";
+import DotNav from "@/components/DotNav";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -155,6 +156,7 @@ function Hero() {
   return (
     <section
       ref={ref}
+      id="hero"
       className="relative h-[130vh] flex items-center justify-center overflow-hidden bg-[#181919]"
     >
       {/* 3D Glacier landscape */}
@@ -208,9 +210,14 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.5 }}
-          className="text-cream/20 text-sm md:text-base font-light mt-12 tracking-[0.2em]"
+          className="mt-14 flex flex-col items-center gap-1"
         >
-          Feeling in Motion
+          <span className="text-cream/40 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
+            Feeling
+          </span>
+          <span className="text-cream/25 text-lg md:text-2xl font-display font-bold tracking-[0.15em]">
+            in Motion
+          </span>
         </motion.p>
       </motion.div>
 
@@ -840,6 +847,7 @@ export default function HomeClient() {
       <CustomCursor />
       <Navbar />
       <SideMargins />
+      <DotNav />
       <Hero />
       <DemoReel />
       <SectionDivider />
