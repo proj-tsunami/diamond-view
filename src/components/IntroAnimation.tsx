@@ -1,29 +1,40 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+
+/*
+  Intro sequence:
+  - Site loads: solid cream screen, nothing else visible
+  - Logo + glyph animate in (fade up)
+  - Hold for a beat
+  - Entire cream panel wipes down with chevron shape, revealing demo reel behind
+*/
 
 export default function IntroAnimation({
   onComplete,
 }: {
   onComplete: () => void;
 }) {
-  const [phase, setPhase] = useState("logo-in");
+  const [phase, setPhase] = useState("idle");
 
   useEffect(() => {
-    // Phase 1: Logo animates in
-    const t1 = setTimeout(() => setPhase("logo-hold"), 800);
-    // Phase 2: Hold on logo
-    const t2 = setTimeout(() => setPhase("wipe"), 2200);
-    // Phase 3: Wipe completes, remove overlay
+    // Small delay to ensure page is ready, then animate logo in
+    const t0 = setTimeout(() => setPhase("logo-in"), 300);
+    // Hold logo
+    const t1 = setTimeout(() => setPhase("hold"), 1100);
+    // Start wipe
+    const t2 = setTimeout(() => setPhase("wipe"), 2400);
+    // Done
     const t3 = setTimeout(() => {
       setPhase("done");
       onComplete();
-    }, 3600);
+    }, 3800);
 
     return () => {
+      clearTimeout(t0);
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
@@ -33,47 +44,48 @@ export default function IntroAnimation({
   return (
     <AnimatePresence>
       {phase !== "done" && (
-        <motion.div
-          className="fixed inset-0 z-[9998]"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {/* Cream background — wipes away with chevron shape */}
+        <div className="fixed inset-0 z-[9998]">
+          {/* Cream panel — always starts visible, wipes away */}
           <motion.div
-            className="absolute inset-0 bg-[#F4F3F1] z-10"
+            className="absolute inset-0 bg-[#F4F3F1]"
+            initial={{
+              clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 100%)",
+            }}
             animate={
               phase === "wipe"
                 ? {
                     clipPath:
-                      "polygon(0 0, 100% 0, 100% -10%, 50% 0%, 0 -10%)",
+                      "polygon(0 0, 100% 0, 100% -20%, 50% -5%, 0 -20%)",
                   }
                 : {
                     clipPath:
                       "polygon(0 0, 100% 0, 100% 100%, 50% 115%, 0 100%)",
                   }
             }
-            transition={{
-              duration: 1.2,
-              ease: [0.76, 0, 0.24, 1],
-            }}
+            transition={
+              phase === "wipe"
+                ? { duration: 1.2, ease: [0.76, 0, 0.24, 1] }
+                : { duration: 0 }
+            }
           />
 
-          {/* Logo — sits on the cream layer */}
-          <motion.div
-            className="absolute inset-0 z-20 flex items-center justify-center"
-            animate={
-              phase === "wipe"
-                ? { opacity: 0, y: -40, scale: 0.95 }
-                : phase === "logo-in"
-                ? { opacity: 0, y: 15, scale: 0.95 }
-                : { opacity: 1, y: 0, scale: 1 }
-            }
-            transition={{
-              duration: phase === "wipe" ? 0.6 : 0.7,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-          >
-            <div className="flex flex-col items-center gap-5">
+          {/* Logo — animates in on the cream panel */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <motion.div
+              className="flex flex-col items-center gap-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={
+                phase === "idle"
+                  ? { opacity: 0, y: 20 }
+                  : phase === "wipe"
+                  ? { opacity: 0, y: -30 }
+                  : { opacity: 1, y: 0 }
+              }
+              transition={{
+                duration: phase === "wipe" ? 0.5 : 0.7,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+            >
               <img
                 src={`${BASE}/images/diamond-logo-dark.png`}
                 alt="Diamond View"
@@ -88,9 +100,9 @@ export default function IntroAnimation({
                   Creative Production Studio
                 </span>
               </div>
-            </div>
-          </motion.div>
-        </motion.div>
+            </motion.div>
+          </div>
+        </div>
       )}
     </AnimatePresence>
   );
