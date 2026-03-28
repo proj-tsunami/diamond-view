@@ -48,6 +48,13 @@ body {
   line-height: 1.6;
 }
 
+/* Custom cursor — hide default on desktop */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
 /* Headings default to Owners */
 h1, h2, h3 {
   font-family: var(--font-heading), Arial, Helvetica, sans-serif;

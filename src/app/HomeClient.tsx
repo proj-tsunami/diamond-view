@@ -26,6 +26,9 @@ import GridOverlay from "@/components/GridOverlay";
 import ChromaticText from "@/components/ChromaticText";
 import CornerMarks from "@/components/CornerMarks";
 import CharReveal from "@/components/CharReveal";
+import CustomCursor from "@/components/CustomCursor";
+import IceParticles from "@/components/IceParticles";
+import GSAPProvider from "@/components/GSAPProvider";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -155,6 +158,9 @@ function Hero() {
     >
       {/* 3D Glacier landscape */}
       <GlacierScene />
+
+      {/* Ice dust particles */}
+      <IceParticles className="z-[5]" />
 
       {/* Geometric grid overlay */}
       <GridOverlay className="z-10" />
@@ -828,7 +834,9 @@ function Contact() {
 
 export default function HomeClient() {
   return (
+    <GSAPProvider>
     <SmoothScroll>
+      <CustomCursor />
       <Navbar />
       <SideMargins />
       <Hero />
@@ -843,5 +851,6 @@ export default function HomeClient() {
       <Team />
       <Contact />
     </SmoothScroll>
+    </GSAPProvider>
   );
 }
