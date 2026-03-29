@@ -7,7 +7,6 @@ import {
   useTransform,
   useInView,
 } from "framer-motion";
-import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import AnimatedSection from "@/components/AnimatedSection";
 import TextReveal from "@/components/TextReveal";
@@ -878,7 +877,7 @@ export default function HomeClient() {
       {/* Branded intro animation */}
       <IntroAnimation onComplete={() => setIntroComplete(true)} />
 
-      <SmoothScroll>
+      <>
         <CustomCursor />
         <Navbar />
         <SideMargins />
@@ -903,7 +902,7 @@ export default function HomeClient() {
           <Team />
           <Contact />
         </div>
-      </SmoothScroll>
+      </>
     </GSAPProvider>
   );
 }

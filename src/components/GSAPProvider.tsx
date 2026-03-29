@@ -3,11 +3,7 @@
 import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-/*
-  GSAP + ScrollTrigger setup.
-  Registers the plugin and syncs with Lenis smooth scroll.
-*/
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,13 +13,29 @@ export default function GSAPProvider({
   children: React.ReactNode;
 }) {
   useEffect(() => {
-    // ScrollTrigger refresh after fonts/images load
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    // Sync Lenis scroll position into GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+
+    // Use GSAP ticker to drive Lenis RAF loop
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // Refresh ScrollTrigger after fonts/images load
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();
     }, 500);
 
     return () => {
       clearTimeout(timer);
+      lenis.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);

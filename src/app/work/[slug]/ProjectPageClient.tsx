@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import CustomCursor from "@/components/CustomCursor";
 import SideMargins from "@/components/SideMargins";
 import GridOverlay from "@/components/GridOverlay";
-import SmoothScroll from "@/components/SmoothScroll";
+import GSAPProvider from "@/components/GSAPProvider";
 
 interface ProjectPageClientProps {
   slug: string;
@@ -29,7 +29,7 @@ export default function ProjectPageClient({ slug }: ProjectPageClientProps) {
   const { prev, next } = getAdjacentProjects(slug);
 
   return (
-    <SmoothScroll>
+    <GSAPProvider>
       <CustomCursor />
       <GridOverlay />
       <SideMargins />
@@ -41,6 +41,6 @@ export default function ProjectPageClient({ slug }: ProjectPageClientProps) {
         <ProjectGallery gallery={project.gallery} />
         <ProjectNav prev={prev} next={next} />
       </main>
-    </SmoothScroll>
+    </GSAPProvider>
   );
 }
