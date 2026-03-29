@@ -32,6 +32,9 @@ import IntroAnimation from "@/components/IntroAnimation";
 import DiamondEdge from "@/components/DiamondEdge";
 import { projects } from "@/data/projects";
 import Link from "next/link";
+import ScrollSequence from "@/components/ScrollSequence";
+import { getFrameUrls } from "@/utils/frames";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
 
@@ -123,6 +126,12 @@ function useShowVideo() {
 }
 
 function Hero() {
+  const isMobile = useIsMobile();
+  const heroFrames = getFrameUrls(
+    `/sequences/hero/${isMobile ? "mobile" : "desktop"}`,
+    isMobile ? 45 : 90
+  );
+
   const reelRef = useRef(null);
   const mountainRef = useRef(null);
   const showVideo = useShowVideo();
@@ -146,90 +155,76 @@ function Hero() {
   return (
     <div id="hero" data-theme="dark" className="bg-[#181919]">
       {/* ── Part 1: Demo Reel (full viewport) ── */}
-      <section ref={reelRef} className="relative h-[120vh] overflow-hidden">
-        <motion.div style={{ opacity: reelOpacity, scale: reelScale }} className="sticky top-0 h-screen">
-          <div className="relative w-full h-full overflow-hidden">
-            {showVideo ? (
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                poster={`${BASE}/images/generated/hero.jpg`}
-                className="w-full h-full object-cover"
-              >
-                <source src={`${BASE}/video/demo-reel.mp4`} type="video/mp4" />
-              </video>
-            ) : (
-              <img
-                src={`${BASE}/images/generated/hero.jpg`}
-                alt="Diamond View demo reel"
-                loading="eager"
-                className="w-full h-full object-cover"
-              />
-            )}
-            <div className="absolute inset-0 bg-charcoal/30" />
+      <section ref={reelRef} className="relative overflow-hidden">
+        <motion.div style={{ opacity: reelOpacity, scale: reelScale }}>
+          <ScrollSequence
+            frames={heroFrames}
+            height="120vh"
+            priority
+            overlay={
+              <>
+                <div className="absolute inset-0 bg-charcoal/30" />
+                <GridOverlay className="z-10" />
 
-            {/* Grid overlay */}
-            <GridOverlay className="z-10" />
+                {/* "Feeling in Motion" wordmark centered over reel */}
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                  <div className="group cursor-default relative">
+                    {/* Chromatic aberration layers — visible on hover */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                        FEELING
+                      </span>
+                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                        IN MOTION
+                      </span>
+                    </div>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                        FEELING
+                      </span>
+                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                        IN MOTION
+                      </span>
+                    </div>
 
-            {/* "Feeling in Motion" wordmark centered over reel */}
-            <div className="absolute inset-0 flex items-center justify-center z-20">
-              <div className="group cursor-default relative">
-                {/* Chromatic aberration layers — visible on hover */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
-                    FEELING
-                  </span>
-                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
-                    IN MOTION
-                  </span>
-                </div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
-                    FEELING
-                  </span>
-                  <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
-                    IN MOTION
-                  </span>
-                </div>
+                    {/* Main wordmark */}
+                    <div className="flex flex-col items-center gap-0">
+                      <span className="text-cream/50 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/70 transition-colors duration-500">
+                        FEELING
+                      </span>
+                      <span className="text-cream/30 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/50 transition-colors duration-500">
+                        IN MOTION
+                      </span>
+                    </div>
 
-                {/* Main wordmark */}
-                <div className="flex flex-col items-center gap-0">
-                  <span className="text-cream/50 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/70 transition-colors duration-500">
-                    FEELING
-                  </span>
-                  <span className="text-cream/30 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/50 transition-colors duration-500">
-                    IN MOTION
-                  </span>
+                    {/* Bokeh blur around edges on hover */}
+                    <div
+                      className="absolute -inset-12 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                      style={{
+                        background: "radial-gradient(ellipse at center, transparent 40%, rgba(244,243,241,0.03) 60%, rgba(244,243,241,0.06) 75%, transparent 90%)",
+                        filter: "blur(8px)",
+                      }}
+                    />
+                  </div>
                 </div>
 
-                {/* Bokeh blur around edges on hover */}
-                <div
-                  className="absolute -inset-12 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse at center, transparent 40%, rgba(244,243,241,0.03) 60%, rgba(244,243,241,0.06) 75%, transparent 90%)",
-                    filter: "blur(8px)",
-                  }}
-                />
-              </div>
-            </div>
+                {/* Bottom gradient into mountain section */}
+                <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-b from-transparent to-[#181919] z-10 pointer-events-none" />
 
-            {/* Bottom gradient into mountain section */}
-            <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-b from-transparent to-[#181919] z-10 pointer-events-none" />
-
-            {/* Scroll indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-              <span className="text-cream/15 text-[9px] tracking-[0.4em] uppercase">Scroll</span>
-              <div className="relative w-[1px] h-12 overflow-hidden">
-                <motion.div
-                  animate={{ y: ["-100%", "100%"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/25 to-transparent"
-                />
-              </div>
-            </div>
-          </div>
+                {/* Scroll indicator */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
+                  <span className="text-cream/15 text-[9px] tracking-[0.4em] uppercase">Scroll</span>
+                  <div className="relative w-[1px] h-12 overflow-hidden">
+                    <motion.div
+                      animate={{ y: ["-100%", "100%"] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/25 to-transparent"
+                    />
+                  </div>
+                </div>
+              </>
+            }
+          />
         </motion.div>
       </section>
 
