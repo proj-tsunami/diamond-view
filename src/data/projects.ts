@@ -22,6 +22,11 @@ export type Project = {
   heroPoster: string;
   cardImage: string;
   gallery: GalleryItem[];
+  sequence?: {
+    path: string;
+    desktopFrames: number;
+    mobileFrames: number;
+  };
 };
 
 export const projects: Project[] = [

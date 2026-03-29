@@ -3,6 +3,9 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { Project } from "@/data/projects";
+import ScrollSequence from "@/components/ScrollSequence";
+import { getFrameUrls } from "@/utils/frames";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface ProjectHeroProps {
   project: Project;
@@ -11,6 +14,7 @@ interface ProjectHeroProps {
 export default function ProjectHero({ project }: ProjectHeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const isMobile = useIsMobile();
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -29,6 +33,27 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
     }
   };
 
+  // Scroll sequence mode
+  if (project.sequence) {
+    const frames = getFrameUrls(
+      `${project.sequence.path}/${isMobile ? "mobile" : "desktop"}`,
+      isMobile ? project.sequence.mobileFrames : project.sequence.desktopFrames
+    );
+
+    return (
+      <section data-theme="dark">
+        <ScrollSequence
+          frames={frames}
+          height="150vh"
+          overlay={
+            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-charcoal/30 z-10" />
+          }
+        />
+      </section>
+    );
+  }
+
+  // Original image/video mode
   return (
     <section className="relative w-full h-screen overflow-hidden" data-theme="dark">
       {/* Hero media */}
