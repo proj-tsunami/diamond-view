@@ -448,36 +448,53 @@ function Stats() {
   );
 }
 
-/* ──────────────── PARALLAX IMAGE BREAK ─────────────────── */
+/* ──────────────── SCROLL INTERSTITIAL ─────────────────── */
 
-function ParallaxBreak() {
+function ScrollInterstitial({
+  sequencePath,
+  desktopFrames,
+  mobileFrames,
+  text,
+  height = "250vh",
+}: {
+  sequencePath: string;
+  desktopFrames: number;
+  mobileFrames: number;
+  text?: string;
+  height?: string;
+}) {
+  const isMobile = useIsMobile();
+  const frames = getFrameUrls(
+    `${sequencePath}/${isMobile ? "mobile" : "desktop"}`,
+    isMobile ? mobileFrames : desktopFrames
+  );
+
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["-25%", "25%"]);
   const textOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
   return (
-    <section ref={ref} data-theme="dark" className="relative h-[60vh] md:h-[70vh] overflow-hidden">
-      <motion.div style={{ y }} className="absolute inset-0 -top-[20%] -bottom-[20%]">
-        <div
-          className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${BASE}/images/generated/hero.jpg)` }}
-        />
-        <div className="absolute inset-0 bg-charcoal/40" />
-      </motion.div>
-
-      <motion.div
-        style={{ opacity: textOpacity }}
-        className="relative z-10 h-full flex items-center justify-center px-6"
-      >
-        <p className="text-cream font-display text-3xl md:text-5xl lg:text-6xl font-bold text-center">
-          Dream Bigger.
-        </p>
-      </motion.div>
-    </section>
+    <div ref={ref} data-theme="dark">
+      <ScrollSequence
+        frames={frames}
+        height={height}
+        overlay={
+          text ? (
+            <div className="absolute inset-0 flex items-center justify-center px-6 z-10">
+              <motion.p
+                style={{ opacity: textOpacity }}
+                className="text-cream font-display text-3xl md:text-5xl lg:text-6xl font-bold text-center"
+              >
+                {text}
+              </motion.p>
+            </div>
+          ) : undefined
+        }
+      />
+    </div>
   );
 }
 
@@ -890,10 +907,34 @@ export default function HomeClient() {
         <div className="relative z-0 -mt-1">
           <IntroStatement />
           <Portfolio />
+
+          {/* Interstitial A: between Portfolio and Stats */}
+          <ScrollInterstitial
+            sequencePath="/sequences/interstitial-a"
+            desktopFrames={40}
+            mobileFrames={20}
+          />
+
           <Stats />
           <Services />
-          <ParallaxBreak />
+
+          {/* Interstitial B: replaces ParallaxBreak */}
+          <ScrollInterstitial
+            sequencePath="/sequences/interstitial-b"
+            desktopFrames={40}
+            mobileFrames={20}
+            text="Dream Bigger."
+          />
+
           <Process />
+
+          {/* Interstitial C: between Process and Team */}
+          <ScrollInterstitial
+            sequencePath="/sequences/interstitial-c"
+            desktopFrames={40}
+            mobileFrames={20}
+          />
+
           <Team />
           <Contact />
         </div>
