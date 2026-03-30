@@ -200,3 +200,85 @@ a, button {
   transform: translate(2px, -1px);
   filter: grayscale(1) brightness(0.5) hue-rotate(30deg);
 }
+
+/* Frosted Chromatic Edge Stylistic Element */
+.frosted-chromatic-edge {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 
+    inset 0 0 0 1px rgba(255,255,255,0.03),
+    inset -2px 0 3px rgba(80,80,255,0.08),
+    inset 2px 0 3px rgba(255,80,80,0.08);
+  overflow: hidden;
+}
+
+[data-theme="light"] .frosted-chromatic-edge {
+  background: rgba(24, 25, 25, 0.02);
+  box-shadow: 
+    inset 0 0 0 1px rgba(24,25,25,0.03),
+    inset -2px 0 3px rgba(80,80,255,0.08),
+    inset 2px 0 3px rgba(255,80,80,0.08);
+}
+
+/* Chromatic Blur Hover */
+.chromatic-blur-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  position: relative;
+  display: inline-block;
+}
+
+.chromatic-blur-hover::before,
+.chromatic-blur-hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), filter 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: -1;
+  mix-blend-mode: screen;
+}
+
+[data-theme="light"] .chromatic-blur-hover::before,
+[data-theme="light"] .chromatic-blur-hover::after {
+  mix-blend-mode: multiply;
+}
+
+.chromatic-blur-hover::before {
+  color: rgba(255, 60, 60, 0.8);
+  transform: translate(-1px, 0);
+  filter: blur(1px);
+}
+
+.chromatic-blur-hover::after {
+  color: rgba(60, 60, 255, 0.8);
+  transform: translate(1px, 0);
+  filter: blur(1px);
+}
+
+.chromatic-blur-hover:hover {
+  color: transparent !important;
+  text-shadow: 0 0 10px rgba(24, 25, 25, 0.5);
+  transform: scale(1.02);
+}
+
+[data-theme="dark"] .chromatic-blur-hover:hover {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.chromatic-blur-hover:hover::before {
+  opacity: 1;
+  transform: translate(-4px, 0);
+  filter: blur(3px);
+}
+
+.chromatic-blur-hover:hover::after {
+  opacity: 1;
+  transform: translate(4px, 0);
+  filter: blur(3px);
+}

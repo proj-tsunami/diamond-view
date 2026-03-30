@@ -23,6 +23,9 @@ import GridOverlay from "@/components/GridOverlay";
 import ChromaticText from "@/components/ChromaticText";
 import CornerMarks from "@/components/CornerMarks";
 import CharReveal from "@/components/CharReveal";
+import { LogoCloud } from "@/components/ui/logo-cloud-2";
+import CornerFrameAnimatedButton from "@/components/ui/corner-frame-animated-button-1";
+import Slideshow from "@/components/ui/slideshow";
 import CustomCursor from "@/components/CustomCursor";
 import IceParticles from "@/components/IceParticles";
 import GSAPProvider from "@/components/GSAPProvider";
@@ -136,34 +139,83 @@ function Hero() {
   const mountainRef = useRef(null);
   const showVideo = useShowVideo();
 
-  const { scrollYProgress: reelScroll } = useScroll({
-    target: reelRef,
-    offset: ["start start", "end start"],
-  });
-
   const { scrollYProgress: mountainScroll } = useScroll({
     target: mountainRef,
     offset: ["start start", "end start"],
   });
 
-  const reelOpacity = useTransform(reelScroll, [0, 0.7, 1], [1, 1, 0]);
-  const reelScale = useTransform(reelScroll, [0, 1], [1, 0.95]);
+  const { scrollYProgress: reelScroll } = useScroll({
+    target: reelRef,
+    offset: ["start end", "end start"],
+  });
 
-  const mtnTextOpacity = useTransform(mountainScroll, [0, 0.2, 0.6], [0, 1, 0.8]);
-  const mtnTextY = useTransform(mountainScroll, [0, 1], [60, -100]);
+  // 1. Mountain Parallax (Starts opaque, fades & moves UP as you scroll)
+  const mtnTextOpacity = useTransform(mountainScroll, [0, 0.4, 0.7], [1, 1, 0]);
+  const mtnTextY = useTransform(mountainScroll, [0, 1], [0, -300]);
+
+  // 2. Reel Blend-in (Starts invisible, fades in as we scroll into it)
+  const reelOpacity = useTransform(reelScroll, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const reelScale = useTransform(reelScroll, [0, 0.4], [1.1, 1]);
 
   return (
     <div id="hero" data-theme="dark" className="bg-[#181919]">
-      {/* ── Part 1: Demo Reel (full viewport) ── */}
-      <section ref={reelRef} className="relative overflow-hidden">
+      {/* ── Part 1: Stylized 3D Brand Intro (Formerly Mountain landscape) ── */}
+      <section ref={mountainRef} className="relative h-[150vh] overflow-hidden">
+        <div className="sticky top-0 h-screen flex items-center justify-center">
+          {/* Style frame environment background */}
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#0d0f11]">
+            <img 
+              src="/images/hero-styleframe.jpg"
+              alt="Diamond View Dream Big Style Frame"
+              className="w-full h-full max-h-[90vh] object-contain object-center drop-shadow-2xl"
+            />
+          </div>
+          {/* Subtle gradient specifically to blend the bottom edge with the following section */}
+          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#181919] via-[#181919]/60 to-transparent z-[1]" />
+          
+          <IceParticles className="z-[5]" />
+          <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
+
+          {/* Branding text */}
+          <motion.div
+            style={{ opacity: mtnTextOpacity, y: mtnTextY }}
+            className="relative z-20 text-center px-6"
+          >
+            <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
+            <p className="text-cream/50 text-[10px] sm:text-[11px] font-thin tracking-[0.5em] sm:tracking-[0.8em] uppercase mb-10">
+              Creative Production Studio
+            </p>
+
+            <ChromaticText
+              as="h1"
+              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight"
+              intensity={4}
+            >
+              Diamond
+            </ChromaticText>
+            <ChromaticText
+              as="h1"
+              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight"
+              intensity={4}
+            >
+              View
+            </ChromaticText>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Part 2: Demo Reel (Seamlessly overlaps with previous section) ── */}
+      <section ref={reelRef} className="relative overflow-hidden -mt-[50vh] z-20">
         <motion.div style={{ opacity: reelOpacity, scale: reelScale }}>
           <ScrollSequence
             frames={heroFrames}
-            height="120vh"
+            height="150vh"
             priority
             overlay={
               <>
-                <div className="absolute inset-0 bg-charcoal/30" />
+                {/* Feathers the top edge so it blends smoothly out of the mountain scene */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#181919] via-transparent to-[#181919] z-[5]" />
+                <div className="absolute inset-0 bg-charcoal/30 z-10" />
                 <GridOverlay className="z-10" />
 
                 {/* "Feeling in Motion" wordmark centered over reel */}
@@ -171,28 +223,28 @@ function Hero() {
                   <div className="group cursor-default relative">
                     {/* Chromatic aberration layers — visible on hover */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
                         FEELING
                       </span>
-                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
                         IN MOTION
                       </span>
                     </div>
                     <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
                         FEELING
                       </span>
-                      <span className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
                         IN MOTION
                       </span>
                     </div>
 
                     {/* Main wordmark */}
                     <div className="flex flex-col items-center gap-0">
-                      <span className="text-cream/50 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/70 transition-colors duration-500">
+                      <span className="text-cream/50 text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] group-hover:text-cream/70 transition-colors duration-500">
                         FEELING
                       </span>
-                      <span className="text-cream/30 text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-[0.08em] group-hover:text-cream/50 transition-colors duration-500">
+                      <span className="text-cream/30 text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] group-hover:text-cream/50 transition-colors duration-500">
                         IN MOTION
                       </span>
                     </div>
@@ -208,12 +260,12 @@ function Hero() {
                   </div>
                 </div>
 
-                {/* Bottom gradient into mountain section */}
+                {/* Bottom gradient into next section */}
                 <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-b from-transparent to-[#181919] z-10 pointer-events-none" />
 
                 {/* Scroll indicator */}
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-                  <span className="text-cream/15 text-[9px] tracking-[0.4em] uppercase">Scroll</span>
+                  <span className="text-cream/15 text-[9px] font-thin tracking-[0.6em] uppercase">Scroll</span>
                   <div className="relative w-[1px] h-12 overflow-hidden">
                     <motion.div
                       animate={{ y: ["-100%", "100%"] }}
@@ -227,51 +279,6 @@ function Hero() {
           />
         </motion.div>
       </section>
-
-      {/* ── Part 2: Mountain landscape with branding ── */}
-      <section ref={mountainRef} className="relative h-[130vh] overflow-hidden">
-        <div className="sticky top-0 h-screen flex items-center justify-center">
-          {/* Glacier parallax background */}
-          <GlacierScene />
-
-          {/* Ice dust particles */}
-          <IceParticles className="z-[5]" />
-
-          {/* Grid overlay */}
-          <GridOverlay className="z-10" />
-
-          {/* Corner marks */}
-          <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
-
-          {/* Branding text */}
-          <motion.div
-            style={{ opacity: mtnTextOpacity, y: mtnTextY }}
-            className="relative z-20 text-center px-6"
-          >
-            <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
-
-            <p className="text-cream/30 text-[11px] tracking-[0.5em] uppercase mb-10">
-              Creative Production Studio
-            </p>
-
-            <ChromaticText
-              as="h1"
-              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold"
-              intensity={3}
-            >
-              Diamond
-            </ChromaticText>
-            <ChromaticText
-              as="h1"
-              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light"
-              intensity={3}
-            >
-              View
-            </ChromaticText>
-
-          </motion.div>
-        </div>
-      </section>
     </div>
   );
 }
@@ -279,8 +286,13 @@ function Hero() {
 /* ──────────────────── INTRO STATEMENT ─────────────────── */
 
 function IntroStatement() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const textY1 = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const textY2 = useTransform(scrollYProgress, [0, 1], [120, -120]);
+
   return (
-    <section data-theme="light" className="py-24 md:py-36 px-6 md:px-12 relative overflow-hidden">
+    <section ref={ref} data-theme="light" className="py-24 md:py-36 px-6 md:px-12 relative overflow-hidden">
       {/* Floating decorative elements */}
       <FloatingElement
         className="absolute top-20 left-[8%] w-[1px] h-32 bg-charcoal/[0.04] hidden md:block"
@@ -303,21 +315,23 @@ function IntroStatement() {
         <div className="w-24 h-[1px] bg-charcoal/[0.06] rotate-45" />
       </ParallaxLayer>
 
-      {/* Sumi ink accents */}
-
       <div className="max-w-5xl mx-auto relative z-10">
-        <AnimatedSection>
-          <p className="text-charcoal/25 text-[10px] tracking-[0.4em] uppercase mb-12 text-center">
-            DV // Diamond View 2026
-          </p>
-        </AnimatedSection>
+        <motion.div style={{ y: textY1 }}>
+          <AnimatedSection>
+            <p className="text-charcoal/40 text-[9px] font-thin tracking-[0.6em] uppercase mb-12 text-center drop-shadow-sm">
+              DV // Diamond View 2026
+            </p>
+          </AnimatedSection>
+        </motion.div>
 
-        <ScrollRevealText
-          as="h2"
-          className="text-charcoal font-heading text-3xl md:text-5xl lg:text-6xl font-medium leading-[1.05] tracking-tight text-center"
-        >
-          An award-winning creative studio exploring what it means to create feeling through moving image — blending organic creativity with innovation in technology.
-        </ScrollRevealText>
+        <motion.div style={{ y: textY2 }}>
+          <ScrollRevealText
+            as="h2"
+            className="text-charcoal font-heading text-3xl md:text-5xl lg:text-7xl font-medium leading-[1.05] tracking-tight text-center"
+          >
+            An award-winning creative studio exploring what it means to create feeling through moving image — blending organic creativity with innovation in technology.
+          </ScrollRevealText>
+        </motion.div>
       </div>
     </section>
   );
@@ -329,13 +343,13 @@ function Portfolio() {
   return (
     <section id="work" data-theme="light">
       {/* Section header */}
-      <div className="px-6 md:px-12 pt-24 pb-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="px-6 md:px-12 pt-32 md:pt-48 pb-12">
+        <div className="max-w-7xl mx-auto text-center md:text-left">
           <AnimatedSection>
-            <p className="text-[10px] tracking-[0.3em] uppercase text-charcoal/25 mb-3">
+            <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-charcoal/40 mb-3 drop-shadow-sm">
               Selected Work
             </p>
-            <div className="section-divider" />
+            <div className="w-full h-[1px] bg-charcoal/10" />
           </AnimatedSection>
         </div>
       </div>
@@ -349,10 +363,10 @@ function Portfolio() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.6 }}
-            className="group flex-shrink-0 w-[80vw] md:w-[45vw] lg:w-[35vw]"
+            className="group flex-shrink-0 w-[85vw] md:w-[70vw] lg:w-[55vw]"
           >
             <Link href={`/work/${project.slug}`} className="block cursor-pointer">
-              <TiltCard intensity={6} className="relative aspect-[16/10] rounded-sm overflow-hidden">
+              <TiltCard intensity={6} className="relative aspect-[16/10] rounded-xl overflow-hidden frosted-chromatic-edge">
                 <motion.div
                   layoutId={`project-hero-${project.slug}`}
                   whileHover={{ scale: 1.05 }}
@@ -374,7 +388,7 @@ function Portfolio() {
                   </span>
 
                   <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
-                    <p className="text-cream/50 text-[10px] tracking-[0.2em] uppercase mb-2">
+                    <p className="text-cream/50 text-[9px] font-thin tracking-[0.4em] uppercase mb-2">
                       {project.category} — {project.year}
                     </p>
                     <h3 className="text-cream group-hover:text-cream/80 text-2xl md:text-3xl font-heading font-medium tracking-tight transition-colors duration-500">
@@ -395,17 +409,14 @@ function Portfolio() {
         ))}
 
         {/* Final CTA card */}
-        <div className="flex-shrink-0 w-[60vw] md:w-[30vw] flex items-center justify-center">
-          <MagneticButton href="#contact">
-            <div className="text-center">
-              <p className="text-charcoal/20 text-sm tracking-[0.2em] uppercase mb-3">
-                Have a project?
-              </p>
-              <p className="text-charcoal/50 text-2xl font-extralight tracking-tight hover:text-charcoal transition-colors duration-300">
-                Let&apos;s talk &rarr;
-              </p>
-            </div>
-          </MagneticButton>
+        <div className="flex-shrink-0 w-[60vw] md:w-[30vw] flex flex-col items-center justify-center space-y-6">
+          <p className="text-charcoal/40 text-[10px] font-thin tracking-[0.4em] uppercase mb-4 text-center">
+            Have a project?
+          </p>
+          <CornerFrameAnimatedButton 
+            buttonText="Let's talk" 
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          />
         </div>
       </HorizontalScroll>
     </section>
@@ -437,7 +448,7 @@ function Stats() {
                   duration={2.5}
                 />
               </div>
-              <p className="text-charcoal/30 text-[10px] tracking-[0.25em] uppercase mt-3">
+              <p className="text-charcoal/50 text-[9px] font-thin tracking-[0.5em] uppercase mt-3 drop-shadow-sm">
                 {stat.label}
               </p>
             </motion.div>
@@ -551,7 +562,7 @@ function ServiceCard({
               {service.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-cream/20 text-[10px] tracking-[0.15em] uppercase border border-cream/8 px-3 py-1.5 rounded-full group-hover:border-cream/12 transition-colors duration-300"
+                  className="text-cream/40 text-[9px] font-thin tracking-[0.3em] uppercase border border-cream/8 px-3 py-1.5 rounded-full group-hover:border-cream/20 transition-colors duration-300"
                 >
                   {tag}
                 </span>
@@ -577,7 +588,7 @@ function Services() {
           <div className="md:col-span-4 py-20 md:py-32">
             <div className="md:sticky md:top-[30vh]">
               <AnimatedSection>
-                <p className="text-[10px] tracking-[0.3em] uppercase text-cream/20 mb-6">
+                <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-cream/40 mb-6 drop-shadow-sm">
                   What We Do
                 </p>
               </AnimatedSection>
@@ -638,7 +649,7 @@ function Process() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <AnimatedSection>
-          <p className="text-[10px] tracking-[0.3em] uppercase text-charcoal/25 mb-6">
+          <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-charcoal/40 mb-6 drop-shadow-sm">
             Our Process
           </p>
         </AnimatedSection>
@@ -682,6 +693,7 @@ function ProcessCard({
       }}
       className="group"
     >
+      <div className="frosted-chromatic-edge rounded-lg p-6 h-full transition-transform duration-500 hover:-translate-y-2">
       {/* Animated top bar */}
       <motion.div
         initial={{ scaleX: 0 }}
@@ -703,6 +715,7 @@ function ProcessCard({
       <p className="text-charcoal/35 text-sm font-light leading-relaxed">
         {step.description}
       </p>
+      </div>
     </motion.div>
   );
 }
@@ -732,7 +745,7 @@ function Team() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
           <div className="md:col-span-7">
             <AnimatedSection>
-              <p className="text-[10px] tracking-[0.3em] uppercase text-cream/20 mb-6">
+              <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-cream/40 mb-6 drop-shadow-sm">
                 The Makers
               </p>
             </AnimatedSection>
@@ -808,7 +821,7 @@ function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-8">
             <AnimatedSection>
-              <p className="text-[10px] tracking-[0.3em] uppercase text-charcoal/25 mb-10">
+              <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-charcoal/40 mb-10 drop-shadow-sm">
                 Get in Touch
               </p>
             </AnimatedSection>
@@ -905,8 +918,16 @@ export default function HomeClient() {
 
         {/* ─── Content sections — parallax out from underneath the header ─── */}
         <div className="relative z-0 -mt-1">
-          <IntroStatement />
+          <div className="bg-background pt-24 pb-12">
+            <h2 className="mb-12 text-center font-medium text-charcoal/40 text-sm tracking-[0.4em] uppercase">
+              Companies we collaborate with
+            </h2>
+            <LogoCloud />
+          </div>
+          
+          <Slideshow />
           <Portfolio />
+          <IntroStatement />
 
           {/* Interstitial A: between Portfolio and Stats */}
           <ScrollInterstitial

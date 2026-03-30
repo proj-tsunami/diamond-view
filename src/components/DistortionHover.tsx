@@ -33,26 +33,39 @@ const fragmentShader = `
     float dist = distance(uv, uMouse);
     float ripple = smoothstep(0.4, 0.0, dist) * uHover;
 
-    // Liquid displacement — warps UV around mouse
-    float displaceX = sin(uv.y * 12.0 + uTime * 2.0) * 0.008 * ripple;
-    float displaceY = cos(uv.x * 12.0 + uTime * 2.0) * 0.006 * ripple;
+    // Liquid displacement
+    float displaceX = sin(uv.y * 20.0 + uTime * 2.0) * 0.012 * ripple;
+    float displaceY = cos(uv.x * 20.0 + uTime * 2.0) * 0.012 * ripple;
 
     vec2 displaced = uv + vec2(displaceX, displaceY);
 
-    // Chromatic aberration — split RGB channels
-    float aberration = 0.006 * uHover;
-    float edgeAberration = 0.003 * (1.0 - uHover); // subtle even when not hovered
+    // Enhanced chromatic aberration / blur
+    float aberration = 0.025 * uHover;
+    float edgeAberration = 0.002 * (1.0 - uHover); 
 
     float totalAberration = aberration + edgeAberration;
 
-    // Direction of split follows mouse offset
     vec2 dir = normalize(uv - uMouse + 0.001) * totalAberration;
 
-    float r = texture2D(uTexture, displaced + dir).r;
-    float g = texture2D(uTexture, displaced).g;
-    float b = texture2D(uTexture, displaced - dir).b;
+    // Multi-tap blur along the chromatic split
+    vec3 col = vec3(0.0);
 
-    gl_FragColor = vec4(r, g, b, 1.0);
+    // Red Channel
+    col.r += texture2D(uTexture, displaced + dir).r * 0.5;
+    col.r += texture2D(uTexture, displaced + dir * 1.5).r * 0.3;
+    col.r += texture2D(uTexture, displaced + dir * 2.0).r * 0.2;
+
+    // Green Channel
+    col.g += texture2D(uTexture, displaced).g * 0.6;
+    col.g += texture2D(uTexture, displaced + dir * 0.2).g * 0.2;
+    col.g += texture2D(uTexture, displaced - dir * 0.2).g * 0.2;
+
+    // Blue Channel
+    col.b += texture2D(uTexture, displaced - dir).b * 0.5;
+    col.b += texture2D(uTexture, displaced - dir * 1.5).b * 0.3;
+    col.b += texture2D(uTexture, displaced - dir * 2.0).b * 0.2;
+
+    gl_FragColor = vec4(col, 1.0);
   }
 `;
 
