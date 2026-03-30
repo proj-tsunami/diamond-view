@@ -165,7 +165,7 @@ function Hero() {
           {/* Style frame environment background */}
           <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#0d0f11]">
             <img 
-              src="/images/hero-styleframe.jpg"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-styleframe.jpg`}
               alt="Diamond View Dream Big Style Frame"
               className="w-full h-full max-h-[90vh] object-contain object-center drop-shadow-2xl"
             />
