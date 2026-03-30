@@ -5,6 +5,12 @@ const isProd = process.env.NODE_ENV === "production";
 const basePath = isProd ? "/diamond-view" : "";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: [
+    "dvstudio.site",
+    "dvsdashboard.site",
+    "tsunamidashboard.site",
+    "tsunamistudio.site",
+  ],
   output: "export",
   reactStrictMode: true,
   basePath,
