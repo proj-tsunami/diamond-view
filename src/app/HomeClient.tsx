@@ -108,26 +108,6 @@ const stats = [
 
 /* ───────────────────────── HERO ───────────────────────── */
 
-function useShowVideo() {
-  const [showVideo, setShowVideo] = useState(false);
-
-  useEffect(() => {
-    // Check reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    // Check if mobile (coarse pointer = touch device)
-    const isMobile =
-      window.matchMedia("(pointer: coarse)").matches &&
-      window.innerWidth < 768;
-
-    setShowVideo(!prefersReducedMotion && !isMobile);
-  }, []);
-
-  return showVideo;
-}
-
 function Hero() {
   const isMobile = useIsMobile();
   const heroFrames = getFrameUrls(
@@ -136,144 +116,139 @@ function Hero() {
   );
 
   const reelRef = useRef(null);
-  const mountainRef = useRef(null);
-  const showVideo = useShowVideo();
-
-  const { scrollYProgress: mountainScroll } = useScroll({
-    target: mountainRef,
-    offset: ["start start", "end start"],
-  });
+  const buildingRef = useRef(null);
 
   const { scrollYProgress: reelScroll } = useScroll({
     target: reelRef,
+    offset: ["start start", "end start"],
+  });
+
+  const { scrollYProgress: buildingScroll } = useScroll({
+    target: buildingRef,
     offset: ["start end", "end start"],
   });
 
-  // 1. Mountain Parallax (Starts opaque, fades & moves UP as you scroll)
-  const mtnTextOpacity = useTransform(mountainScroll, [0, 0.4, 0.7], [1, 1, 0]);
-  const mtnTextY = useTransform(mountainScroll, [0, 1], [0, -300]);
+  // Reel wordmark fades out as you scroll away
+  const reelTextOpacity = useTransform(reelScroll, [0, 0.3, 0.6], [1, 1, 0]);
+  const reelTextY = useTransform(reelScroll, [0, 1], [0, -200]);
 
-  // 2. Reel Blend-in (Starts invisible, fades in as we scroll into it)
-  const reelOpacity = useTransform(reelScroll, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-  const reelScale = useTransform(reelScroll, [0, 0.4], [1.1, 1]);
+  // Building sequence blends in
+  const buildingOpacity = useTransform(buildingScroll, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const buildingScale = useTransform(buildingScroll, [0, 0.4], [1.1, 1]);
 
   return (
     <div id="hero" data-theme="dark" className="bg-[#181919]">
-      {/* ── Part 1: Stylized 3D Brand Intro (Formerly Mountain landscape) ── */}
-      <section ref={mountainRef} className="relative h-[150vh] overflow-hidden">
-        <div className="sticky top-0 h-screen flex items-center justify-center">
-          {/* Style frame environment background */}
-          <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-[#0d0f11]">
-            <img 
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/hero-styleframe.jpg`}
-              alt="Diamond View Dream Big Style Frame"
-              className="w-full h-full max-h-[90vh] object-contain object-center drop-shadow-2xl"
-            />
-          </div>
-          {/* Subtle gradient specifically to blend the bottom edge with the following section */}
-          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#181919] via-[#181919]/60 to-transparent z-[1]" />
-          
-          <IceParticles className="z-[5]" />
-          <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
-
-          {/* Branding text */}
-          <motion.div
-            style={{ opacity: mtnTextOpacity, y: mtnTextY }}
-            className="relative z-20 text-center px-6"
+      {/* ── Part 1: Demo Reel Video (revealed after intro animation wipe) ── */}
+      <section ref={reelRef} className="relative h-[150vh] overflow-hidden">
+        <div className="sticky top-0 h-screen overflow-hidden">
+          {/* Video background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster={`${BASE}/images/hero-styleframe.jpg`}
+            className="absolute inset-0 w-full h-full object-cover"
           >
-            <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
-            <p className="text-cream/50 text-[10px] sm:text-[11px] font-thin tracking-[0.5em] sm:tracking-[0.8em] uppercase mb-10">
-              Creative Production Studio
-            </p>
+            <source
+              src={`${BASE}/video/dv_demo_reel_2026_v1 (1080p).mp4`}
+              type="video/mp4"
+            />
+          </video>
 
-            <ChromaticText
-              as="h1"
-              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight"
-              intensity={4}
-            >
-              Diamond
-            </ChromaticText>
-            <ChromaticText
-              as="h1"
-              className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight"
-              intensity={4}
-            >
-              View
-            </ChromaticText>
+          {/* Subtle dark overlay for text legibility */}
+          <div className="absolute inset-0 bg-charcoal/30 z-[1]" />
+          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#181919] via-[#181919]/60 to-transparent z-[2]" />
+
+          <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
+          <GridOverlay className="z-10" />
+
+          {/* Wordmark overlay */}
+          <motion.div
+            style={{ opacity: reelTextOpacity, y: reelTextY }}
+            className="relative z-20 h-full flex items-center justify-center px-6"
+          >
+            <div className="text-center">
+              <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
+              <p className="text-cream/50 text-[10px] sm:text-[11px] font-thin tracking-[0.5em] sm:tracking-[0.8em] uppercase mb-10">
+                Creative Production Studio
+              </p>
+
+              <div className="group cursor-default relative">
+                {/* Chromatic aberration layers — visible on hover */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                    Diamond
+                  </span>
+                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
+                    View
+                  </span>
+                </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                    Diamond
+                  </span>
+                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
+                    View
+                  </span>
+                </div>
+
+                {/* Main wordmark */}
+                <div className="flex flex-col items-center">
+                  <ChromaticText
+                    as="h1"
+                    className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight"
+                    intensity={4}
+                  >
+                    Diamond
+                  </ChromaticText>
+                  <ChromaticText
+                    as="h1"
+                    className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight"
+                    intensity={4}
+                  >
+                    View
+                  </ChromaticText>
+                </div>
+              </div>
+            </div>
           </motion.div>
+
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
+            <span className="text-cream/15 text-[9px] font-thin tracking-[0.6em] uppercase">Scroll</span>
+            <div className="relative w-[1px] h-12 overflow-hidden">
+              <motion.div
+                animate={{ y: ["-100%", "100%"] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/25 to-transparent"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Part 2: Demo Reel (Seamlessly overlaps with previous section) ── */}
-      <section ref={reelRef} className="relative overflow-hidden -mt-[50vh] z-20">
-        <motion.div style={{ opacity: reelOpacity, scale: reelScale }}>
+      {/* ── Part 2: Dream Big Building Scroll Sequence ── */}
+      <section ref={buildingRef} className="relative overflow-hidden -mt-[50vh] z-20">
+        <motion.div style={{ opacity: buildingOpacity, scale: buildingScale }}>
           <ScrollSequence
             frames={heroFrames}
             height="150vh"
             priority
             overlay={
               <>
-                {/* Feathers the top edge so it blends smoothly out of the mountain scene */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#181919] via-transparent to-[#181919] z-[5]" />
-                <div className="absolute inset-0 bg-charcoal/30 z-10" />
-                <GridOverlay className="z-10" />
+                <div className="absolute inset-0 bg-charcoal/20 z-10" />
 
-                {/* "Feeling in Motion" wordmark centered over reel */}
+                {/* "Dream Bigger" text fades in mid-scroll */}
                 <div className="absolute inset-0 flex items-center justify-center z-20">
-                  <div className="group cursor-default relative">
-                    {/* Chromatic aberration layers — visible on hover */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
-                        FEELING
-                      </span>
-                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
-                        IN MOTION
-                      </span>
-                    </div>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
-                        FEELING
-                      </span>
-                      <span className="text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
-                        IN MOTION
-                      </span>
-                    </div>
-
-                    {/* Main wordmark */}
-                    <div className="flex flex-col items-center gap-0">
-                      <span className="text-cream/50 text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] group-hover:text-cream/70 transition-colors duration-500">
-                        FEELING
-                      </span>
-                      <span className="text-cream/30 text-3xl md:text-5xl lg:text-7xl font-display font-bold tracking-[0.08em] group-hover:text-cream/50 transition-colors duration-500">
-                        IN MOTION
-                      </span>
-                    </div>
-
-                    {/* Bokeh blur around edges on hover */}
-                    <div
-                      className="absolute -inset-12 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                      style={{
-                        background: "radial-gradient(ellipse at center, transparent 40%, rgba(244,243,241,0.03) 60%, rgba(244,243,241,0.06) 75%, transparent 90%)",
-                        filter: "blur(8px)",
-                      }}
-                    />
-                  </div>
+                  <p className="text-cream font-display text-3xl md:text-5xl lg:text-7xl font-bold text-center tracking-tight">
+                    Dream Bigger.
+                  </p>
                 </div>
 
                 {/* Bottom gradient into next section */}
                 <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-b from-transparent to-[#181919] z-10 pointer-events-none" />
-
-                {/* Scroll indicator */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-                  <span className="text-cream/15 text-[9px] font-thin tracking-[0.6em] uppercase">Scroll</span>
-                  <div className="relative w-[1px] h-12 overflow-hidden">
-                    <motion.div
-                      animate={{ y: ["-100%", "100%"] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/25 to-transparent"
-                    />
-                  </div>
-                </div>
               </>
             }
           />
