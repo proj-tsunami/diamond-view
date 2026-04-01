@@ -39,7 +39,7 @@ import ScrollSequence from "@/components/ScrollSequence";
 import { getFrameUrls } from "@/utils/frames";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
-const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const services = [
   {

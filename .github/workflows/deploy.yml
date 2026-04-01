@@ -26,6 +26,8 @@ jobs:
 
       - run: npm ci
       - run: npx next build
+        env:
+          SITE_BASE_PATH: /diamond-view
 
       - uses: actions/upload-pages-artifact@v3
         with:

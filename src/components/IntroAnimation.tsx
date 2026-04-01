@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function IntroAnimation({
   onComplete,

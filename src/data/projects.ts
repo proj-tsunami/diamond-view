@@ -1,6 +1,6 @@
 // src/data/projects.ts
 
-const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export type GalleryItem = {
   src: string;

@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const IMG = `${BASE}/images/generated/glacier-final-1.jpg`;
 
 /*

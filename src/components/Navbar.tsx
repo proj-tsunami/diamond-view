@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const navLinks = [
   { label: "Work", href: "#work" },

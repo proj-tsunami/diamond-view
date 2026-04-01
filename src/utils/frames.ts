@@ -1,4 +1,4 @@
-const BASE = process.env.NODE_ENV === "production" ? "/diamond-view" : "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 /**
  * Generates an array of sequential frame URLs.

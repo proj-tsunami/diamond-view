@@ -46,5 +46,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Scroll sequence frames (large binary assets)
-public/sequences/
+# Scroll sequence frames — un-ignored (under 1MB total, safe to commit)
+# public/sequences/
