@@ -151,7 +151,7 @@ function Hero() {
             className="absolute inset-0 w-full h-full object-cover"
           >
             <source
-              src={`${BASE}/video/dv_demo_reel_2026_v1 (1080p).mp4`}
+              src={`${BASE}/video/demo-reel.mp4`}
               type="video/mp4"
             />
           </video>
