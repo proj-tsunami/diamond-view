@@ -49,5 +49,5 @@ next-env.d.ts
 # Scroll sequence frames — un-ignored (under 1MB total, safe to commit)
 # public/sequences/
 
-# Video assets — large files, serve locally via tunnel; move to R2 CDN for production
-public/video/
+# Video assets — commit for now, move to CDN later if repo size is a concern
+# public/video/
