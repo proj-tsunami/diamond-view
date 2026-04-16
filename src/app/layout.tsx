@@ -29,10 +29,51 @@ const owners = localFont({
   display: "swap",
 });
 
+const SITE_URL = "https://diamond-view-site.vercel.app";
+const SITE_TITLE = "Diamond View — Creative Production Studio";
+const SITE_DESCRIPTION =
+  "Story-driven creative production combining concept development, live-action production, visual effects, virtual production, and AI-enhanced workflows.";
+
 export const metadata: Metadata = {
-  title: "Diamond View — Creative Production Studio",
-  description:
-    "Story-driven creative production combining concept development, live-action production, visual effects, virtual production, and AI-enhanced workflows.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: "%s — Diamond View",
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: "Diamond View",
+  authors: [{ name: "Diamond View" }],
+  keywords: [
+    "Diamond View",
+    "creative production",
+    "VFX",
+    "visual effects",
+    "AI production",
+    "virtual production",
+    "branded content",
+    "commercial production",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Diamond View",
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/images/splash/building-parallax.png",
+        width: 1344,
+        height: 768,
+        alt: "Diamond View — Creative Production Studio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/images/splash/building-parallax.png"],
+  },
 };
 
 export default function RootLayout({
