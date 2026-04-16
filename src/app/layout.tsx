@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import PageTransition from "@/components/PageTransition";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const ownersWide = localFont({
   src: [
@@ -45,6 +47,8 @@ export default function RootLayout({
     >
       <body>
         <PageTransition>{children}</PageTransition>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
