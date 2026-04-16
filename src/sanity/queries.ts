@@ -108,6 +108,26 @@ export async function getAdjacentProjects(slug: string) {
   return { prev: prev!, next: next! };
 }
 
+export type TeamMember = {
+  name: string;
+  role: string;
+  wideImage?: string;
+  closeImage?: string;
+};
+
+export async function getTeamMembers(): Promise<TeamMember[]> {
+  return sanityFetch<TeamMember[]>(
+    `*[_type == "teamMember"] | order(order asc) {
+      name,
+      role,
+      "wideImage": wideImage.asset->url + "?auto=format&w=1600",
+      "closeImage": closeImage.asset->url + "?auto=format&w=1200"
+    }`,
+    {},
+    { tags: ["teamMember"] },
+  );
+}
+
 export type Service = {
   number: string;
   title: string;
