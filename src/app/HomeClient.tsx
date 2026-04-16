@@ -183,7 +183,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
                   Diamond
                 </h1>
                 <h1
-                  className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight leading-[0.88] uppercase transition-[filter,letter-spacing] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px] group-hover:tracking-[0.02em]"
+                  className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight leading-[0.88] uppercase transition-[filter,letter-spacing] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px] group-hover:tracking-[0.02em]"
                 >
                   View
                 </h1>
