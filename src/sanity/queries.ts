@@ -128,6 +128,23 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   );
 }
 
+export type SiteSettings = {
+  demoReelUrl: string | null;
+  demoReelPoster: string | null;
+};
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  const result = await sanityFetch<SiteSettings | null>(
+    `*[_id == "siteSettings"][0] {
+      "demoReelUrl": demoReel.asset->url,
+      "demoReelPoster": demoReelPoster.asset->url + "?auto=format&w=2400"
+    }`,
+    {},
+    { tags: ["siteSettings"] },
+  );
+  return result ?? { demoReelUrl: null, demoReelPoster: null };
+}
+
 export type Service = {
   number: string;
   title: string;

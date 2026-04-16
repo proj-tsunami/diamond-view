@@ -33,7 +33,7 @@ import DistortionHover from "@/components/DistortionHover";
 import DotNav from "@/components/DotNav";
 import IntroAnimation from "@/components/IntroAnimation";
 import DiamondEdge from "@/components/DiamondEdge";
-import type { Project } from "@/sanity/queries";
+import type { Project, SiteSettings } from "@/sanity/queries";
 import Link from "next/link";
 import ScrollSequence from "@/components/ScrollSequence";
 import PlaceholderInterstitial from "@/components/PlaceholderInterstitial";
@@ -109,8 +109,10 @@ const stats = [
 
 /* ───────────────────────── HERO ───────────────────────── */
 
-function Hero() {
+function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; demoReelPoster: string | null }) {
   const isMobile = useIsMobile();
+  const reelSrc = demoReelUrl ?? "/video/demo-reel.mp4";
+  const posterSrc = demoReelPoster ?? "/images/hero-styleframe.jpg";
   const heroFrames = getFrameUrls(
     `/sequences/hero/${isMobile ? "mobile" : "desktop"}`,
     isMobile ? 45 : 90
@@ -148,13 +150,11 @@ function Hero() {
             loop
             muted
             playsInline
-            poster="/images/hero-styleframe.jpg"
+            poster={posterSrc}
             className="absolute inset-0 w-full h-full object-cover"
+            key={reelSrc}
           >
-            <source
-              src="/video/demo-reel.mp4"
-              type="video/mp4"
-            />
+            <source src={reelSrc} type="video/mp4" />
           </video>
 
           {/* Subtle dark overlay for text legibility */}
@@ -895,7 +895,7 @@ function Contact() {
 
 /* ───────────────────── PAGE ───────────────────────────── */
 
-export default function HomeClient({ projects }: { projects: Project[] }) {
+export default function HomeClient({ projects, settings }: { projects: Project[]; settings: SiteSettings }) {
   const [introComplete, setIntroComplete] = useState(false);
 
   return (
@@ -911,7 +911,7 @@ export default function HomeClient({ projects }: { projects: Project[] }) {
 
         {/* ─── Header group — sits on top of content below ─── */}
         <div className="relative z-10">
-          <Hero />
+          <Hero demoReelUrl={settings.demoReelUrl} demoReelPoster={settings.demoReelPoster} />
 
           {/* Diamond point bottom edge with drop shadow */}
           <DiamondEdge color="#111212" />
