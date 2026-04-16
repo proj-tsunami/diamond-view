@@ -192,7 +192,7 @@ export default function Footer() {
               }}
             >
               <tspan fontWeight={700}>Diamond</tspan>
-              <tspan fontWeight={300}> View</tspan>
+              <tspan fontWeight={700}> View</tspan>
             </text>
           </motion.svg>
         </div>
