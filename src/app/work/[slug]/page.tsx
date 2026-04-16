@@ -1,10 +1,12 @@
-import { projects } from "@/data/projects";
+import { getProjectSlugs, getProjectBySlug, getAdjacentProjects } from "@/sanity/queries";
 import ProjectPageWrapper from "./ProjectPageWrapper";
+import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const slugs = await getProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function ProjectPage({
@@ -13,5 +15,8 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <ProjectPageWrapper slug={slug} />;
+  const project = await getProjectBySlug(slug);
+  if (!project) notFound();
+  const { prev, next } = await getAdjacentProjects(slug);
+  return <ProjectPageWrapper project={project} prev={prev} next={next} />;
 }

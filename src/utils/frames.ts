@@ -1,5 +1,3 @@
-const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
-
 /**
  * Generates an array of sequential frame URLs.
  * @param basePath - Directory path under public/ (e.g., "/sequences/hero/desktop")
@@ -14,6 +12,6 @@ export function getFrameUrls(
 ): string[] {
   return Array.from({ length: count }, (_, i) => {
     const num = String(startAt + i).padStart(3, "0");
-    return `${BASE}${basePath}/frame-${num}.webp`;
+    return `${basePath}/frame-${num}.webp`;
   });
 }

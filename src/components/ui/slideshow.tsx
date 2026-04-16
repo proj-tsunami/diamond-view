@@ -5,15 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
-    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
+    img: "/images/bts/expedia-dr-1.jpg",
     text: ["BETWEEN SHADOW", "AND LIGHT"],
   },
   {
-    img: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2600&auto=format&fit=crop",
+    img: "/images/bts/orlando_magic_2025_bts-8.jpg",
     text: ["SILENCE SPEAKS", "THROUGH FORM"],
   },
   {
-    img: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=2670&auto=format&fit=crop",
+    img: "/images/bts/ice02909.jpg",
     text: ["ESSENCE BEYOND", "PERCEPTION"],
   },
 ];

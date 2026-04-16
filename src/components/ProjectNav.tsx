@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
-import type { Project } from "@/data/projects";
+import type { Project } from "@/sanity/queries";
 
 interface ProjectNavProps {
   prev: Project;
@@ -29,7 +29,7 @@ export default function ProjectNav({ prev, next }: ProjectNavProps) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 to-transparent" />
                 <div className="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 py-8">
-                  <p className="text-cream/30 text-[10px] tracking-[0.3em] uppercase mb-2">
+                  <p className="dv-micro-label text-cream/45 mb-3">
                     Previous
                   </p>
                   <p className="text-cream/80 group-hover:text-cream font-heading text-lg md:text-2xl font-medium tracking-tight transition-colors duration-300">
@@ -55,7 +55,7 @@ export default function ProjectNav({ prev, next }: ProjectNavProps) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-l from-charcoal/80 to-transparent" />
                 <div className="relative z-10 flex flex-col justify-center items-end h-full px-6 md:px-12 py-8 text-right">
-                  <p className="text-cream/30 text-[10px] tracking-[0.3em] uppercase mb-2">
+                  <p className="dv-micro-label text-cream/45 mb-3">
                     Next
                   </p>
                   <p className="text-cream/80 group-hover:text-cream font-heading text-lg md:text-2xl font-medium tracking-tight transition-colors duration-300">

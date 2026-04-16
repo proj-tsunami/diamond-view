@@ -1,7 +1,7 @@
 "use client";
 
 import AnimatedSection from "@/components/AnimatedSection";
-import type { GalleryItem } from "@/data/projects";
+import type { GalleryItem } from "@/sanity/queries";
 
 interface ProjectGalleryProps {
   gallery: GalleryItem[];

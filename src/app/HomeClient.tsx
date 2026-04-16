@@ -20,10 +20,10 @@ import FloatingElement from "@/components/FloatingElement";
 import GlacierScene from "@/components/GlacierScene";
 import SideMargins from "@/components/SideMargins";
 import GridOverlay from "@/components/GridOverlay";
-import ChromaticText from "@/components/ChromaticText";
 import CornerMarks from "@/components/CornerMarks";
 import CharReveal from "@/components/CharReveal";
-import { LogoCloud } from "@/components/ui/logo-cloud-2";
+import ClientGrid from "@/components/ClientGrid";
+import Footer from "@/components/Footer";
 import CornerFrameAnimatedButton from "@/components/ui/corner-frame-animated-button-1";
 import Slideshow from "@/components/ui/slideshow";
 import CustomCursor from "@/components/CustomCursor";
@@ -33,13 +33,14 @@ import DistortionHover from "@/components/DistortionHover";
 import DotNav from "@/components/DotNav";
 import IntroAnimation from "@/components/IntroAnimation";
 import DiamondEdge from "@/components/DiamondEdge";
-import { projects } from "@/data/projects";
+import type { Project } from "@/sanity/queries";
 import Link from "next/link";
 import ScrollSequence from "@/components/ScrollSequence";
+import PlaceholderInterstitial from "@/components/PlaceholderInterstitial";
+import Diamond from "@/components/Diamond";
+import SectionDivider from "@/components/SectionDivider";
 import { getFrameUrls } from "@/utils/frames";
 import { useIsMobile } from "@/hooks/useIsMobile";
-
-const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const services = [
   {
@@ -137,7 +138,7 @@ function Hero() {
   const buildingScale = useTransform(buildingScroll, [0, 0.4], [1.1, 1]);
 
   return (
-    <div id="hero" data-theme="dark" className="bg-[#181919]">
+    <div id="hero" data-theme="dark" className="bg-[#111212]">
       {/* ── Part 1: Demo Reel Video (revealed after intro animation wipe) ── */}
       <section ref={reelRef} className="relative h-[150vh] overflow-hidden">
         <div className="sticky top-0 h-screen overflow-hidden">
@@ -147,18 +148,18 @@ function Hero() {
             loop
             muted
             playsInline
-            poster={`${BASE}/images/hero-styleframe.jpg`}
+            poster="/images/hero-styleframe.jpg"
             className="absolute inset-0 w-full h-full object-cover"
           >
             <source
-              src={`${BASE}/video/demo-reel.mp4`}
+              src="/video/demo-reel.mp4"
               type="video/mp4"
             />
           </video>
 
           {/* Subtle dark overlay for text legibility */}
           <div className="absolute inset-0 bg-charcoal/30 z-[1]" />
-          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#181919] via-[#181919]/60 to-transparent z-[2]" />
+          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#111212] via-[#111212]/60 to-transparent z-[2]" />
 
           <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
           <GridOverlay className="z-10" />
@@ -170,53 +171,29 @@ function Hero() {
           >
             <div className="text-center">
               <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
-              <p className="text-cream/50 text-[10px] sm:text-[11px] font-thin tracking-[0.5em] sm:tracking-[0.8em] uppercase mb-10">
+              <p className="dv-micro-label text-cream/55 mb-10 tracking-[0.5em] sm:tracking-[0.8em]">
                 Creative Production Studio
               </p>
 
-              <div className="group cursor-default relative">
-                {/* Chromatic aberration layers — visible on hover */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
-                    Diamond
-                  </span>
-                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight text-red-400/20" style={{ transform: "translate(-3px, 2px)", filter: "blur(2px)" }}>
-                    View
-                  </span>
-                </div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
-                    Diamond
-                  </span>
-                  <span className="text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight text-blue-400/20" style={{ transform: "translate(3px, -2px)", filter: "blur(2px)" }}>
-                    View
-                  </span>
-                </div>
-
-                {/* Main wordmark */}
-                <div className="flex flex-col items-center">
-                  <ChromaticText
-                    as="h1"
-                    className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight"
-                    intensity={4}
-                  >
-                    Diamond
-                  </ChromaticText>
-                  <ChromaticText
-                    as="h1"
-                    className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight"
-                    intensity={4}
-                  >
-                    View
-                  </ChromaticText>
-                </div>
+              {/* Wordmark — cream, clean. Hover blurs the letters softly. */}
+              <div className="group cursor-default relative inline-flex flex-col items-center">
+                <h1
+                  className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight leading-[0.88] uppercase transition-[filter,letter-spacing] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px] group-hover:tracking-[0.02em]"
+                >
+                  Diamond
+                </h1>
+                <h1
+                  className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-light tracking-tight leading-[0.88] uppercase transition-[filter,letter-spacing] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px] group-hover:tracking-[0.02em]"
+                >
+                  View
+                </h1>
               </div>
             </div>
           </motion.div>
 
           {/* Scroll indicator */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-            <span className="text-cream/15 text-[9px] font-thin tracking-[0.6em] uppercase">Scroll</span>
+            <span className="text-cream/15 dv-eyebrow">Scroll</span>
             <div className="relative w-[1px] h-12 overflow-hidden">
               <motion.div
                 animate={{ y: ["-100%", "100%"] }}
@@ -228,29 +205,14 @@ function Hero() {
         </div>
       </section>
 
-      {/* ── Part 2: Dream Big Building Scroll Sequence ── */}
+      {/* ── Part 2: Dream Big — PLACEHOLDER (BTS image) ── */}
       <section ref={buildingRef} className="relative overflow-hidden -mt-[50vh] z-20">
         <motion.div style={{ opacity: buildingOpacity, scale: buildingScale }}>
-          <ScrollSequence
-            frames={heroFrames}
+          <PlaceholderInterstitial
+            image="/images/bts/ny_giants_jersey_bts_bw-19.jpg"
+            alt="Diamond View behind the scenes"
+            text="Dream Bigger."
             height="150vh"
-            priority
-            overlay={
-              <>
-                <div className="absolute inset-0 bg-gradient-to-b from-[#181919] via-transparent to-[#181919] z-[5]" />
-                <div className="absolute inset-0 bg-charcoal/20 z-10" />
-
-                {/* "Dream Bigger" text fades in mid-scroll */}
-                <div className="absolute inset-0 flex items-center justify-center z-20">
-                  <p className="text-cream font-display text-3xl md:text-5xl lg:text-7xl font-bold text-center tracking-tight">
-                    Dream Bigger.
-                  </p>
-                </div>
-
-                {/* Bottom gradient into next section */}
-                <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-b from-transparent to-[#181919] z-10 pointer-events-none" />
-              </>
-            }
           />
         </motion.div>
       </section>
@@ -293,7 +255,7 @@ function IntroStatement() {
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div style={{ y: textY1 }}>
           <AnimatedSection>
-            <p className="text-charcoal/40 text-[9px] font-thin tracking-[0.6em] uppercase mb-12 text-center drop-shadow-sm">
+            <p className="text-charcoal/40 dv-eyebrow mb-12 text-center drop-shadow-sm">
               DV // Diamond View 2026
             </p>
           </AnimatedSection>
@@ -314,14 +276,15 @@ function IntroStatement() {
 
 /* ───────────────────── PORTFOLIO ───────────────────────── */
 
-function Portfolio() {
+function Portfolio({ projects }: { projects: Project[] }) {
   return (
     <section id="work" data-theme="light">
       {/* Section header */}
       <div className="px-6 md:px-12 pt-32 md:pt-48 pb-12">
         <div className="max-w-7xl mx-auto text-center md:text-left">
           <AnimatedSection>
-            <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-charcoal/40 mb-3 drop-shadow-sm">
+            <p className="dv-eyebrow text-charcoal/40 mb-3 drop-shadow-sm flex items-center justify-center md:justify-start gap-3">
+              <Diamond size={6} variant="fill" className="text-taupe" />
               Selected Work
             </p>
             <div className="w-full h-[1px] bg-charcoal/10" />
@@ -331,7 +294,7 @@ function Portfolio() {
 
       {/* Horizontal scroll gallery */}
       <HorizontalScroll>
-        {projects.map((project, i) => (
+        {projects.slice(0, 6).map((project, i) => (
           <motion.div
             key={project.slug}
             initial={{ opacity: 0, y: 40 }}
@@ -363,7 +326,7 @@ function Portfolio() {
                   </span>
 
                   <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
-                    <p className="text-cream/50 text-[9px] font-thin tracking-[0.4em] uppercase mb-2">
+                    <p className="dv-micro-label text-cream/60 mb-3">
                       {project.category} — {project.year}
                     </p>
                     <h3 className="text-cream group-hover:text-cream/80 text-2xl md:text-3xl font-heading font-medium tracking-tight transition-colors duration-500">
@@ -383,17 +346,63 @@ function Portfolio() {
           </motion.div>
         ))}
 
-        {/* Final CTA card */}
+        {/* View All Work card */}
+        <Link
+          href="/work"
+          className="group flex-shrink-0 w-[60vw] md:w-[30vw] flex flex-col items-center justify-center space-y-6 cursor-pointer"
+        >
+          <p className="dv-micro-label text-charcoal/50 text-center">
+            View the Archive
+          </p>
+          <div className="flex items-center gap-4 border border-charcoal/20 rounded-full px-10 py-5 transition-all duration-500 group-hover:bg-charcoal group-hover:text-cream">
+            <span className="dv-micro-label text-charcoal group-hover:text-cream transition-colors duration-500">
+              All Work
+            </span>
+            <Diamond
+              size={8}
+              variant="duotone"
+              strokeWidth={0.8}
+              className="text-taupe group-hover:text-cream transition-colors duration-500"
+            />
+          </div>
+        </Link>
+
+        {/* CTA card */}
         <div className="flex-shrink-0 w-[60vw] md:w-[30vw] flex flex-col items-center justify-center space-y-6">
-          <p className="text-charcoal/40 text-[10px] font-thin tracking-[0.4em] uppercase mb-4 text-center">
+          <p className="dv-micro-label text-charcoal/50 mb-4 text-center">
             Have a project?
           </p>
-          <CornerFrameAnimatedButton 
-            buttonText="Let's talk" 
+          <CornerFrameAnimatedButton
+            buttonText="Let's talk"
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
           />
         </div>
       </HorizontalScroll>
+
+      {/* View-all CTA beneath the carousel */}
+      <div className="px-6 md:px-12 pt-16 pb-24 md:pb-32">
+        <div className="max-w-7xl mx-auto flex justify-center">
+          <AnimatedSection>
+            <Link
+              href="/work"
+              className="group inline-flex items-center gap-5 border border-charcoal/20 rounded-full px-10 md:px-14 py-5 md:py-6 transition-all duration-500 hover:bg-charcoal hover:border-charcoal"
+            >
+              <Diamond
+                size={10}
+                variant="duotone"
+                strokeWidth={0.8}
+                className="text-taupe transition-colors duration-500"
+              />
+              <span className="dv-micro-label text-charcoal group-hover:text-cream transition-colors duration-500">
+                View the Full Archive
+              </span>
+              <span className="dv-micro-label text-charcoal/40 group-hover:text-cream/70 transition-all duration-500 group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          </AnimatedSection>
+        </div>
+      </div>
     </section>
   );
 }
@@ -423,7 +432,7 @@ function Stats() {
                   duration={2.5}
                 />
               </div>
-              <p className="text-charcoal/50 text-[9px] font-thin tracking-[0.5em] uppercase mt-3 drop-shadow-sm">
+              <p className="dv-micro-label text-charcoal/55 mt-3 drop-shadow-sm">
                 {stat.label}
               </p>
             </motion.div>
@@ -530,14 +539,14 @@ function ServiceCard({
           className="overflow-hidden"
         >
           <div className="pt-6 pb-2 pl-[88px] md:pl-[120px] max-w-2xl">
-            <p className="text-cream/30 font-light leading-relaxed mb-5 text-sm md:text-base">
+            <p className="dv-body text-cream/60 mb-6">
               {service.description}
             </p>
             <div className="flex flex-wrap gap-2">
               {service.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-cream/40 text-[9px] font-thin tracking-[0.3em] uppercase border border-cream/8 px-3 py-1.5 rounded-full group-hover:border-cream/20 transition-colors duration-300"
+                  className="dv-micro-label text-cream/60 border border-cream/10 px-4 py-2 rounded-full group-hover:border-cream/30 transition-colors duration-300"
                 >
                   {tag}
                 </span>
@@ -552,18 +561,19 @@ function ServiceCard({
 
 function Services() {
   return (
-    <section id="capabilities" data-theme="dark" className="bg-charcoal relative overflow-hidden">
+    <section id="capabilities" data-theme="dark" className="bg-charcoal relative overflow-hidden min-h-screen flex items-center">
       <GridOverlay />
       <CornerMarks color="rgba(244,243,241,0.05)" size={20} />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full py-20 md:py-24">
         {/* Sticky header + scrollable cards layout */}
         <div className="md:grid md:grid-cols-12 md:gap-16">
           {/* Left column — sticky header */}
-          <div className="md:col-span-4 py-20 md:py-32">
-            <div className="md:sticky md:top-[30vh]">
+          <div className="md:col-span-4">
+            <div className="md:sticky md:top-[20vh]">
               <AnimatedSection>
-                <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-cream/40 mb-6 drop-shadow-sm">
+                <p className="dv-eyebrow text-cream/40 mb-6 drop-shadow-sm flex items-center gap-3">
+                  <Diamond size={6} variant="fill" className="text-taupe" />
                   What We Do
                 </p>
               </AnimatedSection>
@@ -574,7 +584,7 @@ function Services() {
                 What We Do.
               </TextReveal>
               <AnimatedSection delay={0.3}>
-                <p className="text-cream/25 text-sm md:text-base font-light leading-relaxed mt-6 max-w-sm">
+                <p className="dv-body text-cream/55 mt-6 max-w-sm">
                   From first idea to final pixel — concept, craft, technology,
                   and production in one connected pipeline.
                 </p>
@@ -583,7 +593,7 @@ function Services() {
           </div>
 
           {/* Right column — service cards */}
-          <div className="md:col-span-8 py-20 md:py-32">
+          <div className="md:col-span-8 mt-16 md:mt-0">
             {services.map((service, i) => (
               <ServiceCard key={service.number} service={service} index={i} />
             ))}
@@ -600,7 +610,7 @@ function Process() {
   return (
     <section id="process" data-theme="light" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
       {/* Grid overlay — dark lines on light bg */}
-      <GridOverlay color="rgba(24,25,25,0.03)" crossColor="rgba(24,25,25,0.05)" />
+      <GridOverlay color="rgba(17,18,18,0.03)" crossColor="rgba(17,18,18,0.05)" />
 
       {/* Sumi ink accents */}
 
@@ -624,7 +634,8 @@ function Process() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <AnimatedSection>
-          <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-charcoal/40 mb-6 drop-shadow-sm">
+          <p className="dv-eyebrow text-charcoal/40 mb-6 drop-shadow-sm flex items-center gap-3">
+            <Diamond size={6} variant="fill" className="text-taupe" />
             Our Process
           </p>
         </AnimatedSection>
@@ -678,7 +689,7 @@ function ProcessCard({
           duration: 0.8,
           ease: [0.25, 0.1, 0.25, 1],
         }}
-        className="h-[2px] bg-charcoal/10 origin-left mb-8"
+        className="h-[2px] bg-taupe/40 origin-left mb-8"
       />
 
       <span className="text-charcoal/8 text-6xl md:text-7xl font-display font-black block mb-4 group-hover:text-charcoal/12 transition-colors duration-700">
@@ -687,7 +698,7 @@ function ProcessCard({
       <h3 className="text-charcoal font-heading text-xl md:text-2xl font-medium tracking-tight mb-4">
         {step.title}
       </h3>
-      <p className="text-charcoal/35 text-sm font-light leading-relaxed">
+      <p className="dv-body text-charcoal/60">
         {step.description}
       </p>
       </div>
@@ -720,7 +731,8 @@ function Team() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
           <div className="md:col-span-7">
             <AnimatedSection>
-              <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-cream/40 mb-6 drop-shadow-sm">
+              <p className="dv-eyebrow text-cream/40 mb-6 drop-shadow-sm flex items-center gap-3">
+                <Diamond size={6} variant="fill" className="text-taupe" />
                 The Makers
               </p>
             </AnimatedSection>
@@ -733,7 +745,7 @@ function Team() {
             </TextReveal>
 
             <AnimatedSection delay={0.4}>
-              <p className="text-cream/25 text-lg font-light leading-relaxed mt-10 max-w-lg">
+              <p className="dv-body text-cream/55 mt-10 max-w-lg">
                 A collective of directors, designers, producers, artists, and
                 technologists who believe the best work lives at the intersection
                 of story, craft, and innovation.
@@ -741,27 +753,40 @@ function Team() {
             </AnimatedSection>
 
             <AnimatedSection delay={0.6}>
-              <MagneticButton href="#contact" className="mt-14">
-                <span className="inline-block text-cream text-[11px] tracking-[0.2em] uppercase border border-cream/15 px-10 py-5 hover:bg-cream hover:text-charcoal transition-all duration-600">
-                  Work with us
-                </span>
-              </MagneticButton>
+              <div className="mt-14 flex flex-wrap gap-5 md:gap-8 items-center">
+                <Link href="/team" className="group inline-flex items-center gap-4 text-cream dv-micro-label border border-cream/20 px-10 py-5 hover:bg-cream hover:text-charcoal transition-all duration-500">
+                  Meet the Team
+                  <Diamond size={7} variant="duotone" strokeWidth={0.8} className="text-taupe group-hover:text-charcoal transition-colors duration-500" />
+                </Link>
+                <MagneticButton href="#contact">
+                  <span className="text-cream/55 hover:text-cream dv-micro-label transition-colors duration-300 border-b border-cream/15 pb-1">
+                    Work with us
+                  </span>
+                </MagneticButton>
+              </div>
             </AnimatedSection>
           </div>
 
           <div className="md:col-span-5 flex items-center justify-center">
             <AnimatedSection delay={0.3} direction="right">
               <div className="grid grid-cols-2 gap-3">
-                {[1, 2, 3, 4].map((n, i) => (
-                  <ParallaxLayer key={n} speed={i % 2 === 0 ? 0.08 : -0.08}>
+                {[
+                  "/images/team/tim_moore-9.jpg",
+                  "/images/team/vanessa_diaz-3.jpg",
+                  "/images/team/jason_blanc-7.jpg",
+                  "/images/team/erin_cullaro-4.jpg",
+                ].map((src, i) => (
+                  <ParallaxLayer key={src} speed={i % 2 === 0 ? 0.08 : -0.08}>
                     <TiltCard intensity={8}>
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.4 }}
-                        className="aspect-[3/4] w-28 md:w-36 bg-cream/[0.04] rounded-sm overflow-hidden"
-                      >
-                        <div className="w-full h-full bg-gradient-to-b from-cream/[0.06] to-transparent" />
-                      </motion.div>
+                      <Link href="/team" className="block">
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.4 }}
+                          className="aspect-[3/4] w-28 md:w-36 bg-cream/[0.04] rounded-sm overflow-hidden"
+                        >
+                          <img src={src} alt="Team member" className="w-full h-full object-cover" loading="lazy" />
+                        </motion.div>
+                      </Link>
                     </TiltCard>
                   </ParallaxLayer>
                 ))}
@@ -796,7 +821,8 @@ function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-8">
             <AnimatedSection>
-              <p className="text-[9px] font-thin tracking-[0.6em] uppercase text-charcoal/40 mb-10 drop-shadow-sm">
+              <p className="dv-eyebrow text-charcoal/40 mb-10 drop-shadow-sm flex items-center gap-3">
+                <Diamond size={6} variant="fill" className="text-taupe" />
                 Get in Touch
               </p>
             </AnimatedSection>
@@ -869,7 +895,7 @@ function Contact() {
 
 /* ───────────────────── PAGE ───────────────────────────── */
 
-export default function HomeClient() {
+export default function HomeClient({ projects }: { projects: Project[] }) {
   const [introComplete, setIntroComplete] = useState(false);
 
   return (
@@ -888,51 +914,61 @@ export default function HomeClient() {
           <Hero />
 
           {/* Diamond point bottom edge with drop shadow */}
-          <DiamondEdge color="#181919" />
+          <DiamondEdge color="#111212" />
         </div>
 
         {/* ─── Content sections — parallax out from underneath the header ─── */}
         <div className="relative z-0 -mt-1">
-          <div className="bg-background pt-24 pb-12">
-            <h2 className="mb-12 text-center font-medium text-charcoal/40 text-sm tracking-[0.4em] uppercase">
-              Companies we collaborate with
-            </h2>
-            <LogoCloud />
-          </div>
-          
+          <ClientGrid />
+
           <Slideshow />
-          <Portfolio />
+
+          <div className="bg-background py-16 md:py-20 text-charcoal">
+            <div className="max-w-6xl mx-auto px-6 md:px-12">
+              <SectionDivider variant="diamond" />
+            </div>
+          </div>
+
+          <Portfolio projects={projects} />
           <IntroStatement />
 
-          {/* Interstitial A: between Portfolio and Stats */}
-          <ScrollInterstitial
-            sequencePath="/sequences/interstitial-a"
-            desktopFrames={40}
-            mobileFrames={20}
+          {/* Interstitial A: between Portfolio and Stats — BTS placeholder */}
+          <PlaceholderInterstitial
+            image="/images/bts/orlando_magic_2025_bts-1.jpg"
+            alt="Orlando Magic shoot — behind the scenes"
+            height="90vh"
           />
 
           <Stats />
+
+          <div className="bg-charcoal py-12 md:py-16 text-cream">
+            <div className="max-w-6xl mx-auto px-6 md:px-12">
+              <SectionDivider variant="triple" />
+            </div>
+          </div>
+
           <Services />
 
-          {/* Interstitial B: replaces ParallaxBreak */}
-          <ScrollInterstitial
-            sequencePath="/sequences/interstitial-b"
-            desktopFrames={40}
-            mobileFrames={20}
+          {/* Interstitial B: replaces ParallaxBreak — BTS placeholder */}
+          <PlaceholderInterstitial
+            image="/images/bts/tb_lightning_bw_2025-3.jpg"
+            alt="Tampa Bay Lightning shoot — behind the scenes"
             text="Dream Bigger."
+            height="100vh"
           />
 
           <Process />
 
-          {/* Interstitial C: between Process and Team */}
-          <ScrollInterstitial
-            sequencePath="/sequences/interstitial-c"
-            desktopFrames={40}
-            mobileFrames={20}
+          {/* Interstitial C: between Process and Team — BTS placeholder */}
+          <PlaceholderInterstitial
+            image="/images/bts/braves_2025_bts-5.jpg"
+            alt="Braves shoot — behind the scenes"
+            height="90vh"
           />
 
           <Team />
-          <Contact />
+
+          <Footer />
         </div>
       </>
     </GSAPProvider>

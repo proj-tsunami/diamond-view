@@ -13,7 +13,7 @@ type CornerFrameAnimatedButtonProps = {
 const CornerFrameAnimatedButton: FC<CornerFrameAnimatedButtonProps> = ({
   buttonText = 'Hover Button',
   className,
-  color = 'bg-gradient-to-r from-[#181919] via-[#2A2B2B] to-[#181919]',
+  color = 'bg-gradient-to-r from-[#111212] via-[#252628] to-[#111212]',
   onClick,
   ...props
 }) => {

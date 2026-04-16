@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import type { Project } from "@/data/projects";
+import type { Project } from "@/sanity/queries";
 import ScrollSequence from "@/components/ScrollSequence";
 import { getFrameUrls } from "@/utils/frames";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -53,6 +53,38 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
     );
   }
 
+  // Vimeo embed mode — takes priority when vimeoId is set
+  if (project.vimeoId) {
+    const hashParam = project.vimeoHash ? `h=${project.vimeoHash}&` : "";
+    return (
+      <section className="relative w-full h-screen overflow-hidden bg-charcoal" data-theme="dark">
+        <div className="absolute inset-0">
+          <iframe
+            src={`https://player.vimeo.com/video/${project.vimeoId}?${hashParam}autoplay=1&muted=1&loop=1&background=1&autopause=0&controls=0&title=0&byline=0&portrait=0&badge=0`}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            title={project.title}
+            style={{ border: 0 }}
+          />
+          {/* Cover scaling trick — Vimeo player needs over-sizing so cropping behaves like object-cover */}
+          <style>{`
+            iframe[src*="player.vimeo.com"] {
+              width: 177.77vh !important;
+              min-width: 100%;
+              height: 56.25vw !important;
+              min-height: 100%;
+              left: 50% !important;
+              top: 50% !important;
+              transform: translate(-50%, -50%) !important;
+            }
+          `}</style>
+        </div>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-charcoal/30 z-10 pointer-events-none" />
+      </section>
+    );
+  }
+
   // Original image/video mode
   return (
     <section className="relative w-full h-screen overflow-hidden" data-theme="dark">
@@ -78,14 +110,14 @@ export default function ProjectHero({ project }: ProjectHeroProps) {
             <div className="absolute bottom-8 right-8 flex gap-4 z-20">
               <button
                 onClick={toggleMute}
-                className="text-cream/60 hover:text-cream transition-colors text-xs tracking-[0.15em] uppercase"
+                className="dv-micro-label text-cream/60 hover:text-cream transition-colors"
                 aria-label={muted ? "Unmute" : "Mute"}
               >
                 {muted ? "Unmute" : "Mute"}
               </button>
               <button
                 onClick={toggleFullscreen}
-                className="text-cream/60 hover:text-cream transition-colors text-xs tracking-[0.15em] uppercase"
+                className="dv-micro-label text-cream/60 hover:text-cream transition-colors"
                 aria-label="Fullscreen"
               >
                 Fullscreen

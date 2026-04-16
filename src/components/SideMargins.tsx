@@ -61,11 +61,11 @@ export default function SideMargins() {
   }, []);
 
   // Intensified colors — much more visible now
-  const lineColor = isDark ? "rgba(244,243,241,0.1)" : "rgba(24,25,25,0.1)";
-  const tickColor = isDark ? "rgba(244,243,241,0.1)" : "rgba(24,25,25,0.1)";
-  const textBright = isDark ? "rgba(244,243,241,0.2)" : "rgba(24,25,25,0.22)";
-  const textMid = isDark ? "rgba(244,243,241,0.1)" : "rgba(24,25,25,0.12)";
-  const dashColor = isDark ? "rgba(244,243,241,0.06)" : "rgba(24,25,25,0.07)";
+  const lineColor = isDark ? "rgba(244,243,241,0.1)" : "rgba(17,18,18,0.1)";
+  const tickColor = isDark ? "rgba(244,243,241,0.1)" : "rgba(17,18,18,0.1)";
+  const textBright = isDark ? "rgba(244,243,241,0.2)" : "rgba(17,18,18,0.22)";
+  const textMid = isDark ? "rgba(244,243,241,0.1)" : "rgba(17,18,18,0.12)";
+  const dashColor = isDark ? "rgba(244,243,241,0.06)" : "rgba(17,18,18,0.07)";
 
   return (
     <>

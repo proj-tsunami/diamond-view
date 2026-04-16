@@ -3,8 +3,7 @@
 import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
-const IMG = `${BASE}/images/generated/glacier-final-1.jpg`;
+const IMG = "/images/generated/glacier-final-1.jpg";
 
 /*
   6 layers in CSS 3D space using perspective + translateZ.
@@ -206,8 +205,8 @@ export default function GlacierScene() {
                   style={{
                     background: `linear-gradient(to bottom,
                       transparent ${layer.maskTop},
-                      rgba(24,25,25,${layer.opacity}) calc(${layer.maskTop} + ${layer.feather}),
-                      rgba(24,25,25,${layer.opacity}) calc(${layer.maskBottom} - ${layer.feather}),
+                      rgba(17,18,18,${layer.opacity}) calc(${layer.maskTop} + ${layer.feather}),
+                      rgba(17,18,18,${layer.opacity}) calc(${layer.maskBottom} - ${layer.feather}),
                       transparent ${layer.maskBottom})`,
                   }}
                 />
@@ -222,7 +221,7 @@ export default function GlacierScene() {
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 35%, transparent 30%, rgba(24,25,25,0.55) 100%)",
+            "radial-gradient(ellipse at 50% 35%, transparent 30%, rgba(17,18,18,0.55) 100%)",
         }}
       />
 
@@ -230,7 +229,7 @@ export default function GlacierScene() {
       <div
         className="absolute bottom-0 left-0 right-0 h-[18%] z-20 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, transparent, #181919)",
+          background: "linear-gradient(to bottom, transparent, #111212)",
         }}
       />
     </div>

@@ -1,13 +1,47 @@
 @import "tailwindcss";
 
 :root {
+  /* Core palette — Brand Guide 2026 */
   --background: #F4F3F1;
-  --foreground: #181919;
-  --charcoal: #181919;
-  --charcoal-light: #2E2F2F;
+  --foreground: #111212;
+  --charcoal: #111212;
+  --charcoal-light: #252628;
   --cream: #F4F3F1;
   --cream-dark: #E5E4E2;
-  --accent: #8A7D6B;
+  /* Avalanche — brand name for cream */
+  --avalanche: #F4F3F1;
+  --avalanche-dark: #E5E4E2;
+  /* Taupe — brand accent */
+  --accent: #968a79;
+  --accent-light: #b1a89b;
+  --taupe: #968a79;
+  --taupe-light: #b1a89b;
+
+  /* Status colors (dashboard/UI) */
+  --approved: #419041;
+  --final: #3169a0;
+  --rejected: #a22f2f;
+
+  /* Radius scale */
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+
+  /* Spacing scale */
+  --space-xxs: 6px;
+  --space-xs: 12px;
+  --space-sm: 28px;
+  --space-md: 48px;
+  --space-lg: 60px;
+  --space-xl: 80px;
+
+  /* Line weights */
+  --line-card: 0.5px;
+  --line-geo: 1px;
+  --line-divider: 3.5px;
+
+  /* Grain opacity */
+  --grain-opacity: 0.03;
 }
 
 @theme inline {
@@ -18,6 +52,14 @@
   --color-cream: var(--cream);
   --color-cream-dark: var(--cream-dark);
   --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-avalanche: var(--avalanche);
+  --color-avalanche-dark: var(--avalanche-dark);
+  --color-taupe: var(--taupe);
+  --color-taupe-light: var(--taupe-light);
+  --color-approved: var(--approved);
+  --color-final: var(--final);
+  --color-rejected: var(--rejected);
   --font-display: var(--font-owners-wide);
   --font-heading: var(--font-owners);
   --font-body: var(--font-owners);
@@ -48,9 +90,9 @@ body {
   line-height: 1.6;
 }
 
-/* Custom cursor — hide default on desktop */
+/* Custom cursor — hide default on desktop (skip Sanity Studio) */
 @media (pointer: fine) {
-  * {
+  body:not(:has([data-ui])) * {
     cursor: none !important;
   }
 }
@@ -81,6 +123,81 @@ h1, h2, h3 {
   font-family: var(--font-owners), Arial, Helvetica, sans-serif;
 }
 
+/* ── Brand Typography Classes (Brand Guide 2026) ───────────────── */
+
+/* Body — 18px / 1.5 / 0.025em — per brand spec */
+.dv-body {
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  font-weight: 400;
+}
+
+/* Body medium — same size, medium weight */
+.dv-body-medium {
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  font-weight: 500;
+}
+
+/* Label / Tag — 16px / 0.255em — uppercase */
+.dv-label {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.255em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Micro label — 14px / 0.2em — uppercase */
+.dv-micro-label {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Section eyebrow — pairs with a small taupe diamond */
+.dv-eyebrow {
+  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Page heading — 28px / 0.055em */
+.dv-h1 {
+  font-family: var(--font-owners), Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.055em;
+  line-height: 1;
+}
+
+/* Section title — 36px bold uppercase */
+.dv-h2 {
+  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* Hero title — fluid 64px+ */
+.dv-hero-title {
+  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
+  font-size: clamp(48px, 8vw, 128px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
 /* Subtle grain texture overlay */
 body::after {
   content: "";
@@ -91,7 +208,7 @@ body::after {
   height: 100%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.03;
+  opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
@@ -146,10 +263,51 @@ a, button {
 
 /* Section divider line */
 .section-divider {
-  width: 60px;
-  height: 1px;
+  width: 70px;
+  height: var(--line-divider);
   background: var(--charcoal);
-  opacity: 0.2;
+  opacity: 0.12;
+}
+
+/* Glassmorphism — 3 layer system */
+.glass-l1 {
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  background: rgba(244, 243, 241, 0.03);
+  border: var(--line-card) solid rgba(244, 243, 241, 0.06);
+}
+
+.glass-l2 {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(244, 243, 241, 0.05);
+  border: var(--line-card) solid rgba(244, 243, 241, 0.08);
+}
+
+.glass-l3 {
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  background: rgba(244, 243, 241, 0.08);
+  border: var(--line-card) solid rgba(244, 243, 241, 0.12);
+}
+
+/* Light mode glass — inverted */
+[data-theme="light"] .glass-l1,
+.light .glass-l1 {
+  background: rgba(17, 18, 18, 0.03);
+  border-color: rgba(17, 18, 18, 0.06);
+}
+
+[data-theme="light"] .glass-l2,
+.light .glass-l2 {
+  background: rgba(17, 18, 18, 0.05);
+  border-color: rgba(17, 18, 18, 0.08);
+}
+
+[data-theme="light"] .glass-l3,
+.light .glass-l3 {
+  background: rgba(17, 18, 18, 0.08);
+  border-color: rgba(17, 18, 18, 0.12);
 }
 
 /* Thin geometric accent line */
@@ -215,9 +373,9 @@ a, button {
 }
 
 [data-theme="light"] .frosted-chromatic-edge {
-  background: rgba(24, 25, 25, 0.02);
+  background: rgba(17, 18, 18, 0.02);
   box-shadow: 
-    inset 0 0 0 1px rgba(24,25,25,0.03),
+    inset 0 0 0 1px rgba(17,18,18,0.03),
     inset -2px 0 3px rgba(80,80,255,0.08),
     inset 2px 0 3px rgba(255,80,80,0.08);
 }
@@ -263,7 +421,7 @@ a, button {
 
 .chromatic-blur-hover:hover {
   color: transparent !important;
-  text-shadow: 0 0 10px rgba(24, 25, 25, 0.5);
+  text-shadow: 0 0 10px rgba(17, 18, 18, 0.5);
   transform: scale(1.02);
 }
 

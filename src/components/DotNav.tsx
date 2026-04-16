@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSectionTheme } from "@/hooks/useSectionTheme";
+import Diamond from "@/components/Diamond";
 
 /*
-  Sticky vertical dot navigation — sits on the left side.
-  Dots indicate sections, active state follows scroll position.
-  Labels appear on hover. Subtle parallax with page scroll.
+  Sticky vertical diamond navigation — sits on the left side.
+  Diamond motif indicates sections, active state follows scroll.
+  Active: filled diamond. Inactive: outlined. Hover: enlarges + label.
 */
 
 const sections = [
@@ -51,7 +52,9 @@ export default function DotNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const dotColor = isDark ? "rgba(244,243,241," : "rgba(24,25,25,";
+  const activeColor = isDark ? "rgba(244,243,241,0.9)" : "rgba(17,18,18,0.9)";
+  const inactiveColor = isDark ? "rgba(244,243,241,0.3)" : "rgba(17,18,18,0.3)";
+  const lineColor = isDark ? "rgba(244,243,241,0.06)" : "rgba(17,18,18,0.06)";
   const labelColor = isDark ? "text-cream/60" : "text-charcoal/60";
 
   const handleClick = (id: string) => {
@@ -90,39 +93,32 @@ export default function DotNav() {
               )}
             </AnimatePresence>
 
-            {/* Dot */}
-            <div
-              className="relative w-2.5 h-2.5 flex items-center justify-center transition-all duration-500"
+            {/* Diamond motif */}
+            <motion.div
+              className="relative flex items-center justify-center"
+              animate={{
+                scale: hoveredIndex === i ? 1.35 : i === activeIndex ? 1.1 : 1,
+                rotate: i === activeIndex ? 0 : 0,
+              }}
+              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              {/* Outer ring — only on active */}
-              <div
-                className="absolute inset-0 rounded-full border transition-all duration-500"
+              <Diamond
+                size={10}
+                variant={i === activeIndex ? "duotone" : "stroke"}
+                color={i === activeIndex ? activeColor : inactiveColor}
+                strokeWidth={i === activeIndex ? 1 : 0.75}
                 style={{
-                  borderColor: i === activeIndex
-                    ? `${dotColor}0.4)`
-                    : "transparent",
-                  transform: i === activeIndex ? "scale(1)" : "scale(0.5)",
+                  transition: "color 700ms cubic-bezier(0.25,0.1,0.25,1)",
                 }}
               />
-
-              {/* Inner dot */}
-              <div
-                className="w-1.5 h-1.5 rounded-full transition-all duration-500"
-                style={{
-                  backgroundColor: i === activeIndex
-                    ? `${dotColor}0.6)`
-                    : `${dotColor}0.15)`,
-                  transform: hoveredIndex === i ? "scale(1.4)" : "scale(1)",
-                }}
-              />
-            </div>
+            </motion.div>
           </div>
         ))}
 
-        {/* Thin connecting line between dots */}
+        {/* Thin connecting line between diamonds */}
         <div
-          className="absolute top-0 bottom-0 left-1/2 w-[1px] -translate-x-1/2 -z-10 transition-colors duration-700"
-          style={{ background: `${dotColor}0.06)` }}
+          className="absolute top-1 bottom-1 left-1/2 w-[1px] -translate-x-1/2 -z-10 transition-colors duration-700"
+          style={{ background: lineColor }}
         />
       </div>
     </div>

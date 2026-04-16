@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
-
 const navLinks = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "/work" },
+  { label: "Team", href: "/team" },
   { label: "Services", href: "#capabilities" },
   { label: "Process", href: "#process" },
   { label: "Contact", href: "#contact" },
@@ -19,14 +18,20 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [isHome, setIsHome] = useState(true);
   const [isProjectPage, setIsProjectPage] = useState(false);
 
   useEffect(() => {
-    const path = window.location.pathname.replace("/diamond-view", "");
-    if (path.startsWith("/work/")) {
-      setIsProjectPage(true);
-    }
+    const path = window.location.pathname;
+    setIsHome(path === "/" || path === "");
+    setIsProjectPage(path.startsWith("/work/"));
   }, []);
+
+  // Resolve hash links so they work from any route (prefix with "/" when not on home)
+  const resolveHref = (href: string) => {
+    if (!href.startsWith("#")) return href;
+    return isHome ? href : `/${href}`;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,9 +99,9 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
-          <a href={isProjectPage ? `${BASE}/` : "#"} className="flex items-center gap-3">
+          <a href={isHome ? "#" : "/"} className="flex items-center gap-3">
             <Image
-              src={scrolled ? `${BASE}/images/diamond-logo-dark.png` : `${BASE}/images/diamond-logo-light.png`}
+              src={scrolled ? "/images/diamond-logo-dark.png" : "/images/diamond-logo-light.png"}
               alt="Diamond View"
               width={32}
               height={32}
@@ -113,7 +118,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-10">
             {isProjectPage ? (
               <a
-                href={`${BASE}/`}
+                href="/"
                 className={`text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${textMuted} ${scrolled ? "hover:text-charcoal" : "hover:text-cream"}`}
               >
                 &larr; Back to Work
@@ -121,35 +126,59 @@ export default function Navbar() {
             ) : (
               <>
                 {navLinks.map((link) => {
-                  const sectionId = link.href.replace("#", "");
-                  const isActive = activeSection === sectionId;
+                  const isHashLink = link.href.startsWith("#");
+                  const sectionId = isHashLink ? link.href.replace("#", "") : null;
+                  const isActive =
+                    (isHome && sectionId && activeSection === sectionId) ||
+                    (!isHome && !isHashLink && window.location.pathname === link.href);
 
                   return (
                     <a
                       key={link.label}
-                      href={link.href}
-                      className={`relative text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${
+                      href={resolveHref(link.href)}
+                      className={`nav-link group relative text-[11px] tracking-[0.15em] uppercase py-4 px-1 transition-colors duration-300 ${
                         isActive
                           ? scrolled
                             ? "text-charcoal"
                             : "text-cream"
                           : scrolled
-                          ? "text-charcoal/60"
-                          : "text-cream/60"
+                          ? "text-charcoal/50 hover:text-charcoal"
+                          : "text-cream/50 hover:text-cream"
                       }`}
                     >
                       {link.label}
+
+                      {/* Underline — scales from center on hover, solid when active */}
                       <span
-                        className={`absolute -bottom-1 left-0 h-[1px] transition-all duration-300 ${
+                        className={`absolute left-0 right-0 bottom-0 h-[1.5px] origin-center transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
                           scrolled ? "bg-charcoal" : "bg-cream"
-                        } ${isActive ? "w-full opacity-100" : "w-0 opacity-0"}`}
+                        } ${
+                          isActive
+                            ? "scale-x-100"
+                            : "scale-x-0 group-hover:scale-x-100"
+                        }`}
+                      />
+
+                      {/* Diamond marker — rotated square, scales in on hover/active */}
+                      <span
+                        className={`absolute left-1/2 bottom-[6px] -translate-x-1/2 w-[5px] h-[5px] rotate-45 border-[1.25px] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                          isActive
+                            ? scrolled
+                              ? "border-charcoal"
+                              : "border-cream"
+                            : "border-taupe"
+                        } ${
+                          isActive
+                            ? "scale-100"
+                            : "scale-0 group-hover:scale-100"
+                        }`}
                       />
                     </a>
                   );
                 })}
 
                 <a
-                  href="#contact"
+                  href={resolveHref("#contact")}
                   className={`text-[11px] tracking-[0.15em] uppercase px-5 py-2.5 border transition-all duration-500 ${
                     scrolled
                       ? "text-charcoal border-charcoal/20 hover:bg-charcoal hover:text-cream"
@@ -197,7 +226,7 @@ export default function Navbar() {
             {isProjectPage ? (
               <nav className="flex flex-col items-center gap-8">
                 <motion.a
-                  href={`${BASE}/`}
+                  href="/"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-charcoal text-3xl font-light tracking-wide"
@@ -210,7 +239,7 @@ export default function Navbar() {
                 {navLinks.map((link, i) => (
                   <motion.a
                     key={link.label}
-                    href={link.href}
+                    href={resolveHref(link.href)}
                     onClick={() => setMenuOpen(false)}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -222,7 +251,7 @@ export default function Navbar() {
                 ))}
                 {/* Mobile CTA */}
                 <motion.a
-                  href="#contact"
+                  href={resolveHref("#contact")}
                   onClick={() => setMenuOpen(false)}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
