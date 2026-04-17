@@ -108,7 +108,7 @@ export default function Navbar() {
               className="w-7 h-7 md:w-8 md:h-8 -translate-y-[5px] transition-all duration-700"
             />
             <span
-              className={`${textColor} font-display font-bold tracking-tight text-base md:text-lg transition-colors duration-700`}
+              className={`${textColor} font-display font-bold uppercase tracking-tight text-base md:text-lg transition-colors duration-700`}
             >
               Diamond View
             </span>
