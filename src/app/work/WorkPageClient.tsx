@@ -12,17 +12,15 @@ import SectionDivider from "@/components/SectionDivider";
 import Diamond from "@/components/Diamond";
 import AnimatedSection from "@/components/AnimatedSection";
 import TextReveal from "@/components/TextReveal";
-import type { Project, SiteSettings } from "@/sanity/queries";
+import type { Project } from "@/sanity/queries";
 
-export default function WorkPageClient({
-  projects,
-  siteSettings,
-}: {
-  projects: Project[];
-  siteSettings: SiteSettings;
-}) {
-  const { demoReelUrl, demoReelPoster } = siteSettings;
+/* The work page reel is a dedicated DV Demo Reel 2026 — V10 export,
+   separate from the Sanity-driven home-page splash loop. Compressed
+   to 1080p H.264 with faststart for fast scrubbing. */
+const WORK_REEL_URL = "/video/work-demo-reel.mp4";
+const WORK_REEL_POSTER = "/video/work-demo-reel-poster.jpg";
 
+export default function WorkPageClient({ projects }: { projects: Project[] }) {
   return (
     <GSAPProvider>
       <CustomCursor />
@@ -35,20 +33,14 @@ export default function WorkPageClient({
         <section className="pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
           <div className="max-w-6xl mx-auto">
             <div className="relative aspect-video overflow-hidden rounded-sm border border-cream/8 bg-charcoal-light">
-              {demoReelUrl ? (
-                <video
-                  controls
-                  preload="metadata"
-                  poster={demoReelPoster ?? undefined}
-                  className="absolute inset-0 w-full h-full object-cover"
-                >
-                  <source src={demoReelUrl} type="video/mp4" />
-                </video>
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-cream/40">
-                  Demo reel not configured
-                </div>
-              )}
+              <video
+                controls
+                preload="metadata"
+                poster={WORK_REEL_POSTER}
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src={WORK_REEL_URL} type="video/mp4" />
+              </video>
             </div>
           </div>
         </section>
