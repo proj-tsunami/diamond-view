@@ -182,7 +182,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
               <h1 className="sr-only">Feeling in Motion</h1>
               <div className="group cursor-default relative text-cream">
                 <svg
-                  viewBox="249.39 240 208.15 80"
+                  viewBox="246 240 208.15 80"
                   preserveAspectRatio="xMidYMid meet"
                   className="block mx-auto w-[80vw] md:w-[60vw] lg:w-[55vw] xl:w-[50vw] max-w-[1200px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
                   aria-label="Feeling in Motion"
