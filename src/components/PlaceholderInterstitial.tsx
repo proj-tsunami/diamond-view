@@ -27,9 +27,11 @@ export default function PlaceholderInterstitial({
     offset: ["start end", "end start"],
   });
 
-  // Slow parallax — image moves at 30% scroll speed
-  const imgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-  const imgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1.05, 1.1]);
+  // Slow parallax — small Y range and a constant scale that never
+  // dips below the container's overflow buffer, so the image never
+  // reveals the charcoal background at top or bottom.
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  const imgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.15, 1.15, 1.15]);
 
   // Text fades in/out as section passes through viewport
   const textOpacity = useTransform(
@@ -46,9 +48,11 @@ export default function PlaceholderInterstitial({
       className="relative overflow-hidden bg-charcoal"
       style={{ height }}
     >
-      {/* Parallax image */}
+      {/* Parallax image — inset extends 8% top/bottom so the small Y
+          parallax doesn't expose charcoal at the edges. Image always
+          fills the container. */}
       <motion.div
-        className="absolute inset-0 -top-[10%] -bottom-[10%] will-change-transform"
+        className="absolute inset-0 -top-[8%] -bottom-[8%] will-change-transform"
         style={{ y: imgY, scale: imgScale }}
       >
         <img
