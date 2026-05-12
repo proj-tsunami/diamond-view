@@ -112,7 +112,7 @@ const stats = [
 function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; demoReelPoster: string | null }) {
   const isMobile = useIsMobile();
   const reelSrc = demoReelUrl ?? "/video/demo-reel.mp4";
-  const posterSrc = demoReelPoster ?? "/images/hero-styleframe.jpg";
+  const posterSrc = demoReelPoster ?? undefined;
   const heroFrames = getFrameUrls(
     `/sequences/hero/${isMobile ? "mobile" : "desktop"}`,
     isMobile ? 45 : 90
@@ -151,7 +151,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
             muted
             playsInline
             poster={posterSrc}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover bg-[#111212]"
             key={reelSrc}
           >
             <source src={reelSrc} type="video/mp4" />
