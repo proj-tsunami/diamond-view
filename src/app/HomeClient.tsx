@@ -926,12 +926,18 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
         <SideMargins />
         <DotNav />
 
-        {/* ─── Header group — sits on top of content below ─── */}
-        <div className="relative z-10">
+        {/* ─── Header group — sits on top of content below.
+             The clip-path creates a downward V at the bottom, so the
+             Dream Bigger image bleeds into the chevron point instead
+             of a flat charcoal fill. ─── */}
+        <div
+          className="relative z-10"
+          style={{
+            clipPath:
+              "polygon(0 0, 100% 0, 100% calc(100% - 60px), 50% 100%, 0 calc(100% - 60px))",
+          }}
+        >
           <Hero demoReelUrl={settings.demoReelUrl} demoReelPoster={settings.demoReelPoster} />
-
-          {/* Diamond point bottom edge with drop shadow */}
-          <DiamondEdge color="#111212" />
         </div>
 
         {/* ─── Content sections — parallax out from underneath the header ─── */}
