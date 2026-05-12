@@ -172,25 +172,37 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ─── Giant wordmark — CSS-based responsive size (clamp).
-             Previously used SVG textLength + lengthAdjust="spacingAndGlyphs",
-             which Safari renders incorrectly (glyphs overflow viewBox and
-             get clipped). CSS clamp gives reliable, cross-browser scaling. ─── */}
+        {/* ─── Giant wordmark — SVG with text-anchor="middle" for reliable
+             centering across browsers. ViewBox is sized to comfortably hold
+             "Diamond View" at 150px font-size; the SVG scales proportionally
+             to the container width, so the wordmark always fits AND stays
+             centered, no clipping in Safari. No textLength → no Safari bug. ─── */}
         <div className="relative border-t border-cream/10 pt-10 md:pt-14 overflow-hidden">
-          <motion.div
+          <motion.svg
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="font-display font-bold text-cream/10 leading-none whitespace-nowrap select-none text-center"
-            style={{
-              fontSize: "clamp(56px, 14vw, 220px)",
-              letterSpacing: "-0.02em",
-            }}
+            viewBox="0 0 1300 170"
+            preserveAspectRatio="xMidYMid meet"
+            className="block w-full h-auto select-none"
             aria-hidden
           >
-            Diamond View
-          </motion.div>
+            <text
+              x="650"
+              y="135"
+              textAnchor="middle"
+              style={{
+                fontFamily: "'OwnersWide', Arial, Helvetica, sans-serif",
+                fontWeight: 700,
+                fontSize: "150px",
+                letterSpacing: "-0.02em",
+                fill: "rgba(244,243,241,0.1)",
+              }}
+            >
+              Diamond View
+            </text>
+          </motion.svg>
         </div>
 
         {/* ─── Legal bar ─── */}
