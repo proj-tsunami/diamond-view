@@ -172,17 +172,18 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ─── Full-width wordmark from the DV 2026 brand kit ─── */}
+        {/* ─── DV stacked wordmark from the brand kit — half-width, centered,
+             at original SVG color (no opacity override). ─── */}
         <div className="relative border-t border-cream/10 pt-10 md:pt-14 overflow-hidden">
           <motion.img
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 0.5, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
             src="/images/brand/dv-stacked-diamond.svg"
             alt=""
             aria-hidden
-            className="block w-full h-auto select-none"
+            className="block w-1/2 h-auto mx-auto select-none"
           />
         </div>
 

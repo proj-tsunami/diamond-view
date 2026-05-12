@@ -224,7 +224,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
 
       {/* ── Part 2: Dream Bigger — clear breathing room above so the
            hero reel and this BTS section don't merge. ── */}
-      <section ref={buildingRef} className="relative overflow-hidden mt-32 md:mt-48 z-20">
+      <section ref={buildingRef} className="relative overflow-hidden mt-16 md:mt-24 z-20">
         <motion.div style={{ opacity: buildingOpacity, scale: buildingScale }}>
           <PlaceholderInterstitial
             image="/images/bts/ny_giants_jersey_bts_bw-19.jpg"
