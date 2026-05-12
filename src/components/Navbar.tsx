@@ -148,18 +148,22 @@ export default function Navbar() {
                     >
                       {link.label}
 
-                      {/* Underline — taupe accent, scales from center on hover, solid when active */}
+                      {/* Underline — taupe accent (deeper on light bg, lighter on dark bg) */}
                       <span
-                        className={`absolute left-0 right-0 bottom-0 h-[1.5px] origin-center bg-taupe transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                        className={`absolute left-0 right-0 bottom-0 h-[1.5px] origin-center transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                          scrolled ? "bg-taupe" : "bg-taupe-light"
+                        } ${
                           isActive
                             ? "scale-x-100"
                             : "scale-x-0 group-hover:scale-x-100"
                         }`}
                       />
 
-                      {/* Diamond marker — taupe accent in both states */}
+                      {/* Diamond marker — taupe accent (deeper on light bg, lighter on dark bg) */}
                       <span
-                        className={`absolute left-1/2 bottom-[6px] -translate-x-1/2 w-[5px] h-[5px] rotate-45 border-[1.25px] border-taupe transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                        className={`absolute left-1/2 bottom-[6px] -translate-x-1/2 w-[5px] h-[5px] rotate-45 border-[1.25px] transition-transform duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                          scrolled ? "border-taupe" : "border-taupe-light"
+                        } ${
                           isActive
                             ? "scale-100"
                             : "scale-0 group-hover:scale-100"

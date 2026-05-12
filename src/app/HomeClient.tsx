@@ -531,7 +531,7 @@ function ServiceCard({
       <div className="border-t border-cream/8 py-6 md:py-8">
         {/* Header row — always visible */}
         <div className="flex items-center gap-6 md:gap-10">
-          <span className="text-cream/10 text-4xl md:text-5xl font-display font-black group-hover:text-cream/20 transition-colors duration-500 w-16 md:w-20 flex-shrink-0">
+          <span className="text-taupe/70 text-4xl md:text-5xl font-display font-black group-hover:text-taupe transition-colors duration-500 w-16 md:w-20 flex-shrink-0">
             {service.number}
           </span>
           <h3 className="text-cream font-heading text-xl md:text-2xl font-medium tracking-tight group-hover:text-cream/90 transition-colors duration-300 flex-1">
@@ -590,7 +590,7 @@ function Services() {
           <div className="md:col-span-4">
             <div className="md:sticky md:top-[20vh]">
               <AnimatedSection>
-                <p className="dv-eyebrow text-cream/40 mb-6 drop-shadow-sm flex items-center gap-3">
+                <p className="dv-eyebrow text-taupe mb-6 drop-shadow-sm flex items-center gap-3">
                   <Diamond size={6} variant="fill" className="text-taupe" />
                   What We Do
                 </p>
