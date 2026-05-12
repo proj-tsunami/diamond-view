@@ -61,9 +61,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/images/splash/building-parallax.png",
-        width: 1344,
-        height: 768,
+        url: "/images/og-card.jpg",
+        width: 1200,
+        height: 630,
         alt: "Diamond View — Creative Production Studio",
       },
     ],
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ["/images/splash/building-parallax.png"],
+    images: ["/images/og-card.jpg"],
   },
 };
 
