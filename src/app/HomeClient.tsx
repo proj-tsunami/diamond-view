@@ -175,17 +175,17 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
                 Creative Production Studio
               </p>
 
-              {/* Wordmark — cream, clean. Hover blurs the letters softly. */}
+              {/* Tagline lockup — "Feeling in / Motion" stacked, matching brand kit treatment */}
               <div className="group cursor-default relative inline-flex flex-col items-center">
                 <h1
                   className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight leading-[0.88] uppercase transition-[filter,letter-spacing] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px] group-hover:tracking-[0.02em]"
                 >
-                  Diamond
+                  Feeling in
                 </h1>
                 <h1
                   className="text-cream text-6xl md:text-8xl lg:text-[10rem] font-display font-bold tracking-tight leading-[0.88] uppercase transition-[filter,letter-spacing] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px] group-hover:tracking-[0.02em]"
                 >
-                  View
+                  Motion
                 </h1>
               </div>
             </div>
