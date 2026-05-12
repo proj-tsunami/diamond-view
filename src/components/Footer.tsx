@@ -131,9 +131,16 @@ export default function Footer() {
               Studio
             </p>
             <address className="not-italic text-cream/60 text-sm md:text-base leading-relaxed">
-              Orlando, FL
+              Tampa, Florida
               <br />
               United States
+              <br />
+              <a
+                href="tel:+18139725400"
+                className="mt-2 inline-block text-cream/60 hover:text-cream transition-colors duration-200"
+              >
+                1-813-972-5400
+              </a>
             </address>
             <p className="mt-5 dv-body text-cream/50">
               Available worldwide for select projects.
