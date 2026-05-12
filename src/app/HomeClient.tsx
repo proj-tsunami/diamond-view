@@ -171,7 +171,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
           >
             <div className="text-center">
               <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
-              <p className="dv-micro-label text-cream/55 mb-3 tracking-[0.5em] sm:tracking-[0.8em]">
+              <p className="dv-micro-label text-cream/55 mb-2.5 tracking-[0.5em] sm:tracking-[0.8em]">
                 Creative Production Studio
               </p>
 
