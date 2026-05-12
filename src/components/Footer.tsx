@@ -179,7 +179,7 @@ export default function Footer() {
             whileInView={{ opacity: 0.5, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-            src="/images/brand/dv-wordmark-lockup-dark.svg"
+            src="/images/brand/dv-stacked-diamond.svg"
             alt=""
             aria-hidden
             className="block w-full h-auto select-none"
