@@ -31,55 +31,56 @@ export default function WorkPageClient({
       <Navbar />
 
       <main data-theme="dark" className="bg-charcoal text-cream">
-        {/* ─── Demo Reel Header with "THE VAULT" overlay ─── */}
-        <section className="relative h-[85vh] md:h-screen overflow-hidden bg-charcoal">
-          {/* Background reel */}
-          {demoReelUrl ? (
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              poster={demoReelPoster ?? undefined}
-              className="absolute inset-0 w-full h-full object-cover bg-charcoal"
-            >
-              <source src={demoReelUrl} type="video/mp4" />
-            </video>
-          ) : null}
-
-          {/* Dark scrim for legibility */}
-          <div className="absolute inset-0 bg-charcoal/40 z-[1]" />
-          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-charcoal via-charcoal/60 to-transparent z-[2]" />
-
-          {/* Title overlay */}
-          <div className="relative z-10 h-full flex items-center justify-center px-6 md:px-12">
-            <div className="text-center max-w-5xl mx-auto">
-              <AnimatedSection>
-                <p className="dv-eyebrow text-cream/55 mb-8 flex items-center justify-center gap-3">
-                  <Diamond size={6} variant="fill" className="text-taupe" />
-                  Selected Work
-                </p>
-              </AnimatedSection>
-
-              <TextReveal
-                as="h1"
-                className="font-display font-bold uppercase text-6xl md:text-8xl lg:text-[10rem] tracking-tight leading-[0.88] text-cream"
-              >
-                The Vault.
-              </TextReveal>
-
-              <AnimatedSection delay={0.3}>
-                <p className="mt-8 md:mt-12 max-w-2xl mx-auto dv-body text-cream/70">
-                  A collection of our commercial, branded, and VFX work across
-                  sports, hospitality, healthcare, and entertainment.
-                </p>
-              </AnimatedSection>
+        {/* ─── Demo Reel ─── Contained, playable, clean. Sits at the top so visitors can watch the work. */}
+        <section className="pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
+          <div className="max-w-6xl mx-auto">
+            <div className="relative aspect-video overflow-hidden rounded-sm border border-cream/8 bg-charcoal-light">
+              {demoReelUrl ? (
+                <video
+                  controls
+                  preload="metadata"
+                  poster={demoReelPoster ?? undefined}
+                  className="absolute inset-0 w-full h-full object-cover"
+                >
+                  <source src={demoReelUrl} type="video/mp4" />
+                </video>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-cream/40">
+                  Demo reel not configured
+                </div>
+              )}
             </div>
           </div>
         </section>
 
+        {/* ─── Hero Title ─── Original headline structure, sitting below the reel. */}
+        <section className="relative pt-12 md:pt-16 pb-16 md:pb-24 px-6 md:px-12 overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <AnimatedSection>
+              <p className="dv-eyebrow text-cream/45 mb-8 flex items-center gap-3">
+                <Diamond size={6} variant="fill" className="text-taupe" />
+                Selected Work
+              </p>
+            </AnimatedSection>
+
+            <TextReveal
+              as="h1"
+              className="font-display font-bold uppercase text-6xl md:text-8xl lg:text-[9rem] tracking-tight leading-[0.88] text-cream"
+            >
+              The Vault.
+            </TextReveal>
+
+            <AnimatedSection delay={0.3}>
+              <p className="mt-10 md:mt-14 max-w-2xl dv-body text-cream/60">
+                A collection of our commercial, branded, and VFX work across
+                sports, hospitality, healthcare, and entertainment.
+              </p>
+            </AnimatedSection>
+          </div>
+        </section>
+
         {/* Divider */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16 md:pt-24 pb-14 md:pb-20">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 pb-14 md:pb-20">
           <SectionDivider variant="diamond" color="rgba(244,243,241,0.9)" />
         </div>
 
