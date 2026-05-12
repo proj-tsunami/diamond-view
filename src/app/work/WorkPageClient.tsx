@@ -14,11 +14,12 @@ import AnimatedSection from "@/components/AnimatedSection";
 import TextReveal from "@/components/TextReveal";
 import type { Project } from "@/sanity/queries";
 
-/* The work page reel is a dedicated DV Demo Reel 2026 — V10 export,
-   separate from the Sanity-driven home-page splash loop. Compressed
-   to 1080p H.264 with faststart for fast scrubbing. */
-const WORK_REEL_URL = "/video/work-demo-reel.mp4";
-const WORK_REEL_POSTER = "/video/work-demo-reel-poster.jpg";
+/* The work-page reel is DV Demo Reel 2026 — V10, hosted on Vimeo
+   (separate from the Sanity-driven home-page splash loop). The Vimeo
+   player handles adaptive bitrate, CDN, and chrome — keeps the heavy
+   master out of our git repo. Unlisted video w/ hash. */
+const WORK_REEL_VIMEO_EMBED =
+  "https://player.vimeo.com/video/1191542036?h=aecf929b97&byline=0&title=0&portrait=0&color=968a79&dnt=1";
 
 export default function WorkPageClient({ projects }: { projects: Project[] }) {
   return (
@@ -33,14 +34,14 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
         <section className="pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
           <div className="max-w-6xl mx-auto">
             <div className="relative aspect-video overflow-hidden rounded-sm border border-cream/8 bg-charcoal-light">
-              <video
-                controls
-                preload="metadata"
-                poster={WORK_REEL_POSTER}
-                className="absolute inset-0 w-full h-full object-cover"
-              >
-                <source src={WORK_REEL_URL} type="video/mp4" />
-              </video>
+              <iframe
+                src={WORK_REEL_VIMEO_EMBED}
+                title="Diamond View — Demo Reel 2026"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                allowFullScreen
+                loading="lazy"
+                className="absolute inset-0 w-full h-full"
+              />
             </div>
           </div>
         </section>
