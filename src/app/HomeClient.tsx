@@ -180,10 +180,11 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
                   actual paths — no font substitution, no CSS kerning. Color follows
                   parent currentColor (cream on this dark hero). */}
               <h1 className="sr-only">Feeling in Motion</h1>
-              <div className="group cursor-default relative inline-flex flex-col items-center text-cream">
+              <div className="group cursor-default relative text-cream">
                 <svg
                   viewBox="262.74 243.72 208.15 79.90"
-                  className="w-[80vw] md:w-[60vw] lg:w-[55vw] xl:w-[50vw] max-w-[1200px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
+                  preserveAspectRatio="xMidYMid meet"
+                  className="block mx-auto w-[80vw] md:w-[60vw] lg:w-[55vw] xl:w-[50vw] max-w-[1200px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
                   aria-label="Feeling in Motion"
                 >
                   <path fill="currentColor" d="M435.89,248.72l1.56,1.56-1.56,1.56-1.56-1.56,1.56-1.56M435.89,247.77l-2.5,2.5,2.5,2.5,2.5-2.5-2.5-2.5h0Z"/>
