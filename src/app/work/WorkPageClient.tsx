@@ -33,7 +33,8 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
         {/* ─── Demo Reel ─── Contained, playable, clean. Sits at the top so visitors can watch the work. */}
         <section className="pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
           <div className="max-w-6xl mx-auto">
-            <div className="relative aspect-video overflow-hidden rounded-sm border border-cream/8 bg-charcoal-light">
+            {/* 2.35:1 cinemascope aspect to match the source export — no letterbox bars */}
+            <div className="relative aspect-[2.35/1] overflow-hidden rounded-sm border border-cream/8 bg-charcoal-light">
               <iframe
                 src={WORK_REEL_VIMEO_EMBED}
                 title="Diamond View — Demo Reel 2026"
