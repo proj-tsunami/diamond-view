@@ -1,14 +1,17 @@
-import { getProjects } from "@/sanity/queries";
+import { getProjects, getSiteSettings } from "@/sanity/queries";
 import WorkPageWrapper from "./WorkPageWrapper";
 
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Work — Diamond View",
-  description: "Selected work from the Diamond View team.",
+  title: "The Vault — Diamond View",
+  description: "The Vault — selected commercial, branded, and VFX work from Diamond View across sports, hospitality, healthcare, and entertainment.",
 };
 
 export default async function WorkIndexPage() {
-  const projects = await getProjects();
-  return <WorkPageWrapper projects={projects} />;
+  const [projects, siteSettings] = await Promise.all([
+    getProjects(),
+    getSiteSettings(),
+  ]);
+  return <WorkPageWrapper projects={projects} siteSettings={siteSettings} />;
 }
