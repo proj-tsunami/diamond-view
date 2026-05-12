@@ -301,7 +301,7 @@ function Portfolio({ projects }: { projects: Project[] }) {
       <div className="px-6 md:px-12 pt-32 md:pt-48 pb-12">
         <div className="max-w-7xl mx-auto text-center md:text-left">
           <AnimatedSection>
-            <p className="dv-eyebrow text-charcoal/40 mb-3 drop-shadow-sm flex items-center justify-center md:justify-start gap-3">
+            <p className="dv-eyebrow text-taupe mb-3 drop-shadow-sm flex items-center justify-center md:justify-start gap-3">
               <Diamond size={6} variant="fill" className="text-taupe" />
               Selected Work
             </p>
@@ -531,7 +531,7 @@ function ServiceCard({
       <div className="border-t border-cream/8 py-6 md:py-8">
         {/* Header row — always visible */}
         <div className="flex items-center gap-6 md:gap-10">
-          <span className="text-taupe/70 text-4xl md:text-5xl font-display font-black group-hover:text-taupe transition-colors duration-500 w-16 md:w-20 flex-shrink-0">
+          <span className="text-taupe text-4xl md:text-5xl font-display font-black group-hover:text-taupe-light transition-colors duration-500 w-16 md:w-20 flex-shrink-0">
             {service.number}
           </span>
           <h3 className="text-cream font-heading text-xl md:text-2xl font-medium tracking-tight group-hover:text-cream/90 transition-colors duration-300 flex-1">
@@ -652,7 +652,7 @@ function Process() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <AnimatedSection>
-          <p className="dv-eyebrow text-charcoal/40 mb-6 drop-shadow-sm flex items-center gap-3">
+          <p className="dv-eyebrow text-taupe mb-6 drop-shadow-sm flex items-center gap-3">
             <Diamond size={6} variant="fill" className="text-taupe" />
             Our Process
           </p>
@@ -749,7 +749,7 @@ function Team() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
           <div className="md:col-span-7">
             <AnimatedSection>
-              <p className="dv-eyebrow text-cream/40 mb-6 drop-shadow-sm flex items-center gap-3">
+              <p className="dv-eyebrow text-taupe-light mb-6 drop-shadow-sm flex items-center gap-3">
                 <Diamond size={6} variant="fill" className="text-taupe" />
                 The Makers
               </p>
@@ -839,7 +839,7 @@ function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-8">
             <AnimatedSection>
-              <p className="dv-eyebrow text-charcoal/40 mb-10 drop-shadow-sm flex items-center gap-3">
+              <p className="dv-eyebrow text-taupe mb-10 drop-shadow-sm flex items-center gap-3">
                 <Diamond size={6} variant="fill" className="text-taupe" />
                 Get in Touch
               </p>

@@ -23,7 +23,7 @@ export default function ProjectInfo({ project }: ProjectInfoProps) {
 
         {/* Eyebrow */}
         <AnimatedSection delay={0.05}>
-          <p className="mt-10 md:mt-14 dv-eyebrow text-cream/45 flex items-center gap-3">
+          <p className="mt-10 md:mt-14 dv-eyebrow text-taupe-light flex items-center gap-3">
             <Diamond size={6} variant="fill" className="text-taupe" />
             The Project
           </p>

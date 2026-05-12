@@ -47,7 +47,7 @@ export default function Footer() {
         <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
           <div className="md:col-span-8">
             <AnimatedSection>
-              <p className="dv-eyebrow text-cream/40 mb-8 flex items-center gap-3">
+              <p className="dv-eyebrow text-taupe-light mb-8 flex items-center gap-3">
                 <Diamond size={6} variant="fill" className="text-taupe" />
                 Get in Touch
               </p>

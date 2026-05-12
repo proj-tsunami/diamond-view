@@ -32,7 +32,7 @@ export default function ClientGrid() {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Eyebrow */}
         <div className="mb-10 md:mb-14 flex items-center justify-between flex-wrap gap-4">
-          <p className="dv-eyebrow text-charcoal/40 flex items-center gap-3">
+          <p className="dv-eyebrow text-taupe flex items-center gap-3">
             <Diamond size={6} variant="fill" className="text-taupe" />
             Trusted By
           </p>

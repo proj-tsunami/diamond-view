@@ -26,7 +26,7 @@ export default function TeamPageClient({ team }: { team: TeamMember[] }) {
         <section className="relative pt-40 md:pt-48 pb-16 md:pb-24 px-6 md:px-12 overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <AnimatedSection>
-              <p className="dv-eyebrow text-cream/40 mb-8 flex items-center gap-3">
+              <p className="dv-eyebrow text-taupe-light mb-8 flex items-center gap-3">
                 <Diamond size={6} variant="fill" className="text-taupe" />
                 The Makers
               </p>
