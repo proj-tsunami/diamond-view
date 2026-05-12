@@ -171,7 +171,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
           >
             <div className="text-center">
               <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
-              <p className="dv-micro-label text-cream/55 mb-10 tracking-[0.5em] sm:tracking-[0.8em]">
+              <p className="dv-micro-label text-cream/55 mb-3 tracking-[0.5em] sm:tracking-[0.8em]">
                 Creative Production Studio
               </p>
 
@@ -184,7 +184,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
                 <svg
                   viewBox="246 240 208.15 80"
                   preserveAspectRatio="xMidYMid meet"
-                  className="block mx-auto w-[80vw] md:w-[60vw] lg:w-[55vw] xl:w-[50vw] max-w-[1200px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
+                  className="block mx-auto w-[60vw] md:w-[45vw] lg:w-[41vw] xl:w-[38vw] max-w-[900px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
                   aria-label="Feeling in Motion"
                 >
                   <path fill="currentColor" d="M435.89,248.72l1.56,1.56-1.56,1.56-1.56-1.56,1.56-1.56M435.89,247.77l-2.5,2.5,2.5,2.5,2.5-2.5-2.5-2.5h0Z"/>
