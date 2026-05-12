@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 /*
   WebGL distortion + chromatic aberration effect on images.
@@ -81,6 +81,10 @@ export default function DistortionHover({
   className = "",
 }: DistortionHoverProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // glReady flips true only after WebGL initializes AND the texture loads.
+  // Until then, the <img> fallback below is visible so the thumbnail
+  // shows even if WebGL fails (cross-origin, no-WebGL browser, GPU OOM, etc).
+  const [glReady, setGlReady] = useState(false);
   const stateRef = useRef({
     hover: 0,
     targetHover: 0,
@@ -151,15 +155,20 @@ export default function DistortionHover({
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
-      const tex = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      // Flip Y during upload — HTML images are top-left origin, WebGL is bottom-left
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      try {
+        const tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        // Flip Y during upload — HTML images are top-left origin, WebGL is bottom-left
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        setGlReady(true);
+      } catch {
+        // CORS-tainted or otherwise unusable texture — keep the <img> fallback visible
+      }
     };
     img.src = src;
 
@@ -210,11 +219,23 @@ export default function DistortionHover({
   }, [src]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`w-full h-full ${className}`}
-      aria-label={alt}
-      role="img"
-    />
+    <div className={`relative w-full h-full ${className}`}>
+      {/* Always-visible image — the actual thumbnail. Shows immediately,
+          stays visible if WebGL fails or hasn't initialized yet. */}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      {/* WebGL canvas — overlays the img once a texture is successfully
+          uploaded. Hover distortion + chromatic aberration paint here. */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full transition-opacity duration-300"
+        style={{ opacity: glReady ? 1 : 0 }}
+        aria-hidden="true"
+      />
+    </div>
   );
 }
