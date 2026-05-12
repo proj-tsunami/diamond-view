@@ -172,36 +172,25 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ─── Giant wordmark — auto-scales to full width via SVG textLength.
-             Wrapped in a font-display div so the SVG text inherits Owners Wide. ─── */}
-        <div className="relative border-t border-cream/10 pt-10 md:pt-14 font-display">
-          <motion.svg
+        {/* ─── Giant wordmark — CSS-based responsive size (clamp).
+             Previously used SVG textLength + lengthAdjust="spacingAndGlyphs",
+             which Safari renders incorrectly (glyphs overflow viewBox and
+             get clipped). CSS clamp gives reliable, cross-browser scaling. ─── */}
+        <div className="relative border-t border-cream/10 pt-10 md:pt-14 overflow-hidden">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-            viewBox="0 0 1000 150"
-            preserveAspectRatio="xMidYMid meet"
-            className="block w-full h-auto select-none"
+            className="font-display font-bold text-cream/10 leading-none whitespace-nowrap select-none text-center"
+            style={{
+              fontSize: "clamp(56px, 14vw, 220px)",
+              letterSpacing: "-0.02em",
+            }}
             aria-hidden
           >
-            <text
-              x="500"
-              y="120"
-              textAnchor="middle"
-              textLength="990"
-              lengthAdjust="spacingAndGlyphs"
-              style={{
-                fontFamily: "inherit",
-                fontSize: "150px",
-                letterSpacing: "-0.02em",
-                fill: "rgba(244,243,241,0.1)",
-              }}
-            >
-              <tspan fontWeight={700}>Diamond</tspan>
-              <tspan fontWeight={700}> View</tspan>
-            </text>
-          </motion.svg>
+            Diamond View
+          </motion.div>
         </div>
 
         {/* ─── Legal bar ─── */}
