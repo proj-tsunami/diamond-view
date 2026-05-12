@@ -229,8 +229,9 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
           <PlaceholderInterstitial
             image="/images/bts/ny_giants_jersey_bts_bw-19.jpg"
             alt="Diamond View behind the scenes"
-            text="Dream Bigger."
+            text="The Makers."
             height="65vh"
+            textColorClass="text-taupe-light"
           />
         </motion.div>
       </section>

@@ -8,6 +8,8 @@ interface PlaceholderInterstitialProps {
   text?: string;
   height?: string;
   alt?: string;
+  /** Override the default text color class (defaults to text-cream) */
+  textColorClass?: string;
 }
 
 /**
@@ -20,6 +22,7 @@ export default function PlaceholderInterstitial({
   text,
   height = "100vh",
   alt = "",
+  textColorClass = "text-cream",
 }: PlaceholderInterstitialProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -71,7 +74,7 @@ export default function PlaceholderInterstitial({
         <div className="absolute inset-0 flex items-center justify-center px-6 z-10">
           <motion.p
             style={{ opacity: textOpacity, y: textY }}
-            className="text-cream font-display text-3xl md:text-5xl lg:text-6xl font-bold text-center tracking-tight"
+            className={`${textColorClass} font-display text-3xl md:text-5xl lg:text-6xl font-bold text-center tracking-tight`}
           >
             {text}
           </motion.p>
