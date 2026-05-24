@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 
 const navLinks = [
   { label: "Work", href: "/work" },
@@ -100,13 +99,6 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
           <a href={isHome ? "#" : "/"} className="flex items-center gap-3">
-            <Image
-              src={scrolled ? "/images/diamond-logo-dark.png" : "/images/diamond-logo-light.png"}
-              alt="Diamond View"
-              width={32}
-              height={32}
-              className="w-7 h-7 md:w-8 md:h-8 -translate-y-[5px] transition-all duration-700"
-            />
             <span
               className={`${textColor} font-display font-bold uppercase tracking-tight text-base md:text-lg transition-colors duration-700`}
             >

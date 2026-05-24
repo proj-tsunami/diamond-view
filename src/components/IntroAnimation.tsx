@@ -132,14 +132,6 @@ export default function IntroAnimation({
             ease: [0.25, 0.1, 0.25, 1],
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/diamond-logo-dark.png"
-            alt="Diamond View"
-            loading="eager"
-            className="w-12 h-12 md:w-14 md:h-14"
-            draggable={false}
-          />
           <div className="flex flex-col items-center gap-1">
             <span
               className="font-display font-bold text-lg md:text-xl tracking-[0.12em]"
