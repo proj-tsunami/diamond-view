@@ -82,7 +82,6 @@ export default function Navbar() {
     };
   }, []);
 
-  const textColor = scrolled ? "text-charcoal" : "text-cream";
   const textMuted = scrolled ? "text-charcoal/60" : "text-cream/60";
   const barColor = scrolled ? "bg-charcoal" : "bg-cream";
 
@@ -97,13 +96,15 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Logo */}
-          <a href={isHome ? "#" : "/"} className="flex items-center gap-3">
-            <span
-              className={`${textColor} font-display font-bold uppercase tracking-tight text-base md:text-lg transition-colors duration-700`}
-            >
-              Diamond View
-            </span>
+          {/* Logo — inline wordmark (light on dark hero, dark when scrolled) */}
+          <a href={isHome ? "#" : "/"} className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={scrolled ? "/images/brand/dv-wordmark-inline-dark.svg" : "/images/brand/dv-wordmark-inline-light.svg"}
+              alt="Diamond View"
+              className="h-4 md:h-5 w-auto transition-all duration-700"
+              draggable={false}
+            />
           </a>
 
           {/* Desktop links + CTA */}

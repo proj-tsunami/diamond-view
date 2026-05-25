@@ -17,8 +17,7 @@ import { motion } from "framer-motion";
  */
 
 const TAUPE = "#968a79";
-const CREAM = "#F4F3F1";
-const CHARCOAL = "#111212";
+const CREAM = "#e5e5e3";
 
 // Full diamond ◇ — chevron at top AND bottom.
 // Side vertices at 15% / 85% set the chevron angle.
@@ -132,20 +131,13 @@ export default function IntroAnimation({
             ease: [0.25, 0.1, 0.25, 1],
           }}
         >
-          <div className="flex flex-col items-center gap-1">
-            <span
-              className="font-display font-bold text-lg md:text-xl tracking-[0.12em]"
-              style={{ color: CHARCOAL }}
-            >
-              Diamond View
-            </span>
-            <span
-              className="text-[9px] tracking-[0.35em] uppercase"
-              style={{ color: "rgba(17,18,18,0.3)" }}
-            >
-              Creative Production Studio
-            </span>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/brand/dv-wordmark-FIM-dark.svg"
+            alt="Diamond View — Feeling in Motion"
+            className="w-[260px] md:w-[340px] h-auto"
+            draggable={false}
+          />
         </motion.div>
       </div>
     </div>

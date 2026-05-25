@@ -5,7 +5,7 @@ import type { Project, SiteSettings } from "@/sanity/queries";
 
 const HomeClient = dynamic(() => import("./HomeClient"), {
   ssr: false,
-  loading: () => <div className="h-screen w-full bg-[#F4F3F1]" />,
+  loading: () => <div className="h-screen w-full bg-[#e5e5e3]" />,
 });
 
 export default function HomePage({

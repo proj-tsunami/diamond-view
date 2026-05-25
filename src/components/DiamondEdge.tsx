@@ -7,7 +7,7 @@
 */
 
 export default function DiamondEdge({
-  color = "#111212",
+  color = "#1a1a1a",
   shadow = true,
 }: {
   color?: string;

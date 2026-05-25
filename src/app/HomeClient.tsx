@@ -140,7 +140,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
   const buildingScale = useTransform(buildingScroll, [0, 0.4], [1.1, 1]);
 
   return (
-    <div id="hero" data-theme="dark" className="bg-[#111212]">
+    <div id="hero" data-theme="dark" className="bg-[#1a1a1a]">
       {/* ── Part 1: Demo Reel Video (revealed after intro animation wipe) ── */}
       <section ref={reelRef} className="relative h-[150vh] overflow-hidden">
         <div className="sticky top-0 h-screen overflow-hidden">
@@ -151,7 +151,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
             muted
             playsInline
             poster={posterSrc}
-            className="absolute inset-0 w-full h-full object-cover bg-[#111212]"
+            className="absolute inset-0 w-full h-full object-cover bg-[#1a1a1a]"
             key={reelSrc}
           >
             <source src={reelSrc} type="video/mp4" />
@@ -159,7 +159,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
 
           {/* Subtle dark overlay for text legibility */}
           <div className="absolute inset-0 bg-charcoal/30 z-[1]" />
-          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#111212] via-[#111212]/60 to-transparent z-[2]" />
+          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/60 to-transparent z-[2]" />
 
           <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
           <GridOverlay className="z-10" />
@@ -175,35 +175,16 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
                 Creative Production Studio
               </p>
 
-              {/* Tagline lockup — extracted DIRECTLY from DV-2026-Brand-Kit-10.svg
-                  (bottom-right stacked composition). Letterforms are the designer's
-                  actual paths — no font substitution, no CSS kerning. Color follows
-                  parent currentColor (cream on this dark hero). */}
+              {/* Tagline lockup — FEELING IN MOTION (revised May-25 brand mark). */}
               <h1 className="sr-only">Feeling in Motion</h1>
               <div className="group cursor-default relative text-cream">
-                <svg
-                  viewBox="246 240 208.15 80"
-                  preserveAspectRatio="xMidYMid meet"
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/brand/dv-FIM-stacked-light.svg"
+                  alt="Feeling in Motion"
                   className="block mx-auto w-[60vw] md:w-[45vw] lg:w-[41vw] xl:w-[38vw] max-w-[900px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
-                  aria-label="Feeling in Motion"
-                >
-                  <path fill="currentColor" d="M435.89,248.72l1.56,1.56-1.56,1.56-1.56-1.56,1.56-1.56M435.89,247.77l-2.5,2.5,2.5,2.5,2.5-2.5-2.5-2.5h0Z"/>
-                  <path fill="currentColor" d="M268.52,255.17h16.48v3.51h-11.22v3.04h8.35v3.37h-8.35v6.46h-5.27v-16.38Z"/>
-                  <path fill="currentColor" d="M287.62,255.17h16.46v3.46h-11.19v2.93h8.42v3.32h-8.42v3.28h11.19v3.39h-16.46v-16.38Z"/>
-                  <path fill="currentColor" d="M306.81,255.17h16.46v3.46h-11.19v2.93h8.42v3.32h-8.42v3.28h11.19v3.39h-16.46v-16.38Z"/>
-                  <path fill="currentColor" d="M325.99,255.17h5.27v12.9h11.05v3.49h-16.31v-16.38Z"/>
-                  <path fill="currentColor" d="M344.98,255.17h5.24v16.38h-5.24v-16.38Z"/>
-                  <path fill="currentColor" d="M353.26,255.17h5.73l3.98,5.17,3.93,5.17-.05-10.35h4.54v16.38h-5.75l-3.98-5.15-3.88-5.13.02,5.15v5.13h-4.54v-16.38Z"/>
-                  <path fill="currentColor" d="M404.2,255.17h5.24v16.38h-5.24v-16.38Z"/>
-                  <path fill="currentColor" d="M412.48,255.17h5.73l3.98,5.17,3.93,5.17-.05-10.35h4.54v16.38h-5.75l-3.98-5.15-3.88-5.13.02,5.15v5.13h-4.54v-16.38Z"/>
-                  <path fill="currentColor" d="M389.51,269.07c-1.43,1.78-3.64,2.81-6.46,2.81-5.34,0-8.98-3.21-8.98-8.47s4.03-8.64,10.15-8.64c5.41,0,9.18,2.5,10.05,6.51h-5.36c-.63-1.9-2.5-2.95-4.59-2.95-2.91,0-4.83,1.75-4.83,5.08s1.92,5.08,4.81,5.08c2.14,0,3.91-1.03,4.66-2.93h-4.61v-3.07h9.95v9.06h-4.78v-2.48Z"/>
-                  <path fill="currentColor" d="M267.74,276.02h10.69l2.92,8.32,2.81,8.35,2.88-8.35,2.88-8.32h10.73v25.2h-7.13l.07-12.49.04-5.26-1.76,5.26-4.36,12.49h-6.88l-4.36-12.49-1.76-5.26.04,5.26.04,12.49h-6.84v-25.2Z"/>
-                  <path fill="currentColor" d="M362.89,276.02h7.78v25.2h-7.78v-25.2Z"/>
-                  <path fill="currentColor" d="M404.5,276.02h8.5l5.9,7.96,5.83,7.96-.07-15.91h6.73v25.2h-8.53l-5.9-7.92-5.76-7.88.04,7.92v7.88h-6.73v-25.2Z"/>
-                  <path fill="currentColor" d="M342.94,281.42h-10.58v-5.4h28.98v5.4h-10.55v19.8h-7.85v-19.8Z"/>
-                  <path fill="currentColor" d="M302.26,288.62c0-8.21,6.23-13.21,15.26-13.21s15.26,5,15.26,13.21-6.26,13.21-15.26,13.21-15.26-5-15.26-13.21ZM324.69,288.62c0-4.93-2.92-7.56-7.16-7.56s-7.2,2.63-7.2,7.56,2.92,7.6,7.2,7.6,7.16-2.66,7.16-7.6Z"/>
-                  <path fill="currentColor" d="M372.35,288.62c0-8.21,6.23-13.21,15.26-13.21s15.26,5,15.26,13.21-6.26,13.21-15.26,13.21-15.26-5-15.26-13.21ZM394.78,288.62c0-4.93-2.92-7.56-7.16-7.56s-7.2,2.63-7.2,7.56,2.92,7.6,7.2,7.6,7.16-2.66,7.16-7.6Z"/>
-                </svg>
+                  draggable={false}
+                />
               </div>
             </div>
           </motion.div>
@@ -854,9 +835,9 @@ function Contact() {
             </TextReveal>
 
             <AnimatedSection delay={0.4}>
-              <MagneticButton href="mailto:hello@diamondview.studio" className="mt-14">
+              <MagneticButton href="mailto:hello@diamondviewstudios.com" className="mt-14">
                 <span className="text-charcoal/40 hover:text-charcoal text-lg font-light border-b border-charcoal/10 hover:border-charcoal/30 pb-1 transition-all duration-300">
-                  hello@diamondview.studio
+                  hello@diamondviewstudios.com
                 </span>
               </MagneticButton>
             </AnimatedSection>
@@ -889,7 +870,15 @@ function Contact() {
         </div>
 
         {/* Footer */}
-        <div className="mt-24 pt-6 border-t border-charcoal/6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-24 pt-8 border-t border-charcoal/6 flex flex-col items-center gap-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/brand/dv-wordmark-inline-dark.svg"
+            alt="Diamond View"
+            className="h-5 md:h-6 w-auto opacity-80"
+            draggable={false}
+          />
+          <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -906,6 +895,7 @@ function Contact() {
           >
             Feeling in Motion
           </motion.p>
+          </div>
         </div>
       </div>
     </section>

@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  /* Core palette — Brand Guide 2026 */
-  --background: #F4F3F1;
-  --foreground: #111212;
-  --charcoal: #111212;
-  --charcoal-light: #252628;
-  --cream: #F4F3F1;
-  --cream-dark: #E5E4E2;
-  /* Avalanche — brand name for cream */
-  --avalanche: #F4F3F1;
-  --avalanche-dark: #E5E4E2;
+  /* Core palette — Brand Refresh 2026 (revised May-25) */
+  --background: #e5e5e3;
+  --foreground: #1a1a1a;
+  --charcoal: #1a1a1a;
+  --charcoal-light: #303133;
+  --charcoal-3: #494a4c;
+  /* Avalanche — primary light neutral (replaces "cream") */
+  --cream: #e5e5e3;
+  --cream-dark: #cccbc9;
+  --avalanche: #e5e5e3;
+  --avalanche-dark: #cccbc9;
+  --avalanche-3: #b2b2b0;
   /* Taupe — brand accent */
   --accent: #968a79;
   --accent-light: #b1a89b;
@@ -49,12 +51,14 @@
   --color-foreground: var(--foreground);
   --color-charcoal: var(--charcoal);
   --color-charcoal-light: var(--charcoal-light);
+  --color-charcoal-3: var(--charcoal-3);
   --color-cream: var(--cream);
   --color-cream-dark: var(--cream-dark);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
   --color-avalanche: var(--avalanche);
   --color-avalanche-dark: var(--avalanche-dark);
+  --color-avalanche-3: var(--avalanche-3);
   --color-taupe: var(--taupe);
   --color-taupe-light: var(--taupe-light);
   --color-approved: var(--approved);

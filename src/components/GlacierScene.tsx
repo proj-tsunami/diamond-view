@@ -229,7 +229,7 @@ export default function GlacierScene() {
       <div
         className="absolute bottom-0 left-0 right-0 h-[18%] z-20 pointer-events-none"
         style={{
-          background: "linear-gradient(to bottom, transparent, #111212)",
+          background: "linear-gradient(to bottom, transparent, #1a1a1a)",
         }}
       />
     </div>

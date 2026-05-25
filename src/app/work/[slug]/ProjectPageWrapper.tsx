@@ -5,7 +5,7 @@ import type { Project } from "@/sanity/queries";
 
 const ProjectPageClient = dynamic(() => import("./ProjectPageClient"), {
   ssr: false,
-  loading: () => <div className="h-screen w-full bg-[#111212]" />,
+  loading: () => <div className="h-screen w-full bg-[#1a1a1a]" />,
 });
 
 interface ProjectPageWrapperProps {

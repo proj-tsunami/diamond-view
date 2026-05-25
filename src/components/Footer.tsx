@@ -21,9 +21,9 @@ const services = [
 ];
 
 const contactLinks = [
-  { label: "Start a Project", href: "mailto:hello@diamondview.studio" },
+  { label: "Start a Project", href: "mailto:hello@diamondviewstudios.com" },
   { label: "Careers", href: "#careers" },
-  { label: "Press", href: "mailto:press@diamondview.studio" },
+  { label: "Press", href: "mailto:press@diamondviewstudios.com" },
 ];
 
 const socials = [
@@ -63,11 +63,11 @@ export default function Footer() {
 
             <AnimatedSection delay={0.15}>
               <a
-                href="mailto:hello@diamondview.studio"
+                href="mailto:hello@diamondviewstudios.com"
                 className="group inline-flex items-center gap-4 mt-10 md:mt-12"
               >
                 <span className="font-display uppercase tracking-[0.15em] text-sm md:text-base border-b border-cream/20 pb-2 transition-colors duration-300 group-hover:border-cream">
-                  hello@diamondview.studio
+                  hello@diamondviewstudios.com
                 </span>
                 <Diamond
                   size={8}
@@ -172,17 +172,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ─── DV stacked wordmark from the brand kit — half-width, centered,
-             at original SVG color (no opacity override). ─── */}
+        {/* ─── DV inline wordmark — half-width, centered (light on dark footer). ─── */}
         <div className="relative border-t border-cream/10 pt-10 md:pt-14 overflow-hidden">
           <motion.img
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-            src="/images/brand/dv-stacked-diamond.svg"
-            alt=""
-            aria-hidden
+            src="/images/brand/dv-wordmark-inline-light.svg"
+            alt="Diamond View"
             className="block w-1/2 h-auto mx-auto select-none"
           />
         </div>
