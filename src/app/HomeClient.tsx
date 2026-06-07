@@ -327,7 +327,7 @@ function Portfolio({ projects }: { projects: Project[] }) {
 
                   <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
                     <p className="dv-micro-label text-cream/60 mb-3">
-                      {project.category} — {project.year}
+                      {project.category}
                     </p>
                     <h3 className="text-cream group-hover:text-cream/80 text-2xl md:text-3xl font-heading font-medium tracking-tight transition-colors duration-500">
                       {project.title}

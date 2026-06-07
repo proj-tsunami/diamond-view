@@ -131,10 +131,9 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
             />
           </div>
 
-          {/* Category + year */}
           <div className="absolute top-4 left-4 z-10">
             <p className="dv-micro-label text-cream/60">
-              {project.category} — {project.year}
+              {project.category}
             </p>
           </div>
 

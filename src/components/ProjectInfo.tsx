@@ -50,9 +50,6 @@ export default function ProjectInfo({ project }: ProjectInfoProps) {
               {project.client}
             </span>
             <span className="text-cream/80 dv-micro-label text-cream/80 border border-cream/15 px-4 py-2 rounded-sm">
-              {project.year}
-            </span>
-            <span className="text-cream/80 dv-micro-label text-cream/80 border border-cream/15 px-4 py-2 rounded-sm">
               {project.category}
             </span>
             {project.services.map((service) => (
