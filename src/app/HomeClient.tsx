@@ -666,49 +666,39 @@ function Services() {
 /* ───────────────────── PROCESS ─────────────────────────── */
 
 function Process() {
+  const [active, setActive] = useState(0);
   return (
-    <section id="process" data-theme="light" className="py-20 md:py-32 px-6 md:px-12 relative overflow-hidden">
-      {/* Grid overlay — dark lines on light bg */}
-      <GridOverlay color="rgba(17,18,18,0.03)" crossColor="rgba(17,18,18,0.05)" />
-
-      {/* Sumi ink accents */}
-
-      {/* Depth layers */}
-      <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-cream-dark/30 to-transparent" />
-
-      <ParallaxLayer speed={0.35} className="absolute top-[10%] right-[6%] hidden md:block">
-        <div className="w-32 h-[1px] bg-charcoal/[0.06]" />
-      </ParallaxLayer>
-      <ParallaxLayer speed={-0.4} className="absolute bottom-[25%] left-[4%] hidden md:block">
-        <div className="w-12 h-12 border border-charcoal/[0.05] rotate-45" />
-      </ParallaxLayer>
-      <FloatingElement
-        className="absolute top-[50%] left-[8%] hidden md:block"
-        duration={7}
-        distance={10}
-        delay={1.5}
-      >
-        <div className="w-1.5 h-1.5 bg-charcoal/[0.06] rounded-full" />
-      </FloatingElement>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <AnimatedSection>
-          <p className="dv-eyebrow text-taupe mb-6 drop-shadow-sm flex items-center gap-3">
-            <Diamond size={6} variant="fill" className="text-taupe" />
-            Our Process
-          </p>
-        </AnimatedSection>
-
-        <ScrollRevealText
-          as="h2"
-          className="text-charcoal font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-16 md:mb-24 max-w-3xl"
-        >
+    <section id="process" data-theme="dark" className="relative overflow-hidden px-6 md:px-12 py-24 md:py-32" style={{ background: "var(--charcoal)" }}>
+      <div className="max-w-[1280px] mx-auto relative z-10">
+        <p className="dv-eyebrow flex items-center gap-3 mb-7" style={{ color: "var(--accent-light)" }}>
+          <span className="inline-block rotate-45" style={{ width: 6, height: 6, background: "var(--accent)" }} />
+          Our Process
+        </p>
+        <h2 className="mb-16 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 700, fontSize: "clamp(28px,3.6vw,52px)", letterSpacing: "-0.02em", lineHeight: 1.04, color: "var(--avalanche)", maxWidth: "16ch" }}>
           Four steps to extraordinary.
-        </ScrollRevealText>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-          {processSteps.map((step, i) => (
-            <ProcessCard key={step.number} step={step} index={i} />
+        </h2>
+        {/* pipeline bar with gate diamonds */}
+        <div className="flex items-center mb-14">
+          {processSteps.map((s, i) => (
+            <div key={s.number} className={"flex items-center " + (i < processSteps.length - 1 ? "flex-1" : "")}>
+              <span
+                className="rotate-45 shrink-0 transition-colors duration-300"
+                style={{ width: 11, height: 11, background: i <= active ? "var(--accent)" : "var(--charcoal)", border: "1.5px solid " + (i <= active ? "var(--accent)" : "var(--av-24)") }}
+              />
+              {i < processSteps.length - 1 && (
+                <div className="flex-1 h-[2px] mx-3 transition-colors duration-300" style={{ background: i < active ? "var(--accent)" : "var(--av-16)" }} />
+              )}
+            </div>
+          ))}
+        </div>
+        {/* phases */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
+          {processSteps.map((s, i) => (
+            <div key={s.number} onMouseEnter={() => setActive(i)} className="cursor-default">
+              <div className="mb-3" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 13, letterSpacing: "0.2em", color: i === active ? "var(--accent-light)" : "var(--av-40)", transition: "color .3s" }}>{s.number}</div>
+              <h3 className="mb-3 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 700, fontSize: 19, letterSpacing: "-0.01em", color: "var(--avalanche)" }}>{s.title}</h3>
+              <p style={{ fontSize: 15, lineHeight: 1.65, letterSpacing: "0.02em", color: "var(--avalanche-3)" }}>{s.description}</p>
+            </div>
           ))}
         </div>
       </div>
