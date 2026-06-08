@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import PageTransition from "@/components/PageTransition";
+// Claude design system — faithful port (tokens, components, site styles)
+import "./redesign-css/_tokens.css";
+import "./redesign-css/_components.css";
+import "./redesign-css/_site.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -87,7 +90,7 @@ export default function RootLayout({
       className={`${ownersWide.variable} ${owners.variable} antialiased`}
     >
       <body>
-        <PageTransition>{children}</PageTransition>
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>

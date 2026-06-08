@@ -19,20 +19,51 @@
   --taupe: #968a79;
   --taupe-light: #b1a89b;
 
-  /* Status colors (dashboard/UI) */
-  --approved: #419041;
-  --final: #3169a0;
-  --rejected: #a22f2f;
+  /* Status colors — warm/grounded per design system (olive / bronze / brick) */
+  --status-draft: #8a8a86;
+  --approved: #7c8a5a;
+  --final: #9a8255;
+  --rejected: #9a5f57;
 
-  /* Radius scale */
-  --radius-sm: 4px;
-  --radius-md: 5px;
-  --radius-lg: 8px;
+  /* Avalanche-on-charcoal washes (hairlines / glass / hover) */
+  --av-03: rgba(229,229,227,0.03);
+  --av-06: rgba(229,229,227,0.06);
+  --av-10: rgba(229,229,227,0.10);
+  --av-16: rgba(229,229,227,0.16);
+  --av-24: rgba(229,229,227,0.24);
+  --av-40: rgba(229,229,227,0.40);
+  --av-60: rgba(229,229,227,0.60);
+  --av-80: rgba(229,229,227,0.80);
+  /* Charcoal-on-avalanche (light-mode washes) */
+  --ch-06: rgba(26,26,26,0.06);
+  --ch-10: rgba(26,26,26,0.10);
+  --ch-16: rgba(26,26,26,0.16);
 
-  /* Spacing scale */
-  --space-xxs: 6px;
+  /* Semantic tokens (dark-first; flip under [data-theme="light"]) */
+  --bg: var(--charcoal);
+  --surface-1: var(--charcoal-light);
+  --surface-2: var(--charcoal-3);
+  --border: var(--av-10);
+  --border-strong: var(--av-16);
+  --fg1: var(--avalanche);
+  --fg2: var(--avalanche-3);
+  --fg3: var(--av-40);
+  --fg-accent: var(--accent-light);
+  --link: var(--accent-light);
+
+  /* Radius — single 3px everywhere per design system (no pills; circles 50%) */
+  --radius: 3px;
+  --radius-sm: 3px;
+  --radius-md: 3px;
+  --radius-lg: 3px;
+  --radius-circle: 50%;
+
+  /* Spacing — 8-based with editorial half-steps (design system) */
+  --space-xxs: 8px;
   --space-xs: 12px;
+  --space-xs2: 18px;
   --space-sm: 28px;
+  --space-sm2: 36px;
   --space-md: 48px;
   --space-lg: 60px;
   --space-xl: 80px;
@@ -42,8 +73,8 @@
   --line-geo: 1px;
   --line-divider: 3.5px;
 
-  /* Grain opacity */
-  --grain-opacity: 0.03;
+  /* Grain opacity — 0.05 per design system */
+  --grain-opacity: 0.05;
 }
 
 @theme inline {
@@ -94,12 +125,7 @@ body {
   line-height: 1.6;
 }
 
-/* Custom cursor — hide default on desktop (skip Sanity Studio) */
-@media (pointer: fine) {
-  body:not(:has([data-ui])) * {
-    cursor: none !important;
-  }
-}
+/* (Custom cursor removed in the redesign — use the native cursor.) */
 
 /* Headings default to Owners */
 h1, h2, h3 {

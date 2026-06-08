@@ -1,155 +1,172 @@
 "use client";
 
+/* The Vault (/work) — faithful port of the Claude design prototype
+   (work.html + js/WorkGallery.jsx). Uses the prototype's exact DOM
+   structure and site.css class names (.vault-*, .gcard, .chip, .wrap,
+   .footer--bare). The prototype's embedded data mirror is swapped for the
+   real Sanity `projects` passed in via props; fields are mapped per
+   js/cms.jsx (cardImage → card, category → cat, title, client, tagline).
+   `year` is intentionally not rendered. */
+
+import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import Navbar from "@/components/Navbar";
-import CustomCursor from "@/components/CustomCursor";
-import GridOverlay from "@/components/GridOverlay";
-import SideMargins from "@/components/SideMargins";
-import GSAPProvider from "@/components/GSAPProvider";
-import Footer from "@/components/Footer";
-import SectionDivider from "@/components/SectionDivider";
-import Diamond from "@/components/Diamond";
-import AnimatedSection from "@/components/AnimatedSection";
-import TextReveal from "@/components/TextReveal";
+import Nav from "@/components/site/Nav";
+import {
+  Eyebrow,
+  Icon,
+  Drift,
+  useReveal,
+  useScrollEngine,
+} from "@/components/site/primitives";
+import Footer from "@/components/site/Footer";
 import type { Project } from "@/sanity/queries";
 
-/* The work-page reel is DV Demo Reel 2026 — V10, hosted on Vimeo
-   (separate from the Sanity-driven home-page splash loop). The Vimeo
-   player handles adaptive bitrate, CDN, and chrome — keeps the heavy
-   master out of our git repo. Unlisted video w/ hash. */
-const WORK_REEL_VIMEO_EMBED =
+// The work-page reel — DV Demo Reel 2026, hosted on Vimeo (matches the repo).
+const REEL_VIMEO =
   "https://player.vimeo.com/video/1191542036?h=aecf929b97&byline=0&title=0&portrait=0&color=968a79&dnt=1";
 
-export default function WorkPageClient({ projects }: { projects: Project[] }) {
-  return (
-    <GSAPProvider>
-      <CustomCursor />
-      <GridOverlay />
-      <SideMargins />
-      <Navbar />
+const REEL_POSTER = "/images/generated/hero.jpg";
 
-      <main data-theme="dark" className="bg-charcoal text-cream">
-        {/* ─── Demo Reel ─── Contained, playable, clean. Sits at the top so visitors can watch the work. */}
-        <section className="pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
-          <div className="max-w-6xl mx-auto">
-            {/* 2.35:1 cinemascope aspect to match the source export — no letterbox bars */}
-            <div className="relative aspect-[2.35/1] overflow-hidden rounded-sm border border-cream/8 bg-charcoal-light">
-              <iframe
-                src={WORK_REEL_VIMEO_EMBED}
-                title="Diamond View — Demo Reel 2026"
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                allowFullScreen
-                loading="lazy"
-                className="absolute inset-0 w-full h-full"
-              />
+const CATS = [
+  "All",
+  "Campaign",
+  "Commercial",
+  "Branded Content",
+  "Sports / Entertainment",
+  "Short Film",
+] as const;
+
+function ReelEmbed() {
+  const [play, setPlay] = useState(false);
+  return (
+    <div className="vault-reel">
+      <div className="vault-reel__frame">
+        {play ? (
+          <iframe
+            className="vault-reel__iframe"
+            src={REEL_VIMEO + "&autoplay=1"}
+            title="Diamond View — Demo Reel 2026"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+            allowFullScreen
+            loading="lazy"
+          />
+        ) : (
+          <button
+            className="vault-reel__poster"
+            onClick={() => setPlay(true)}
+            aria-label="Play demo reel"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={REEL_POSTER} alt="" />
+            <span className="vault-reel__scrim" />
+            <span className="vault-reel__corner vault-reel__corner--tl" />
+            <span className="vault-reel__corner vault-reel__corner--br" />
+            <span className="vault-reel__play">
+              <Icon name="play" size={30} />
+            </span>
+            <span className="vault-reel__cap">DV Demo Reel 2026 · 01:48 · 4K</span>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function GCard({ p, i }: { p: Project; i: number }) {
+  const [ok, setOk] = useState(Boolean(p.cardImage));
+  const ref = useReveal<HTMLAnchorElement>();
+  return (
+    <Link
+      className="gcard reveal"
+      id={p.slug}
+      ref={ref}
+      href={`/work/${p.slug}`}
+      style={{ transitionDelay: Math.min(i, 6) * 60 + "ms" }}
+    >
+      <div className="gcard__media">
+        <div className="gcard__plate" />
+        {ok && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="gcard__img"
+            src={p.cardImage}
+            alt={p.title}
+            loading="lazy"
+            onError={() => setOk(false)}
+          />
+        )}
+        <div className="gcard__scrim" />
+        <span className="gcard__d" />
+        <div className="gcard__cat">{p.category}</div>
+        <div className="gcard__meta">
+          <h3 className="gcard__title">{p.title}</h3>
+          <p className="gcard__tag">
+            {p.tagline ? p.client + " · " + p.tagline : p.client}
+          </p>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export default function WorkPageClient({ projects }: { projects: Project[] }) {
+  const [cat, setCat] = useState<string>("All");
+  useScrollEngine();
+
+  const shown = projects.filter((w) => cat === "All" || w.category === cat);
+
+  return (
+    <>
+      <Nav />
+
+      <main className="vault">
+        <section className="vault-hero">
+          <Drift size={440} speed={0.16} top={120} right={-130} opacity={0.55} />
+          <div className="wrap">
+            <ReelEmbed />
+            <div className="vault-head">
+              <Eyebrow style={{ marginBottom: 22 }}>
+                Selected Work · The Vault
+              </Eyebrow>
+              <h1 className="vault-title" data-parallax="0.06">
+                The Vault.
+              </h1>
+              <p className="vault-lead">
+                A collection of our commercial, branded, and VFX work across
+                sports, hospitality, healthcare, and entertainment — every frame
+                made in Tampa.
+              </p>
+            </div>
+            <div className="vault-filter">
+              {CATS.map((c) => (
+                <button
+                  key={c}
+                  className={"chip" + (cat === c ? " is-active" : "")}
+                  onClick={() => setCat(c)}
+                >
+                  {c}
+                </button>
+              ))}
+              <span className="vault-count">
+                {shown.length} {shown.length === 1 ? "project" : "projects"}
+              </span>
             </div>
           </div>
         </section>
 
-        {/* ─── Hero Title ─── Original headline structure, sitting below the reel. */}
-        <section className="relative pt-12 md:pt-16 pb-16 md:pb-24 px-6 md:px-12 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <AnimatedSection>
-              <p className="dv-eyebrow text-taupe-light mb-8 flex items-center gap-3">
-                <Diamond size={6} variant="fill" className="text-taupe" />
-                Selected Work
-              </p>
-            </AnimatedSection>
-
-            <TextReveal
-              as="h1"
-              className="font-display font-bold uppercase text-6xl md:text-8xl lg:text-[9rem] tracking-tight leading-[0.88] text-cream"
-            >
-              The Vault.
-            </TextReveal>
-
-            <AnimatedSection delay={0.3}>
-              <p className="mt-10 md:mt-14 max-w-2xl dv-body text-cream/60">
-                A collection of our commercial, branded, and VFX work across
-                sports, hospitality, healthcare, and entertainment.
-              </p>
-            </AnimatedSection>
-          </div>
-        </section>
-
-        {/* Divider */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 pb-14 md:pb-20">
-          <SectionDivider variant="diamond" color="rgba(244,243,241,0.9)" />
-        </div>
-
-        {/* ─── Grid ─── */}
-        <section className="pb-24 md:pb-32 px-6 md:px-12">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {projects.map((project, i) => (
-                <WorkCard key={project.slug} project={project} index={i} />
+        <section className="vault-grid-wrap">
+          <div className="wrap">
+            <div className="vault-grid">
+              {shown.map((p, i) => (
+                <GCard key={p.slug} p={p} i={i} />
               ))}
             </div>
           </div>
         </section>
-
-        <Footer />
       </main>
-    </GSAPProvider>
+
+      <Footer cta={false} />
+    </>
   );
 }
 
-function WorkCard({ project, index }: { project: Project; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{
-        delay: Math.min(index * 0.04, 0.6),
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-    >
-      <Link
-        href={`/work/${project.slug}`}
-        className="group block relative"
-      >
-        <div className="relative aspect-[3/2] overflow-hidden rounded-sm border border-cream/6 bg-charcoal-light">
-          <img
-            src={project.cardImage}
-            alt={project.title}
-            loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-          />
-          {/* Dark scrim */}
-          <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent pointer-events-none" />
-
-          {/* Top-right diamond marker */}
-          <div className="absolute top-4 right-4 z-10">
-            <Diamond
-              size={8}
-              variant="duotone"
-              strokeWidth={0.8}
-              className="text-taupe"
-            />
-          </div>
-
-          <div className="absolute top-4 left-4 z-10">
-            <p className="dv-micro-label text-cream/60">
-              {project.category}
-            </p>
-          </div>
-
-          {/* Title */}
-          <div className="absolute left-0 right-0 bottom-0 p-5 md:p-6 z-10">
-            <h3 className="font-heading text-cream text-xl md:text-2xl font-medium tracking-tight leading-tight">
-              {project.title}
-            </h3>
-            {project.tagline && (
-              <p className="mt-2 dv-micro-label text-taupe/90 leading-snug">
-                {project.tagline}
-              </p>
-            )}
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-}

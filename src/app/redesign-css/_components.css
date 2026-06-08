@@ -1,0 +1,236 @@
+/* ============================================================================
+   DIAMOND VIEW — COMPONENTS
+   Reusable component layer built on colors_and_type.css tokens.
+   Brand Guide §3.3–§3.9. Load colors_and_type.css FIRST.
+   ========================================================================== */
+
+/* ---- Wordmark (live text lockup, OwnersWide) --------------------------- */
+.dv-wordmark {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  line-height: 1;
+}
+.dv-wordmark__name {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg1);
+  font-size: 1.5rem;
+}
+.dv-wordmark__tag {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-medium);
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--fg-accent);
+  font-size: 0.62rem;
+}
+
+/* ---- Diamond motif ----------------------------------------------------- */
+/* 45° rotated square. Use as divider, gate, bullet, status indicator. */
+.dv-diamond {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  transform: rotate(45deg);
+  flex: 0 0 auto;
+}
+.dv-diamond--outline {
+  background: transparent;
+  border: 1.5px solid var(--accent);
+}
+.dv-diamond--sm { width: 6px; height: 6px; }
+.dv-diamond--xs { width: 4px; height: 4px; }
+
+/* ---- Corner registration marks (camera-gate brackets) ------------------ */
+/* Wrap any block; L-brackets frame the four corners. */
+.dv-frame {
+  position: relative;
+}
+.dv-frame::before,
+.dv-frame::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--av-40);
+  pointer-events: none;
+}
+.dv-frame::before { top: 10px;    left: 10px;  border-right: none;  border-bottom: none; }
+.dv-frame::after  { bottom: 10px; right: 10px; border-left: none;   border-top: none;    }
+/* Add .dv-frame--quad with two child <i class="dv-frame__c"> for all 4 corners */
+.dv-frame__tr, .dv-frame__bl {
+  position: absolute; width: 18px; height: 18px; border: 1.5px solid var(--av-40);
+  pointer-events: none;
+}
+.dv-frame__tr { top: 10px;    right: 10px; border-left: none;  border-bottom: none; }
+.dv-frame__bl { bottom: 10px; left: 10px;  border-right: none; border-top: none;    }
+
+/* ---- Buttons (Brand Guide §3.5) ---------------------------------------- */
+.dv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-medium);
+  font-size: 10px;
+  letter-spacing: var(--track-button);
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background var(--dur-quick) var(--ease-standard),
+              color var(--dur-quick) var(--ease-standard),
+              border-color var(--dur-quick) var(--ease-standard),
+              transform var(--dur-quick) var(--ease-standard);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.dv-btn--primary {
+  background: var(--avalanche);
+  color: var(--charcoal);
+}
+.dv-btn--primary:hover { background: #fff; }
+.dv-btn--primary:active { transform: scale(0.98); }
+
+.dv-btn--secondary {
+  background: transparent;
+  color: var(--fg1);
+  border-color: var(--border-strong);
+}
+.dv-btn--secondary:hover { border-color: var(--accent-light); color: var(--accent-light); }
+.dv-btn--secondary:active { transform: scale(0.98); }
+
+.dv-btn--ghost {
+  background: transparent;
+  color: var(--fg2);
+  padding-inline: 6px;
+}
+.dv-btn--ghost:hover { color: var(--fg1); }
+
+/* ---- Status badges (Brand Guide §3.5) ---------------------------------- */
+.dv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px 5px 9px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-medium);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.dv-badge::before {
+  content: ""; width: 6px; height: 6px; transform: rotate(45deg); flex: 0 0 auto;
+}
+.dv-badge--draft    { color: var(--status-draft);    background: var(--status-draft-bg); }
+.dv-badge--draft::before    { background: var(--status-draft); }
+.dv-badge--approved { color: var(--status-approved); background: var(--status-approved-bg); }
+.dv-badge--approved::before { background: var(--status-approved); }
+.dv-badge--final    { color: var(--status-final);    background: var(--status-final-bg); }
+.dv-badge--final::before    { background: var(--status-final); }
+.dv-badge--rejected { color: var(--status-rejected); background: var(--status-rejected-bg); }
+.dv-badge--rejected::before { background: var(--status-rejected); }
+
+/* ---- Glass surface (L1) + KPI card (Brand Guide §3.4–§3.5) ------------- */
+.dv-glass {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.dv-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  transition: transform var(--dur-standard) var(--ease-standard),
+              border-color var(--dur-standard) var(--ease-standard);
+}
+.dv-card--hover:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+}
+.dv-kpi__label {
+  font-family: var(--font-display); font-stretch: 125%;
+  font-weight: var(--w-medium); font-size: 12px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg3);
+}
+.dv-kpi__value {
+  font-family: var(--font-body); font-stretch: 100%;
+  font-weight: var(--w-bold); font-size: 34px; line-height: 1;
+  color: var(--fg1); margin: 12px 0 6px; font-variant-numeric: tabular-nums;
+}
+.dv-kpi__sub {
+  font-family: var(--font-body); font-size: 13px; color: var(--fg3);
+}
+
+/* ---- Pipeline bar with gate diamonds (Brand Guide §3.3) ---------------- */
+.dv-pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.dv-pipeline__seg {
+  height: 2px;
+  flex: 1;
+  background: var(--av-16);
+}
+.dv-pipeline__seg--done { background: var(--accent); }
+.dv-pipeline__gate {
+  width: 9px; height: 9px; transform: rotate(45deg);
+  background: var(--charcoal); border: 1.5px solid var(--av-24);
+  flex: 0 0 auto;
+}
+.dv-pipeline__gate--done { background: var(--accent); border-color: var(--accent); }
+.dv-pipeline__gate--current { background: var(--avalanche); border-color: var(--avalanche); }
+
+/* ---- Film grain overlay (Brand Guide §3.4) ----------------------------- */
+/* Apply .dv-grain to a positioned container; overlay sits above bg, below content. */
+.dv-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Hero scrim (multi-stop protection gradient) ----------------------- */
+.dv-scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(26,26,26,0.10) 0%,
+    rgba(26,26,26,0.00) 30%,
+    rgba(26,26,26,0.55) 78%,
+    rgba(26,26,26,0.92) 100%);
+}
+
+/* ---- Eyebrow (label + diamond bullet) ---------------------------------- */
+.dv-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-display); font-stretch: 125%;
+  font-weight: var(--w-medium); font-size: 13px;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-accent);
+}
+
+/* ---- Motion keyframes (Brand Guide §3.7) ------------------------------- */
+@keyframes dvFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes dvScaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes dvDiamondPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes dvKenBurns { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition-duration: 0.001ms !important; }
+}
