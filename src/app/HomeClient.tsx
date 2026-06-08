@@ -1011,6 +1011,27 @@ function MarqueeBand() {
   );
 }
 
+/* ──────────────────── STATEMENT (redesign) ─────────────── */
+
+function StatementBand() {
+  return (
+    <section data-theme="light" className="relative overflow-hidden px-6 md:px-12 py-24 md:py-40" style={{ background: "var(--avalanche)" }}>
+      <div className="mx-auto max-w-[1280px]">
+        <p className="dv-eyebrow flex items-center gap-3 mb-8 text-accent">
+          <span className="inline-block rotate-45 bg-accent" style={{ width: 6, height: 6 }} />
+          Who We Are
+        </p>
+        <ScrollRevealText
+          as="h2"
+          className="text-charcoal font-heading font-light text-[clamp(30px,4.2vw,60px)] leading-[1.16] tracking-[-0.005em] max-w-[30ch]"
+        >
+          An award-winning creative production studio reimagining what it means to create feeling through video.
+        </ScrollRevealText>
+      </div>
+    </section>
+  );
+}
+
 /* ───────────────────── PAGE ───────────────────────────── */
 
 export default function HomeClient({ projects, settings }: { projects: Project[]; settings: SiteSettings }) {
@@ -1054,7 +1075,7 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
           </div>
 
           <Portfolio projects={projects} />
-          <IntroStatement />
+          <StatementBand />
 
           {/* Interstitial A: between Portfolio and Stats — BTS placeholder */}
           <PlaceholderInterstitial
