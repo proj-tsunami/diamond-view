@@ -40,7 +40,7 @@ export default function MakersTeam({
 
       <div className="makers-one__inner wrap">
         <div className="makers-one__text">
-          <Eyebrow style={{ marginBottom: 24 }}>The Makers · Tampa, FL · Est. 2010</Eyebrow>
+          <Eyebrow style={{ marginBottom: 24 }}>Tampa, FL · Est. 2007</Eyebrow>
           <h2 className="makers-one__title reveal">The Makers.</h2>
           <p className="makers-one__manifesto reveal">
             We are creators. We are storytellers. We are innovators.

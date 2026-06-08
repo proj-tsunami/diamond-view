@@ -9,7 +9,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 const LEFT_LABELS = [
   "DV.2026", "—", "27.9506° N", "82.4572° W", "—",
   "CREATIVE PRODUCTION", "FEELING IN MOTION", "—",
-  "DV.STUDIO", "EST. 2010", "—",
+  "DV.STUDIO", "EST. 2007", "—",
   "ORIGINAL CREATIVE", "DIAMOND VIEW", "—",
   "STORY-FIRST", "CRAFT + TECHNOLOGY",
 ];
