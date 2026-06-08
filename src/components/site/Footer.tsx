@@ -63,7 +63,6 @@ export default function Footer({
               alt="Diamond View — Feeling in Motion"
               style={{ display: "block", margin: 0, maxWidth: 340 }}
             />
-            <div className="footer__tag" style={{ textAlign: "left", marginLeft: 0 }}>Tampa, Florida</div>
             <address className="footer__addr" style={{ fontStyle: "normal" }}>
               <p>1616 E. Bearss Ave<br />Tampa, FL 33613</p>
               <p>1 (813) 972 5400<br />1 (800) 613 9693</p>

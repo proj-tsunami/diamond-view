@@ -1134,9 +1134,9 @@ section[data-theme], footer[data-theme] {
 .footer .dv-btn--primary:hover { background: #000; color: #fff; }
 
 .footer__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; padding-top: 40px; border-top: 1px solid var(--av-10); }
-.footer__addr { margin-top: 20px; }
-.footer__addr p { font-size: 13px; color: var(--avalanche-deep); letter-spacing: 0.02em; line-height: 1.75; margin: 0; }
-.footer__addr p + p { margin-top: 8px; }
+.footer__addr { margin-top: 24px; }
+.footer__addr p { font-family: var(--font-display); font-stretch: 125%; font-weight: 500; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--avalanche-deep); line-height: 2.1; margin: 0; }
+.footer__addr p + p { margin-top: 12px; border-top: 1px solid var(--av-06); padding-top: 12px; }
 .footer__logo { width: min(380px, 70vw); height: auto; display: block; }
 .footer__tag { font-family: var(--font-display); font-stretch: 125%; font-weight: 500; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-light); margin-top: 22px; }
 .footer__cols { display: flex; gap: 56px; flex-wrap: nowrap; justify-content: flex-end; }
