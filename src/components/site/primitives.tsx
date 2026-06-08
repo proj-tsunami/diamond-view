@@ -12,6 +12,10 @@ import {
   type ReactNode,
 } from "react";
 import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 /* ---- Icons (inlined Lucide path data, thin stroke) --------------------- */
 const ICON_PATHS: Record<string, string[]> = {
@@ -192,18 +196,19 @@ export function useScrollEngine(enabled = true) {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let lenis: Lenis | null = null;
-    let scrollRaf = 0;
+    let tickerFn: ((time: number) => void) | null = null;
     if (!reduce) {
       lenis = new Lenis({
         duration: 1.2,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
       });
-      const raf = (time: number) => {
-        lenis?.raf(time);
-        scrollRaf = requestAnimationFrame(raf);
-      };
-      scrollRaf = requestAnimationFrame(raf);
+      // Sync Lenis with GSAP ScrollTrigger — drive Lenis off gsap.ticker so
+      // every scroll-linked animation stays in lockstep with smooth scroll.
+      lenis.on("scroll", ScrollTrigger.update);
+      tickerFn = (time: number) => lenis?.raf(time * 1000);
+      gsap.ticker.add(tickerFn);
+      gsap.ticker.lagSmoothing(0);
     }
 
     // Parallax driver
@@ -237,7 +242,7 @@ export function useScrollEngine(enabled = true) {
     }
 
     return () => {
-      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      if (tickerFn) gsap.ticker.remove(tickerFn);
       if (parallaxRaf) cancelAnimationFrame(parallaxRaf);
       lenis?.destroy();
     };
