@@ -41,6 +41,7 @@ import Diamond from "@/components/Diamond";
 import SectionDivider from "@/components/SectionDivider";
 import { getFrameUrls } from "@/utils/frames";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import SelectedWorkRail from "@/components/SelectedWorkRail";
 
 const services = [
   {
@@ -1145,7 +1146,7 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
           <Services />
           <Stats />
           <ShowreelBand />
-          <Portfolio projects={projects} />
+          <SelectedWorkRail projects={projects} />
           <Process />
           <FooterCTA />
         </div>
