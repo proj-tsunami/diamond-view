@@ -53,7 +53,8 @@ export default function Footer({
           </div>
         </div>
       )}
-      <div className="wrap footer__lower">
+      <div className="footer__lower">
+        <div className="wrap">
         <div className="footer__top">
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -113,6 +114,7 @@ export default function Footer({
           <span className="footer__fine">
             Original creative · Unique production · Story at the heart
           </span>
+        </div>
         </div>
       </div>
     </footer>
