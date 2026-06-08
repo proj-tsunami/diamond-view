@@ -45,7 +45,7 @@ export default function Footer({
             </h2>
             <button
               className="dv-btn dv-btn--primary"
-              onClick={onContact}
+              onClick={() => onContact?.()}
               style={{ padding: "16px 30px" }}
             >
               <Icon name="mail" size={15} /> Start a Project
@@ -76,7 +76,7 @@ export default function Footer({
               <a href="#capabilities">Capabilities</a>
               <a href="#process">Process</a>
               <Link href="/team">The Makers</Link>
-              <a href="mailto:hello@diamondviewstudios.com?subject=Careers">Careers</a>
+              <a href="mailto:careers@diamondviewstudios.com">Careers</a>
             </div>
             <div className="footer__col">
               <h4>Capabilities</h4>
