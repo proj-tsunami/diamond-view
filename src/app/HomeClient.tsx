@@ -170,12 +170,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
             className="relative z-20 h-full flex items-center justify-center px-6"
           >
             <div className="text-center">
-              <div className="h-[1px] w-[60px] bg-cream/15 mx-auto mb-10" />
-              <p className="dv-micro-label text-cream/55 mb-2.5 tracking-[0.5em] sm:tracking-[0.8em]">
-                Creative Production Studio
-              </p>
-
-              {/* Tagline lockup — FEELING IN MOTION (revised May-25 brand mark). */}
+              {/* Feeling in Motion lockup — canonical brand mark, centered (mark-only hero) */}
               <h1 className="sr-only">Feeling in Motion</h1>
               <div className="group cursor-default relative text-cream">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
