@@ -9,8 +9,8 @@ import { useReveal, stagger } from "@/components/site/primitives";
 const MAKER_STATS = [
   { v: "10", l: "Countries visited" },
   { v: "40+", l: "Industry awards" },
-  { v: "3,000+", l: "Days on set" },
-  { v: "10,000+", l: "Stories told" },
+  { v: "3K+", l: "Days on set" },
+  { v: "10K+", l: "Stories told" },
 ];
 
 function MakerStat({ s, i }: { s: { v: string; l: string }; i: number }) {
