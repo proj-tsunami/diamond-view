@@ -961,6 +961,56 @@ function Contact() {
   );
 }
 
+/* ──────────────── CLIENT MARQUEE (redesign) ────────────── */
+
+const CLIENT_SLUGS = [
+  "adidas", "alessi-foods", "amazon", "amelia-island", "atlanta-braves",
+  "azul-beach-resorts", "bleacher-report", "bpd-advertising", "bugatchi", "burger-21",
+  "carolina-hurricanes", "coca-cola", "duke-university-basketball", "edelman", "expedia-group",
+  "florida-cancer-specialists", "fort-lauderdale-cvb", "freight-center", "heyday-wake-boats", "jack-daniels",
+  "kforce", "nascar", "nbc-universal", "new-york-giants", "orlando-pride",
+  "peerfit", "philadelphia-eagles", "philadelphia-flyers", "publix", "regal-boats",
+  "reliaquest", "saint-leo-university", "san-francisco-49ers", "seattle-seahawks", "shasta-college",
+  "socom", "space-coast-credit-union", "starmark-agency", "tampa-bay-buccaneers", "tampa-bay-lightning",
+  "tampa-bay-rays", "tampa-bay-thrives", "uma", "university-of-florida", "university-of-south-florida",
+  "wwe",
+];
+
+function MarqueeBand() {
+  const row = [...CLIENT_SLUGS, ...CLIENT_SLUGS];
+  return (
+    <section
+      data-theme="dark"
+      aria-label="Trusted by"
+      className="dvm relative overflow-hidden"
+      style={{ background: "var(--charcoal)", borderTop: "1px solid var(--av-10)", borderBottom: "1px solid var(--av-10)", padding: "38px 0" }}
+    >
+      <style>{`
+        @keyframes dvMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .dvm-track { display: flex; width: max-content; align-items: center; animation: dvMarquee 64s linear infinite; }
+        .dvm:hover .dvm-track { animation-play-state: paused; }
+        .dvm-mark { display: block; height: 34px; width: 116px; background: var(--accent-light); opacity: 0.5; transition: opacity 0.5s var(--ease-standard, ease);
+          -webkit-mask-position: center; -webkit-mask-repeat: no-repeat; -webkit-mask-size: contain;
+          mask-position: center; mask-repeat: no-repeat; mask-size: contain; }
+        .dvm-cell:hover .dvm-mark { opacity: 1; }
+        @media (prefers-reduced-motion: reduce) { .dvm-track { animation: none; flex-wrap: wrap; justify-content: center; } }
+      `}</style>
+      <div className="absolute inset-y-0 left-0 w-[140px] z-[2] pointer-events-none" style={{ background: "linear-gradient(90deg, var(--charcoal), transparent)" }} />
+      <div className="absolute inset-y-0 right-0 w-[140px] z-[2] pointer-events-none" style={{ background: "linear-gradient(270deg, var(--charcoal), transparent)" }} />
+      <div className="dvm-track">
+        {row.map((slug, i) => (
+          <div key={slug + i} className="dvm-cell flex items-center justify-center px-9" role="img" aria-label={slug.replace(/-/g, " ")}>
+            <span
+              className="dvm-mark"
+              style={{ WebkitMaskImage: `url(/images/clients/${slug}-logo.png)`, maskImage: `url(/images/clients/${slug}-logo.png)` }}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ───────────────────── PAGE ───────────────────────────── */
 
 export default function HomeClient({ projects, settings }: { projects: Project[]; settings: SiteSettings }) {
@@ -993,7 +1043,7 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
 
         {/* ─── Content sections — parallax out from underneath the header ─── */}
         <div className="relative z-0 -mt-1">
-          <ClientGrid />
+          <MarqueeBand />
 
           <Slideshow />
 
