@@ -1,1156 +1,153 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useInView,
-} from "framer-motion";
-import Navbar from "@/components/Navbar";
-import AnimatedSection from "@/components/AnimatedSection";
-import TextReveal from "@/components/TextReveal";
-import ScrollRevealText from "@/components/ScrollRevealText";
-import HorizontalScroll from "@/components/HorizontalScroll";
-import CountUp from "@/components/CountUp";
-import MagneticButton from "@/components/MagneticButton";
-import ParallaxLayer from "@/components/ParallaxLayer";
-import TiltCard from "@/components/TiltCard";
-import FloatingElement from "@/components/FloatingElement";
-import GlacierScene from "@/components/GlacierScene";
-import SideMargins from "@/components/SideMargins";
-import GridOverlay from "@/components/GridOverlay";
-import CornerMarks from "@/components/CornerMarks";
-import CharReveal from "@/components/CharReveal";
-import ClientGrid from "@/components/ClientGrid";
-import Footer from "@/components/Footer";
-import CornerFrameAnimatedButton from "@/components/ui/corner-frame-animated-button-1";
-import Slideshow from "@/components/ui/slideshow";
-import CustomCursor from "@/components/CustomCursor";
-import IceParticles from "@/components/IceParticles";
-import GSAPProvider from "@/components/GSAPProvider";
-import DistortionHover from "@/components/DistortionHover";
-import DotNav from "@/components/DotNav";
-import IntroAnimation from "@/components/IntroAnimation";
-import DiamondEdge from "@/components/DiamondEdge";
+/* Diamond View — home page. Faithful port of the Claude design prototype's
+   App.jsx composition (Nav → SideRails → sticky Hero → .sheet[ MakersTeam →
+   MakersSlider → Marquee → div.stack[ Statement → Capabilities ] → StatsBand →
+   Showreel → Work → Process → Footer ]). The pinned Hero recedes while the
+   opaque .sheet rides up over it; smooth scroll + parallax + reveal are driven
+   by the shared engine. */
+
+import { useEffect, useState } from "react";
+import { useScrollEngine, smoothTo } from "@/components/site/primitives";
+import Nav, { type NavLink } from "@/components/site/Nav";
+import SideRails from "@/components/site/SideRails";
+import Hero from "@/components/site/Hero";
+import MakersTeam from "@/components/site/MakersTeam";
+import MakersSlider from "@/components/site/MakersSlider";
+import Marquee from "@/components/site/Marquee";
+import Statement from "@/components/site/Statement";
+import Capabilities from "@/components/site/Capabilities";
+import StatsBand from "@/components/site/StatsBand";
+import Showreel from "@/components/site/Showreel";
+import Work from "@/components/site/Work";
+import Process from "@/components/site/Process";
+import Footer from "@/components/site/Footer";
+import ContactModal from "@/components/site/ContactModal";
+import ReelModal from "@/components/site/ReelModal";
 import type { Project, SiteSettings } from "@/sanity/queries";
-import Link from "next/link";
-import ScrollSequence from "@/components/ScrollSequence";
-import PlaceholderInterstitial from "@/components/PlaceholderInterstitial";
-import Diamond from "@/components/Diamond";
-import SectionDivider from "@/components/SectionDivider";
-import { getFrameUrls } from "@/utils/frames";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import SelectedWorkRail from "@/components/SelectedWorkRail";
 
-const services = [
-  {
-    number: "01",
-    title: "Creative Development",
-    description:
-      "We shape the idea before production begins. Strategy, concepting, scripting, visual development, storyboards, style frames, and pitch materials — defining the tone and visual world early.",
-    tags: ["Strategy", "Concepting", "Visual Dev", "Storyboards", "Pitch"],
-  },
-  {
-    number: "02",
-    title: "Production",
-    description:
-      "Commercial and branded content production with post, VFX, and visualization already in mind. Studio and on-location shoots, multi-platform campaigns, and integrated production planning.",
-    tags: ["Commercial", "Branded", "Multi-Platform", "Live Action", "Planning"],
-  },
-  {
-    number: "03",
-    title: "Post Production + VFX",
-    description:
-      "Advanced visual finishing that bridges production reality and final-pixel ambition. Compositing, set extensions, motion graphics, relighting, editorial, and VFX supervision.",
-    tags: ["Compositing", "VFX", "Motion", "Editorial", "Finishing"],
-  },
-  {
-    number: "04",
-    title: "AI-Enhanced Workflows",
-    description:
-      "Practical, modular AI that accelerates creative — from concepting and rapid visualization to AI-assisted VFX, environment development, and scalable content creation.",
-    tags: ["Visualization", "AI VFX", "Environments", "Scalable", "Pipelines"],
-  },
-];
+// Per-section ground (alternating rhythm) — cream breaths at Statement & Work.
+const RHYTHM: Record<string, "light" | "dark"> = {
+  statement: "light",
+  capabilities: "dark",
+  work: "light",
+  process: "dark",
+};
 
-const processSteps = [
-  {
-    number: "01",
-    title: "Discover",
-    description:
-      "We immerse ourselves in your brand, objectives, and audience. Research, creative briefs, and strategic alignment to define the vision before anything else.",
-  },
-  {
-    number: "02",
-    title: "Design",
-    description:
-      "Concepts take shape through visual development, storyboards, previs, and style frames. You see the idea before a single frame is captured.",
-  },
-  {
-    number: "03",
-    title: "Make",
-    description:
-      "Production, virtual production, and post converge. We shoot, build, composite, and finish with craft and precision across every stage.",
-  },
-  {
-    number: "04",
-    title: "Refine",
-    description:
-      "Final color, VFX, sound, and delivery. Every detail is polished to ensure the work hits with the emotional impact it deserves.",
-  },
-];
-
-const stats = [
-  { value: 20, suffix: "+", label: "Team Members" },
-  { value: 50, suffix: "+", label: "Projects Delivered" },
-  { value: 12, suffix: "", label: "Years Experience" },
-  { value: 8, suffix: "+", label: "Industry Awards" },
-];
-
-/* ───────────────────────── HERO ───────────────────────── */
-
-function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; demoReelPoster: string | null }) {
-  const isMobile = useIsMobile();
-  const reelSrc = demoReelUrl ?? "/video/demo-reel.mp4";
-  const posterSrc = demoReelPoster ?? undefined;
-  const heroFrames = getFrameUrls(
-    `/sequences/hero/${isMobile ? "mobile" : "desktop"}`,
-    isMobile ? 45 : 90
-  );
-
-  const reelRef = useRef(null);
-  const buildingRef = useRef(null);
-
-  const { scrollYProgress: reelScroll } = useScroll({
-    target: reelRef,
-    offset: ["start start", "end start"],
-  });
-
-  const { scrollYProgress: buildingScroll } = useScroll({
-    target: buildingRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Reel wordmark fades out as you scroll away
-  const reelTextOpacity = useTransform(reelScroll, [0, 0.3, 0.6], [1, 1, 0]);
-  const reelTextY = useTransform(reelScroll, [0, 1], [0, -200]);
-
-  // Building sequence blends in
-  const buildingOpacity = useTransform(buildingScroll, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-  const buildingScale = useTransform(buildingScroll, [0, 0.4], [1.1, 1]);
-
-  return (
-    <div id="hero" data-theme="dark" className="bg-[#1a1a1a]">
-      {/* ── Part 1: Demo Reel Video (revealed after intro animation wipe) ── */}
-      <section ref={reelRef} className="relative h-[150vh] overflow-hidden">
-        <div className="sticky top-0 h-screen overflow-hidden">
-          {/* Video background */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster={posterSrc}
-            className="absolute inset-0 w-full h-full object-cover bg-[#1a1a1a]"
-            key={reelSrc}
-          >
-            <source src={reelSrc} type="video/mp4" />
-          </video>
-
-          {/* Subtle dark overlay for text legibility */}
-          <div className="absolute inset-0 bg-charcoal/30 z-[1]" />
-          <div className="absolute bottom-0 inset-x-0 h-[40vh] bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/60 to-transparent z-[2]" />
-
-          <CornerMarks color="rgba(244,243,241,0.06)" size={24} className="z-10" />
-          <GridOverlay className="z-10" />
-
-          {/* Wordmark overlay */}
-          <motion.div
-            style={{ opacity: reelTextOpacity, y: reelTextY }}
-            className="relative z-20 h-full flex items-center justify-center px-6"
-          >
-            <div className="text-center">
-              {/* Feeling in Motion lockup — canonical brand mark, centered (mark-only hero) */}
-              <h1 className="sr-only">Feeling in Motion</h1>
-              <div className="group cursor-default relative text-cream">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/brand/logos/FIM-stacked__primary-dark.svg"
-                  alt="Feeling in Motion"
-                  className="block mx-auto w-[60vw] md:w-[45vw] lg:w-[41vw] xl:w-[38vw] max-w-[900px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
-                  draggable={false}
-                />
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-            <span className="text-cream/15 dv-eyebrow">Scroll</span>
-            <div className="relative w-[1px] h-12 overflow-hidden">
-              <motion.div
-                animate={{ y: ["-100%", "100%"] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute w-full h-1/2 bg-gradient-to-b from-transparent via-cream/25 to-transparent"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── The Makers — manifesto + team link + proof-point stats (redesign) ── */}
-      <section ref={buildingRef} id="studio" data-theme="dark" className="relative overflow-hidden" style={{ background: "var(--charcoal)" }}>
-        <div className="mx-auto max-w-[1280px] px-6 md:px-12 py-24 md:py-32">
-          <div className="grid items-center gap-12 md:gap-[72px] md:grid-cols-[1.05fr_0.95fr]">
-            <div>
-              <p className="dv-eyebrow flex items-center gap-3" style={{ color: "var(--accent-light)" }}>
-                <span className="inline-block rotate-45" style={{ width: 6, height: 6, background: "var(--accent)" }} />
-                The Team
-              </p>
-              <p
-                className="mt-6 mb-8 text-[clamp(28px,3.4vw,46px)] leading-[1.16]"
-                style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 300, letterSpacing: "-0.01em", color: "var(--avalanche)" }}
-              >
-                We are creators. We are storytellers. We are innovators.
-                <span style={{ color: "var(--accent-light)" }}> We are the makers.</span>
-              </p>
-              <p className="mb-9 text-[16px] leading-[1.75] max-w-[46ch]" style={{ letterSpacing: "0.05em", color: "var(--avalanche-3)" }}>
-                A collective of directors, designers, producers, editors, artists, and technologists who
-                believe the best work is made by passionate people.
-              </p>
-              <a
-                href="/team"
-                className="group inline-flex items-center gap-3 uppercase text-[12px] pb-[7px]"
-                style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, letterSpacing: "0.18em", color: "var(--avalanche)", borderBottom: "1px solid var(--av-24)" }}
-              >
-                Meet the full team
-                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-              </a>
-            </div>
-            <figure className="relative m-0" data-parallax="0.05">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/DV_00066.jpg"
-                alt="The Makers — the Diamond View team outside the studio in Tampa, Florida"
-                loading="lazy"
-                className="block w-full h-auto aspect-[4/5] object-cover rounded-[3px]"
-                style={{ objectPosition: "center 58%", border: "1px solid var(--av-10)" }}
-              />
-              <span className="absolute pointer-events-none" style={{ top: 14, left: 14, width: 26, height: 26, borderTop: "1.5px solid var(--av-40)", borderLeft: "1.5px solid var(--av-40)" }} />
-              <span className="absolute pointer-events-none" style={{ bottom: 14, right: 14, width: 26, height: 26, borderBottom: "1.5px solid var(--av-40)", borderRight: "1.5px solid var(--av-40)" }} />
-              <figcaption
-                className="absolute uppercase text-[11px]"
-                style={{ left: 18, bottom: 16, fontFamily: "var(--font-owners-wide)", fontWeight: 500, letterSpacing: "0.2em", color: "var(--avalanche)", textShadow: "0 1px 14px rgba(20,19,18,0.7)" }}
-              >
-                The Makers · Tampa, FL
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-        {/* proof-point stats band */}
-        <div style={{ borderTop: "1px solid var(--av-10)", borderBottom: "1px solid var(--av-10)" }}>
-          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 1, background: "var(--av-10)" }}>
-            {[
-              { n: "10", u: "", l: "Countries visited" },
-              { n: "40", u: "+", l: "Industry awards" },
-              { n: "3,000", u: "+", l: "Days on set" },
-              { n: "10,000", u: "+", l: "Stories told" },
-            ].map((s) => (
-              <div key={s.l} className="text-center px-6 py-16 md:py-24" style={{ background: "var(--charcoal)" }}>
-                <div
-                  className="text-[clamp(38px,4.6vw,60px)] leading-none tabular-nums"
-                  style={{ fontFamily: "var(--font-owners)", fontWeight: 700, letterSpacing: "-0.01em", color: "var(--avalanche)" }}
-                >
-                  {s.n}
-                  <span style={{ color: "var(--accent-light)" }}>{s.u}</span>
-                </div>
-                <div className="text-[13px] mt-3.5" style={{ lineHeight: 1.5, letterSpacing: "0.04em", color: "var(--avalanche-3)" }}>{s.l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-/* ──────────────────── INTRO STATEMENT ─────────────────── */
-
-function IntroStatement() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const textY1 = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const textY2 = useTransform(scrollYProgress, [0, 1], [120, -120]);
-
-  return (
-    <section ref={ref} data-theme="light" className="py-24 md:py-36 px-6 md:px-12 relative overflow-hidden">
-      {/* Floating decorative elements */}
-      <FloatingElement
-        className="absolute top-20 left-[8%] w-[1px] h-32 bg-charcoal/[0.04] hidden md:block"
-        duration={8}
-        distance={20}
-        delay={0}
-      >
-        <div className="w-full h-full" />
-      </FloatingElement>
-      <FloatingElement
-        className="absolute bottom-32 right-[12%] w-16 h-16 border border-charcoal/[0.04] rounded-full hidden md:block"
-        duration={10}
-        distance={12}
-        delay={2}
-      >
-        <div className="w-full h-full" />
-      </FloatingElement>
-
-      <ParallaxLayer speed={-0.35} className="absolute top-10 right-[5%] hidden md:block">
-        <div className="w-24 h-[1px] bg-charcoal/[0.06] rotate-45" />
-      </ParallaxLayer>
-
-      <div className="max-w-5xl mx-auto relative z-10">
-        <motion.div style={{ y: textY1 }}>
-          <AnimatedSection>
-            <p className="text-charcoal/40 dv-eyebrow mb-12 text-center drop-shadow-sm">
-              DV // Diamond View 2026
-            </p>
-          </AnimatedSection>
-        </motion.div>
-
-        <motion.div style={{ y: textY2 }}>
-          <ScrollRevealText
-            as="h2"
-            className="text-charcoal font-heading text-3xl md:text-5xl lg:text-7xl font-medium leading-[1.05] tracking-tight text-center"
-          >
-            An award-winning creative studio exploring what it means to create feeling through moving image — blending organic creativity with innovation in technology.
-          </ScrollRevealText>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────── PORTFOLIO ───────────────────────── */
-
-function Portfolio({ projects }: { projects: Project[] }) {
-  return (
-    <section id="work" data-theme="light">
-      {/* Section header */}
-      <div className="px-6 md:px-12 pt-32 md:pt-48 pb-12">
-        <div className="max-w-7xl mx-auto text-center md:text-left">
-          <AnimatedSection>
-            <p className="dv-eyebrow text-taupe mb-3 drop-shadow-sm flex items-center justify-center md:justify-start gap-3">
-              <Diamond size={6} variant="fill" className="text-taupe" />
-              Selected Work
-            </p>
-            <div className="w-full h-[1px] bg-charcoal/10" />
-          </AnimatedSection>
-        </div>
-      </div>
-
-      {/* Horizontal scroll gallery */}
-      <HorizontalScroll>
-        {projects.slice(0, 6).map((project, i) => (
-          <motion.div
-            key={project.slug}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.6 }}
-            className="group flex-shrink-0 w-[85vw] md:w-[70vw] lg:w-[55vw]"
-          >
-            <Link href={`/work/${project.slug}`} className="block cursor-pointer">
-              <TiltCard intensity={6} className="relative aspect-[16/10] rounded-xl overflow-hidden frosted-chromatic-edge">
-                <motion.div
-                  layoutId={`project-hero-${project.slug}`}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{
-                    duration: 0.7,
-                    ease: [0.25, 0.1, 0.25, 1],
-                  }}
-                  className="w-full h-full relative"
-                >
-                  <DistortionHover
-                    src={project.cardImage}
-                    alt={project.title}
-                    className="absolute inset-0"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
-
-                  <span className="absolute top-6 right-6 text-cream/10 text-7xl md:text-8xl font-display font-black">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-
-                  <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
-                    <p className="dv-micro-label text-cream/60 mb-3">
-                      {project.category}
-                    </p>
-                    <h3 className="text-cream group-hover:text-cream/80 text-2xl md:text-3xl font-heading font-medium tracking-tight transition-colors duration-500">
-                      {project.title}
-                    </h3>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="absolute bottom-0 left-0 w-full h-[2px] bg-cream/40 origin-left"
-                />
-              </TiltCard>
-            </Link>
-          </motion.div>
-        ))}
-
-        {/* View All Work card */}
-        <Link
-          href="/work"
-          className="group flex-shrink-0 w-[60vw] md:w-[30vw] flex flex-col items-center justify-center space-y-6 cursor-pointer"
-        >
-          <p className="dv-micro-label text-charcoal/50 text-center">
-            View the Archive
-          </p>
-          <div className="flex items-center gap-4 border border-charcoal/20 rounded-full px-10 py-5 transition-all duration-500 group-hover:bg-charcoal group-hover:text-cream">
-            <span className="dv-micro-label text-charcoal group-hover:text-cream transition-colors duration-500">
-              All Work
-            </span>
-            <Diamond
-              size={8}
-              variant="duotone"
-              strokeWidth={0.8}
-              className="text-taupe group-hover:text-cream transition-colors duration-500"
-            />
-          </div>
-        </Link>
-
-        {/* CTA card */}
-        <div className="flex-shrink-0 w-[60vw] md:w-[30vw] flex flex-col items-center justify-center space-y-6">
-          <p className="dv-micro-label text-charcoal/50 mb-4 text-center">
-            Have a project?
-          </p>
-          <CornerFrameAnimatedButton
-            buttonText="Let's talk"
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          />
-        </div>
-      </HorizontalScroll>
-
-      {/* View-all CTA beneath the carousel */}
-      <div className="px-6 md:px-12 pt-16 pb-24 md:pb-32">
-        <div className="max-w-7xl mx-auto flex justify-center">
-          <AnimatedSection>
-            <Link
-              href="/work"
-              className="group inline-flex items-center gap-5 border border-charcoal/20 rounded-full px-10 md:px-14 py-5 md:py-6 transition-all duration-500 hover:bg-charcoal hover:border-charcoal"
-            >
-              <Diamond
-                size={10}
-                variant="duotone"
-                strokeWidth={0.8}
-                className="text-taupe transition-colors duration-500"
-              />
-              <span className="dv-micro-label text-charcoal group-hover:text-cream transition-colors duration-500">
-                View the Full Archive
-              </span>
-              <span className="dv-micro-label text-charcoal/40 group-hover:text-cream/70 transition-all duration-500 group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
-          </AnimatedSection>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ────────────────────── STATS ──────────────────────────── */
-
-function Stats() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <section ref={ref} data-theme="light" className="py-16 md:py-24 border-y border-charcoal/8">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.15, duration: 0.6 }}
-              className="text-center"
-            >
-              <div className="text-charcoal font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                <CountUp
-                  end={stat.value}
-                  suffix={stat.suffix}
-                  duration={2.5}
-                />
-              </div>
-              <p className="dv-micro-label text-charcoal/55 mt-3 drop-shadow-sm">
-                {stat.label}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ──────────────── SCROLL INTERSTITIAL ─────────────────── */
-
-function ScrollInterstitial({
-  sequencePath,
-  desktopFrames,
-  mobileFrames,
-  text,
-  height = "250vh",
+export default function HomeClient({
+  projects,
+  settings,
 }: {
-  sequencePath: string;
-  desktopFrames: number;
-  mobileFrames: number;
-  text?: string;
-  height?: string;
+  projects: Project[];
+  settings: SiteSettings;
 }) {
-  const isMobile = useIsMobile();
-  const frames = getFrameUrls(
-    `${sequencePath}/${isMobile ? "mobile" : "desktop"}`,
-    isMobile ? mobileFrames : desktopFrames
-  );
+  const [active, setActive] = useState<NavLink>("Home");
+  const [contact, setContact] = useState(false);
+  const [reel, setReel] = useState(false);
+  const [toast, setToast] = useState(false);
 
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const textOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
+  // Boot smooth-scroll + parallax engines once.
+  useScrollEngine();
+
+  // Scroll-driven guide diamonds on the slide-over cards (no looping timer).
+  useEffect(() => {
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>(".slide-card, .makers-one--team")
+    );
+    if (!cards.length) return;
+    let metrics: { el: HTMLElement; top: number; h: number }[] = [];
+    const measure = () => {
+      const y = window.scrollY;
+      metrics = cards.map((el) => ({
+        el,
+        top: el.getBoundingClientRect().top + y,
+        h: el.offsetHeight,
+      }));
+    };
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY,
+        vh = window.innerHeight || 1;
+      for (const m of metrics) {
+        const p = Math.max(0, Math.min(1, (y - (m.top - vh)) / (m.h + vh)));
+        m.el.style.setProperty("--gp", p.toFixed(4));
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      measure();
+      update();
+    };
+    measure();
+    update();
+    const t = setTimeout(onResize, 350);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const nav = (l: NavLink) => {
+    setActive(l);
+    const map: Record<string, string> = {
+      Work: "work",
+      Capabilities: "capabilities",
+      Process: "process",
+      Studio: "studio",
+    };
+    smoothTo(map[l] || "top");
+  };
+  const sent = () => {
+    setContact(false);
+    setToast(true);
+    setTimeout(() => setToast(false), 2600);
+  };
+  const th = (name: string): "light" | "dark" => RHYTHM[name] || "dark";
 
   return (
-    <div ref={ref} data-theme="dark">
-      <ScrollSequence
-        frames={frames}
-        height={height}
-        overlay={
-          text ? (
-            <div className="absolute inset-0 flex items-center justify-center px-6 z-10">
-              <motion.p
-                style={{ opacity: textOpacity }}
-                className="text-cream font-display text-3xl md:text-5xl lg:text-6xl font-bold text-center"
-              >
-                {text}
-              </motion.p>
-            </div>
-          ) : undefined
-        }
+    <>
+      <Nav active={active} onNav={nav} onContact={() => setContact(true)} />
+      <SideRails on />
+      <Hero
+        active
+        demoReelUrl={settings.demoReelUrl}
+        demoReelPoster={settings.demoReelPoster}
       />
-    </div>
-  );
-}
-
-/* ───────────────────── SERVICES ────────────────────────── */
-
-function ServiceCard({
-  service,
-  index,
-}: {
-  service: (typeof services)[0];
-  index: number;
-}) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  return (
-    <motion.div
-      className="group cursor-pointer"
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-    >
-      <div className="border-t border-cream/8 py-6 md:py-8">
-        {/* Header row — always visible */}
-        <div className="flex items-center gap-6 md:gap-10">
-          <span className="text-taupe text-4xl md:text-5xl font-display font-black group-hover:text-taupe-light transition-colors duration-500 w-16 md:w-20 flex-shrink-0">
-            {service.number}
-          </span>
-          <h3 className="text-cream font-heading text-xl md:text-2xl font-medium tracking-tight group-hover:text-cream/90 transition-colors duration-300 flex-1">
-            {service.title}
-          </h3>
-          <motion.div
-            animate={{ rotate: isExpanded ? 45 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="w-5 h-5 flex-shrink-0 flex items-center justify-center"
-          >
-            <span className="text-cream/20 text-xl font-light group-hover:text-cream/40 transition-colors duration-300">+</span>
-          </motion.div>
+      <div className="sheet">
+        <MakersTeam onReel={() => setReel(true)} />
+        <MakersSlider onReel={() => setReel(true)} />
+        <Marquee />
+        <div className="stack">
+          <Statement theme={th("statement")} />
+          <Capabilities theme={th("capabilities")} />
         </div>
-
-        {/* Expandable content — slides out on hover */}
-        <motion.div
-          initial={false}
-          animate={{
-            height: isExpanded ? "auto" : 0,
-            opacity: isExpanded ? 1 : 0,
-          }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          className="overflow-hidden"
-        >
-          <div className="pt-6 pb-2 pl-[88px] md:pl-[120px] max-w-2xl">
-            <p className="dv-body text-cream/60 mb-6">
-              {service.description}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {service.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="dv-micro-label text-cream/60 border border-cream/10 px-4 py-2 rounded-full group-hover:border-cream/30 transition-colors duration-300"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
+        <StatsBand />
+        <Showreel onReel={() => setReel(true)} />
+        <Work projects={projects} theme={th("work")} />
+        <Process theme={th("process")} />
+        <Footer onContact={() => setContact(true)} />
       </div>
-    </motion.div>
-  );
-}
 
-function Services() {
-  return (
-    <section id="capabilities" data-theme="dark" className="bg-charcoal relative overflow-hidden min-h-screen flex items-center">
-      <GridOverlay />
-      <CornerMarks color="rgba(244,243,241,0.05)" size={20} />
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full py-20 md:py-24">
-        {/* Sticky header + scrollable cards layout */}
-        <div className="md:grid md:grid-cols-12 md:gap-16">
-          {/* Left column — sticky header */}
-          <div className="md:col-span-4">
-            <div className="md:sticky md:top-[20vh]">
-              <AnimatedSection>
-                <p className="dv-eyebrow text-taupe mb-6 drop-shadow-sm flex items-center gap-3">
-                  <Diamond size={6} variant="fill" className="text-taupe" />
-                  What We Do
-                </p>
-              </AnimatedSection>
-              <TextReveal
-                as="h2"
-                className="text-cream font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[0.95]"
-              >
-                What We Do.
-              </TextReveal>
-              <AnimatedSection delay={0.3}>
-                <p className="dv-body text-cream/55 mt-6 max-w-sm">
-                  From first idea to final pixel — concept, craft, technology,
-                  and production in one connected pipeline.
-                </p>
-              </AnimatedSection>
-            </div>
-          </div>
-
-          {/* Right column — service cards */}
-          <div className="md:col-span-8 mt-16 md:mt-0">
-            {services.map((service, i) => (
-              <ServiceCard key={service.number} service={service} index={i} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────── PROCESS ─────────────────────────── */
-
-function Process() {
-  const [active, setActive] = useState(0);
-  return (
-    <section id="process" data-theme="dark" className="relative overflow-hidden px-6 md:px-12 py-24 md:py-32" style={{ background: "var(--charcoal)" }}>
-      <div className="max-w-[1280px] mx-auto relative z-10">
-        <p className="dv-eyebrow flex items-center gap-3 mb-7" style={{ color: "var(--accent-light)" }}>
-          <span className="inline-block rotate-45" style={{ width: 6, height: 6, background: "var(--accent)" }} />
-          Our Process
-        </p>
-        <h2 className="mb-16 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 700, fontSize: "clamp(28px,3.6vw,52px)", letterSpacing: "-0.02em", lineHeight: 1.04, color: "var(--avalanche)", maxWidth: "16ch" }}>
-          Four steps to extraordinary.
-        </h2>
-        {/* pipeline bar with gate diamonds */}
-        <div className="flex items-center mb-14">
-          {processSteps.map((s, i) => (
-            <div key={s.number} className={"flex items-center " + (i < processSteps.length - 1 ? "flex-1" : "")}>
-              <span
-                className="rotate-45 shrink-0 transition-colors duration-300"
-                style={{ width: 11, height: 11, background: i <= active ? "var(--accent)" : "var(--charcoal)", border: "1.5px solid " + (i <= active ? "var(--accent)" : "var(--av-24)") }}
-              />
-              {i < processSteps.length - 1 && (
-                <div className="flex-1 h-[2px] mx-3 transition-colors duration-300" style={{ background: i < active ? "var(--accent)" : "var(--av-16)" }} />
-              )}
-            </div>
-          ))}
-        </div>
-        {/* phases */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
-          {processSteps.map((s, i) => (
-            <div key={s.number} onMouseEnter={() => setActive(i)} className="cursor-default">
-              <div className="mb-3" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 13, letterSpacing: "0.2em", color: i === active ? "var(--accent-light)" : "var(--av-40)", transition: "color .3s" }}>{s.number}</div>
-              <h3 className="mb-3 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 700, fontSize: 19, letterSpacing: "-0.01em", color: "var(--avalanche)" }}>{s.title}</h3>
-              <p style={{ fontSize: 15, lineHeight: 1.65, letterSpacing: "0.02em", color: "var(--avalanche-3)" }}>{s.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ProcessCard({
-  step,
-  index,
-}: {
-  step: (typeof processSteps)[0];
-  index: number;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        delay: index * 0.2,
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-      className="group"
-    >
-      <div className="frosted-chromatic-edge rounded-lg p-6 h-full transition-transform duration-500 hover:-translate-y-2">
-      {/* Animated top bar */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={isInView ? { scaleX: 1 } : {}}
-        transition={{
-          delay: index * 0.2 + 0.3,
-          duration: 0.8,
-          ease: [0.25, 0.1, 0.25, 1],
-        }}
-        className="h-[2px] bg-taupe/40 origin-left mb-8"
-      />
-
-      <span className="text-charcoal/8 text-6xl md:text-7xl font-display font-black block mb-4 group-hover:text-charcoal/12 transition-colors duration-700">
-        {step.number}
-      </span>
-      <h3 className="text-charcoal font-heading text-xl md:text-2xl font-medium tracking-tight mb-4">
-        {step.title}
-      </h3>
-      <p className="dv-body text-charcoal/60">
-        {step.description}
-      </p>
-      </div>
-    </motion.div>
-  );
-}
-
-/* ───────────────────── TEAM / CTA ─────────────────────── */
-
-function Team() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-
-  return (
-    <section ref={ref} data-theme="dark" className="py-20 md:py-32 bg-charcoal overflow-hidden relative">
-      {/* Grid overlay */}
-      <GridOverlay />
-
-      {/* Parallax depth layer */}
-      <motion.div
-        style={{ y: bgY }}
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,240,235,0.03)_0%,_transparent_60%)]"
-      />
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-20">
-          <div className="md:col-span-7">
-            <AnimatedSection>
-              <p className="dv-eyebrow text-taupe-light mb-6 drop-shadow-sm flex items-center gap-3">
-                <Diamond size={6} variant="fill" className="text-taupe" />
-                The Makers
-              </p>
-            </AnimatedSection>
-
-            <TextReveal
-              as="h2"
-              className="text-cream font-display text-5xl md:text-6xl lg:text-8xl font-bold tracking-tight leading-[0.9]"
-            >
-              Meet our team.
-            </TextReveal>
-
-            <AnimatedSection delay={0.4}>
-              <p className="dv-body text-cream/55 mt-10 max-w-lg">
-                A collective of directors, designers, producers, artists, and
-                technologists who believe the best work lives at the intersection
-                of story, craft, and innovation.
-              </p>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.6}>
-              <div className="mt-14 flex flex-wrap gap-5 md:gap-8 items-center">
-                <Link href="/team" className="group inline-flex items-center gap-4 text-cream dv-micro-label border border-cream/20 px-10 py-5 hover:bg-cream hover:text-charcoal transition-all duration-500">
-                  Meet the Team
-                  <Diamond size={7} variant="duotone" strokeWidth={0.8} className="text-taupe group-hover:text-charcoal transition-colors duration-500" />
-                </Link>
-                <MagneticButton href="#contact">
-                  <span className="text-cream/55 hover:text-cream dv-micro-label transition-colors duration-300 border-b border-cream/15 pb-1">
-                    Work with us
-                  </span>
-                </MagneticButton>
-              </div>
-            </AnimatedSection>
-          </div>
-
-          <div className="md:col-span-5 flex items-center justify-center">
-            <AnimatedSection delay={0.3} direction="right">
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  "/images/team/tim_moore-9.jpg",
-                  "/images/team/vanessa_diaz-3.jpg",
-                  "/images/team/jason_blanc-7.jpg",
-                  "/images/team/erin_cullaro-4.jpg",
-                ].map((src, i) => (
-                  <ParallaxLayer key={src} speed={i % 2 === 0 ? 0.08 : -0.08}>
-                    <TiltCard intensity={8}>
-                      <Link href="/team" className="block">
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          transition={{ duration: 0.4 }}
-                          className="aspect-[3/4] w-28 md:w-36 bg-cream/[0.04] rounded-sm overflow-hidden"
-                        >
-                          <img src={src} alt="Team member" className="w-full h-full object-cover" loading="lazy" />
-                        </motion.div>
-                      </Link>
-                    </TiltCard>
-                  </ParallaxLayer>
-                ))}
-              </div>
-            </AnimatedSection>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ───────────────────── CONTACT ─────────────────────────── */
-
-function Contact() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end end"],
-  });
-  const lineWidth = useTransform(scrollYProgress, [0.3, 0.8], ["0%", "100%"]);
-
-  return (
-    <section id="contact" ref={ref} data-theme="light" className="py-20 md:py-32 px-6 md:px-12 relative">
-      <div className="max-w-7xl mx-auto">
-        {/* Animated divider */}
-        <motion.div
-          style={{ width: lineWidth }}
-          className="h-[1px] bg-charcoal/10 mb-24 md:mb-32"
+      {contact && <ContactModal onClose={() => setContact(false)} onSent={sent} />}
+      {reel && (
+        <ReelModal
+          onClose={() => setReel(false)}
+          src={settings.demoReelUrl}
+          poster={settings.demoReelPoster}
         />
-
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-          <div className="md:col-span-8">
-            <AnimatedSection>
-              <p className="dv-eyebrow text-taupe mb-10 drop-shadow-sm flex items-center gap-3">
-                <Diamond size={6} variant="fill" className="text-taupe" />
-                Get in Touch
-              </p>
-            </AnimatedSection>
-
-            <TextReveal
-              as="h2"
-              className="text-charcoal font-display text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight"
-            >
-              Let&apos;s create something extraordinary.
-            </TextReveal>
-
-            <AnimatedSection delay={0.4}>
-              <MagneticButton href="mailto:hello@diamondviewstudios.com" className="mt-14">
-                <span className="text-charcoal/40 hover:text-charcoal text-lg font-light border-b border-charcoal/10 hover:border-charcoal/30 pb-1 transition-all duration-300">
-                  hello@diamondviewstudios.com
-                </span>
-              </MagneticButton>
-            </AnimatedSection>
-          </div>
-
-          <div className="md:col-span-4 flex flex-col justify-end">
-            <AnimatedSection delay={0.3}>
-              <div className="space-y-8">
-                <div>
-                  <p className="text-charcoal/20 text-[9px] tracking-[0.3em] uppercase mb-4">
-                    Follow
-                  </p>
-                  <div className="flex flex-col gap-3">
-                    {["Instagram", "LinkedIn", "Vimeo"].map((social, i) => (
-                      <motion.a
-                        key={social}
-                        href="#"
-                        whileHover={{ x: 6 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-charcoal/30 hover:text-charcoal text-sm transition-colors duration-300"
-                      >
-                        {social}
-                      </motion.a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </AnimatedSection>
-          </div>
+      )}
+      {toast && (
+        <div className="toast">
+          <span className="toast__d" /> Thanks — we&apos;ll be in touch
         </div>
-
-        {/* Footer */}
-        <div className="mt-24 pt-8 border-t border-charcoal/6 flex flex-col items-center gap-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/brand/dv-wordmark-inline-dark.svg"
-            alt="Diamond View"
-            className="h-5 md:h-6 w-auto opacity-80"
-            draggable={false}
-          />
-          <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-charcoal/15 text-[11px] tracking-wide"
-          >
-            &copy; {new Date().getFullYear()} Diamond View. All rights reserved.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-charcoal/8 text-[9px] tracking-[0.4em] uppercase"
-          >
-            Feeling in Motion
-          </motion.p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ──────────────── CLIENT MARQUEE (redesign) ────────────── */
-
-const CLIENT_SLUGS = [
-  "adidas", "alessi-foods", "amazon", "amelia-island", "atlanta-braves",
-  "azul-beach-resorts", "bleacher-report", "bpd-advertising", "bugatchi", "burger-21",
-  "carolina-hurricanes", "coca-cola", "duke-university-basketball", "edelman", "expedia-group",
-  "florida-cancer-specialists", "fort-lauderdale-cvb", "freight-center", "heyday-wake-boats", "jack-daniels",
-  "kforce", "nascar", "nbc-universal", "new-york-giants", "orlando-pride",
-  "peerfit", "philadelphia-eagles", "philadelphia-flyers", "publix", "regal-boats",
-  "reliaquest", "saint-leo-university", "san-francisco-49ers", "seattle-seahawks", "shasta-college",
-  "socom", "space-coast-credit-union", "starmark-agency", "tampa-bay-buccaneers", "tampa-bay-lightning",
-  "tampa-bay-rays", "tampa-bay-thrives", "uma", "university-of-florida", "university-of-south-florida",
-  "wwe",
-];
-
-function MarqueeBand() {
-  const row = [...CLIENT_SLUGS, ...CLIENT_SLUGS];
-  return (
-    <section
-      data-theme="dark"
-      aria-label="Trusted by"
-      className="dvm relative overflow-hidden"
-      style={{ background: "var(--charcoal)", borderTop: "1px solid var(--av-10)", borderBottom: "1px solid var(--av-10)", padding: "38px 0" }}
-    >
-      <style>{`
-        @keyframes dvMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .dvm-track { display: flex; width: max-content; align-items: center; animation: dvMarquee 64s linear infinite; }
-        .dvm:hover .dvm-track { animation-play-state: paused; }
-        .dvm-mark { display: block; height: 34px; width: 116px; background: var(--accent-light); opacity: 0.5; transition: opacity 0.5s var(--ease-standard, ease);
-          -webkit-mask-position: center; -webkit-mask-repeat: no-repeat; -webkit-mask-size: contain;
-          mask-position: center; mask-repeat: no-repeat; mask-size: contain; }
-        .dvm-cell:hover .dvm-mark { opacity: 1; }
-        @media (prefers-reduced-motion: reduce) { .dvm-track { animation: none; flex-wrap: wrap; justify-content: center; } }
-      `}</style>
-      <div className="absolute inset-y-0 left-0 w-[140px] z-[2] pointer-events-none" style={{ background: "linear-gradient(90deg, var(--charcoal), transparent)" }} />
-      <div className="absolute inset-y-0 right-0 w-[140px] z-[2] pointer-events-none" style={{ background: "linear-gradient(270deg, var(--charcoal), transparent)" }} />
-      <div className="dvm-track">
-        {row.map((slug, i) => (
-          <div key={slug + i} className="dvm-cell flex items-center justify-center px-9" role="img" aria-label={slug.replace(/-/g, " ")}>
-            <span
-              className="dvm-mark"
-              style={{ WebkitMaskImage: `url(/images/clients/${slug}-logo.png)`, maskImage: `url(/images/clients/${slug}-logo.png)` }}
-            />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ──────────────────── STATEMENT (redesign) ─────────────── */
-
-function StatementBand() {
-  return (
-    <section data-theme="light" className="relative overflow-hidden px-6 md:px-12 py-24 md:py-40" style={{ background: "var(--avalanche)" }}>
-      <div className="mx-auto max-w-[1280px]">
-        <p className="dv-eyebrow flex items-center gap-3 mb-8 text-accent">
-          <span className="inline-block rotate-45 bg-accent" style={{ width: 6, height: 6 }} />
-          Who We Are
-        </p>
-        <ScrollRevealText
-          as="h2"
-          className="text-charcoal font-heading font-light text-[clamp(30px,4.2vw,60px)] leading-[1.16] tracking-[-0.005em] max-w-[30ch]"
-        >
-          An award-winning creative production studio reimagining what it means to create feeling through video.
-        </ScrollRevealText>
-      </div>
-    </section>
-  );
-}
-
-/* ──────────────────── SHOWREEL (redesign) ──────────────── */
-
-function ShowreelBand() {
-  return (
-    <section data-theme="dark" className="relative overflow-hidden" style={{ background: "var(--charcoal)" }}>
-      <div className="relative h-[70vh] min-h-[460px] w-full overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/bts/orlando_magic_2025_bts-1.jpg"
-          alt="Diamond View showreel"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: "grayscale(0.15)" }}
-          loading="lazy"
-        />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(26,26,26,0.45) 0%, rgba(26,26,26,0.2) 38%, rgba(26,26,26,0.78) 100%)" }} />
-        {/* corner brackets */}
-        <span className="absolute pointer-events-none" style={{ top: 28, left: 28, width: 26, height: 26, borderTop: "1.5px solid var(--av-40)", borderLeft: "1.5px solid var(--av-40)" }} />
-        <span className="absolute pointer-events-none" style={{ bottom: 28, right: 28, width: 26, height: 26, borderBottom: "1.5px solid var(--av-40)", borderRight: "1.5px solid var(--av-40)" }} />
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
-          <button
-            aria-label="Play the reel"
-            className="group grid place-items-center rounded-full transition-transform duration-500 hover:scale-105"
-            style={{ width: 92, height: 92, border: "1.5px solid var(--av-40)", background: "rgba(26,26,26,0.18)" }}
-          >
-            <span style={{ width: 0, height: 0, borderTop: "10px solid transparent", borderBottom: "10px solid transparent", borderLeft: "17px solid var(--avalanche)", marginLeft: 5 }} />
-          </button>
-          <p className="dv-eyebrow mt-8" style={{ color: "var(--avalanche)" }}>Ninety seconds of feeling</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ──────────────────── FOOTER CTA (redesign) ────────────── */
-
-function FooterCTA() {
-  const cols = [
-    { h: "Studio", links: [["Work", "/work"], ["Capabilities", "#capabilities"], ["Process", "#process"], ["The Makers", "/team"]] },
-    { h: "Capabilities", links: [["Live-Action", "#capabilities"], ["Virtual Production", "#capabilities"], ["Visual Effects", "#capabilities"], ["AI Workflow", "#capabilities"]] },
-    { h: "Connect", links: [["Instagram", "https://www.instagram.com/diamondviewstudios/"], ["LinkedIn", "https://www.linkedin.com/company/diamond-view-studios/"], ["Vimeo", "https://vimeo.com/diamondview"], ["hello@diamondviewstudios.com", "mailto:hello@diamondviewstudios.com"]] },
-  ];
-  return (
-    <footer id="contact" data-theme="dark" className="relative flex flex-col" style={{ background: "var(--charcoal)", borderTop: "1px solid var(--av-10)" }}>
-      {/* CTA hero */}
-      <div className="relative flex items-center justify-center overflow-hidden" style={{ minHeight: "60vh" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/footer-dreambig-2200.jpg" alt="Diamond View — Dream Big studio mural, Tampa, Florida" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 48%" }} loading="lazy" />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(0,0,0,0.46) 0%, rgba(0,0,0,0.14) 34%, rgba(0,0,0,0.36) 66%, rgba(0,0,0,0.70) 100%)" }} />
-        <div className="relative z-[2] text-center px-6">
-          <span className="dv-eyebrow inline-flex items-center gap-3 justify-center" style={{ color: "var(--accent-light)" }}>
-            <span className="inline-block rotate-45" style={{ width: 6, height: 6, background: "var(--accent)" }} />
-            Start a Project
-          </span>
-          <h2 className="mt-5 mb-8 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 700, fontSize: "clamp(40px,6vw,88px)", lineHeight: 0.92, letterSpacing: "-0.03em", color: "var(--avalanche)" }}>
-            Tell us<br />the <em style={{ fontStyle: "normal", color: "var(--accent-light)" }}>story.</em>
-          </h2>
-          <a href="mailto:hello@diamondviewstudios.com?subject=Start a Project" className="inline-flex items-center gap-2 uppercase transition-colors hover:opacity-90" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 12, letterSpacing: "0.18em", padding: "16px 30px", borderRadius: "var(--radius)", background: "var(--avalanche)", color: "var(--charcoal)" }}>
-            Start a Project
-          </a>
-        </div>
-      </div>
-      {/* lower sitemap */}
-      <div className="mx-auto w-full max-w-[1280px] px-6 md:px-12 py-14">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr] md:gap-14" style={{ borderTop: "1px solid var(--av-10)", paddingTop: 36 }}>
-          <div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/brand/logos/wordmark-FIM_left__primary-dark.svg" alt="Diamond View — Feeling in Motion" style={{ width: "min(360px,70vw)", height: "auto", display: "block" }} />
-            <div className="mt-5 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 12, letterSpacing: "0.3em", color: "var(--accent-light)" }}>Tampa, Florida</div>
-          </div>
-          <div className="flex gap-12 md:justify-end flex-wrap">
-            {cols.map((col) => (
-              <div key={col.h}>
-                <h4 className="uppercase mb-4" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 11, letterSpacing: "0.2em", color: "var(--av-40)" }}>{col.h}</h4>
-                {col.links.map(([label, href]) => (
-                  <a key={label} href={href} className="block mb-3 hover:opacity-100" style={{ color: "var(--avalanche-3)", fontSize: 14, letterSpacing: "0.04em" }}>{label}</a>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex justify-between items-center flex-wrap gap-4 mt-9 pt-6" style={{ borderTop: "1px solid var(--av-06)" }}>
-          <span style={{ fontSize: 12, letterSpacing: "0.05em", color: "var(--av-40)" }}>© 2026 Diamond View — The Makers · Tampa, Florida</span>
-          <span style={{ fontSize: 12, letterSpacing: "0.05em", color: "var(--av-40)" }}>Original creative · Unique production · Story at the heart</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-/* ───────────────────── PAGE ───────────────────────────── */
-
-export default function HomeClient({ projects, settings }: { projects: Project[]; settings: SiteSettings }) {
-  const [introComplete, setIntroComplete] = useState(false);
-
-  return (
-    <GSAPProvider>
-      {/* Branded intro animation */}
-      <IntroAnimation onComplete={() => setIntroComplete(true)} />
-
-      <>
-        <CustomCursor />
-        <Navbar />
-        <SideMargins />
-        <DotNav />
-
-        {/* ─── Header group — sits on top of content below.
-             The clip-path creates a downward V at the bottom, so the
-             Dream Bigger image bleeds into the chevron point instead
-             of a flat charcoal fill. ─── */}
-        <div
-          className="relative z-10"
-          style={{
-            clipPath:
-              "polygon(0 0, 100% 0, 100% calc(100% - 60px), 50% 100%, 0 calc(100% - 60px))",
-          }}
-        >
-          <Hero demoReelUrl={settings.demoReelUrl} demoReelPoster={settings.demoReelPoster} />
-        </div>
-
-        {/* ─── Content sections — parallax out from underneath the header ─── */}
-        {/* Redesign home flow: Hero+Makers (above) → Marquee → Statement →
-            Capabilities → Stats → Showreel → Work → Process → Footer CTA. */}
-        <div className="relative z-0 -mt-1">
-          <MarqueeBand />
-          <StatementBand />
-          <Services />
-          <Stats />
-          <ShowreelBand />
-          <SelectedWorkRail projects={projects} />
-          <Process />
-          <FooterCTA />
-        </div>
-      </>
-    </GSAPProvider>
+      )}
+    </>
   );
 }
