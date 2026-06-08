@@ -203,18 +203,77 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
         </div>
       </section>
 
-      {/* ── Part 2: Dream Bigger — clear breathing room above so the
-           hero reel and this BTS section don't merge. ── */}
-      <section ref={buildingRef} className="relative overflow-hidden mt-16 md:mt-24 z-20">
-        <motion.div style={{ opacity: buildingOpacity, scale: buildingScale }}>
-          <PlaceholderInterstitial
-            image="/images/bts/ny_giants_jersey_bts_bw-19.jpg"
-            alt="Diamond View behind the scenes"
-            text="The Makers."
-            height="65vh"
-            textColorClass="text-taupe-light"
-          />
-        </motion.div>
+      {/* ── The Makers — manifesto + team link + proof-point stats (redesign) ── */}
+      <section ref={buildingRef} id="studio" data-theme="dark" className="relative overflow-hidden" style={{ background: "var(--charcoal)" }}>
+        <div className="mx-auto max-w-[1280px] px-6 md:px-12 py-24 md:py-32">
+          <div className="grid items-center gap-12 md:gap-[72px] md:grid-cols-[1.05fr_0.95fr]">
+            <div>
+              <p className="dv-eyebrow flex items-center gap-3" style={{ color: "var(--accent-light)" }}>
+                <span className="inline-block rotate-45" style={{ width: 6, height: 6, background: "var(--accent)" }} />
+                The Team
+              </p>
+              <p
+                className="mt-6 mb-8 text-[clamp(28px,3.4vw,46px)] leading-[1.16]"
+                style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 300, letterSpacing: "-0.01em", color: "var(--avalanche)" }}
+              >
+                We are creators. We are storytellers. We are innovators.
+                <span style={{ color: "var(--accent-light)" }}> We are the makers.</span>
+              </p>
+              <p className="mb-9 text-[16px] leading-[1.75] max-w-[46ch]" style={{ letterSpacing: "0.05em", color: "var(--avalanche-3)" }}>
+                A collective of directors, designers, producers, editors, artists, and technologists who
+                believe the best work is made by passionate people.
+              </p>
+              <a
+                href="/team"
+                className="group inline-flex items-center gap-3 uppercase text-[12px] pb-[7px]"
+                style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, letterSpacing: "0.18em", color: "var(--avalanche)", borderBottom: "1px solid var(--av-24)" }}
+              >
+                Meet the full team
+                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </a>
+            </div>
+            <figure className="relative m-0" data-parallax="0.05">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/DV_00066.jpg"
+                alt="The Makers — the Diamond View team outside the studio in Tampa, Florida"
+                loading="lazy"
+                className="block w-full h-auto aspect-[4/5] object-cover rounded-[3px]"
+                style={{ objectPosition: "center 58%", border: "1px solid var(--av-10)" }}
+              />
+              <span className="absolute pointer-events-none" style={{ top: 14, left: 14, width: 26, height: 26, borderTop: "1.5px solid var(--av-40)", borderLeft: "1.5px solid var(--av-40)" }} />
+              <span className="absolute pointer-events-none" style={{ bottom: 14, right: 14, width: 26, height: 26, borderBottom: "1.5px solid var(--av-40)", borderRight: "1.5px solid var(--av-40)" }} />
+              <figcaption
+                className="absolute uppercase text-[11px]"
+                style={{ left: 18, bottom: 16, fontFamily: "var(--font-owners-wide)", fontWeight: 500, letterSpacing: "0.2em", color: "var(--avalanche)", textShadow: "0 1px 14px rgba(20,19,18,0.7)" }}
+              >
+                The Makers · Tampa, FL
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+        {/* proof-point stats band */}
+        <div style={{ borderTop: "1px solid var(--av-10)", borderBottom: "1px solid var(--av-10)" }}>
+          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 1, background: "var(--av-10)" }}>
+            {[
+              { n: "10", u: "", l: "Countries visited" },
+              { n: "40", u: "+", l: "Industry awards" },
+              { n: "3,000", u: "+", l: "Days on set" },
+              { n: "10,000", u: "+", l: "Stories told" },
+            ].map((s) => (
+              <div key={s.l} className="text-center px-6 py-16 md:py-24" style={{ background: "var(--charcoal)" }}>
+                <div
+                  className="text-[clamp(38px,4.6vw,60px)] leading-none tabular-nums"
+                  style={{ fontFamily: "var(--font-owners)", fontWeight: 700, letterSpacing: "-0.01em", color: "var(--avalanche)" }}
+                >
+                  {s.n}
+                  <span style={{ color: "var(--accent-light)" }}>{s.u}</span>
+                </div>
+                <div className="text-[13px] mt-3.5" style={{ lineHeight: 1.5, letterSpacing: "0.04em", color: "var(--avalanche-3)" }}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );
