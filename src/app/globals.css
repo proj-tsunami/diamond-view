@@ -125,12 +125,7 @@ body {
   line-height: 1.6;
 }
 
-/* Custom cursor — hide default on desktop (skip Sanity Studio) */
-@media (pointer: fine) {
-  body:not(:has([data-ui])) * {
-    cursor: none !important;
-  }
-}
+/* (Custom cursor removed in the redesign — use the native cursor.) */
 
 /* Headings default to Owners */
 h1, h2, h3 {
