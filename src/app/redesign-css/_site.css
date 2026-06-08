@@ -217,7 +217,7 @@ section[data-theme], footer[data-theme] {
 .nav__link {
   position: relative;
   font-family: var(--font-display); font-stretch: 125%; font-weight: 500;
-  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--avalanche-deep); cursor: pointer; background: none; border: none;
   transition: color var(--dur-quick) var(--ease-standard); padding: 4px 0;
 }
@@ -228,7 +228,7 @@ section[data-theme], footer[data-theme] {
 .nav__link:hover { color: var(--avalanche); }
 .nav__link:hover::after, .nav__link.is-active::after { right: 0; }
 .nav__link.is-active { color: var(--avalanche); }
-.nav__cta { padding: 7px 16px !important; }
+.nav__cta { padding: 6px 13px !important; font-size: 9px !important; }
 .nav__toggle { display: none; background: none; border: none; color: var(--avalanche); cursor: pointer; padding: 4px; }
 .nav__mobile {
   position: absolute; top: 100%; left: 0; right: 0;
