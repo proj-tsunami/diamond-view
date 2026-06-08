@@ -1032,6 +1032,39 @@ function StatementBand() {
   );
 }
 
+/* ──────────────────── SHOWREEL (redesign) ──────────────── */
+
+function ShowreelBand() {
+  return (
+    <section data-theme="dark" className="relative overflow-hidden" style={{ background: "var(--charcoal)" }}>
+      <div className="relative h-[70vh] min-h-[460px] w-full overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/bts/orlando_magic_2025_bts-1.jpg"
+          alt="Diamond View showreel"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: "grayscale(0.15)" }}
+          loading="lazy"
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(26,26,26,0.45) 0%, rgba(26,26,26,0.2) 38%, rgba(26,26,26,0.78) 100%)" }} />
+        {/* corner brackets */}
+        <span className="absolute pointer-events-none" style={{ top: 28, left: 28, width: 26, height: 26, borderTop: "1.5px solid var(--av-40)", borderLeft: "1.5px solid var(--av-40)" }} />
+        <span className="absolute pointer-events-none" style={{ bottom: 28, right: 28, width: 26, height: 26, borderBottom: "1.5px solid var(--av-40)", borderRight: "1.5px solid var(--av-40)" }} />
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+          <button
+            aria-label="Play the reel"
+            className="group grid place-items-center rounded-full transition-transform duration-500 hover:scale-105"
+            style={{ width: 92, height: 92, border: "1.5px solid var(--av-40)", background: "rgba(26,26,26,0.18)" }}
+          >
+            <span style={{ width: 0, height: 0, borderTop: "10px solid transparent", borderBottom: "10px solid transparent", borderLeft: "17px solid var(--avalanche)", marginLeft: 5 }} />
+          </button>
+          <p className="dv-eyebrow mt-8" style={{ color: "var(--avalanche)" }}>Ninety seconds of feeling</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ───────────────────── PAGE ───────────────────────────── */
 
 export default function HomeClient({ projects, settings }: { projects: Project[]; settings: SiteSettings }) {
@@ -1085,6 +1118,8 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
           />
 
           <Stats />
+
+          <ShowreelBand />
 
           <div className="bg-charcoal py-12 md:py-16 text-cream">
             <div className="max-w-6xl mx-auto px-6 md:px-12">
