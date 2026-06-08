@@ -240,8 +240,8 @@ section[data-theme], footer[data-theme] {
    SIDE RAILS — vertical scroll-line graphics (film-gate reference)
    ========================================================================== */
 .rail { position: fixed; top: 0; bottom: 0; width: var(--gutter); z-index: 30; pointer-events: none; display: flex; align-items: stretch; }
-.rail--l { left: 20px; justify-content: center; }
-.rail--r { right: 20px; justify-content: center; }
+.rail--l { left: 10px; justify-content: center; }
+.rail--r { right: 10px; justify-content: center; }
 .rail__line { position: absolute; top: 0; bottom: 0; width: 1px; left: 50%; background: rgba(150,138,121,0.22); }
 .rail__ticks { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; justify-content: space-between; padding: 120px 0 60px; }
 .rail__tick { width: 7px; height: 1px; background: rgba(150,138,121,0.34); transform: translateX(-50%); }

@@ -76,7 +76,7 @@ export default function SideRails({ on = true }: { on?: boolean }) {
           ))}
         </span>
         {/* parallax vertical text ruler (blended from prior version) */}
-        <div style={{ ...track, gap: 64, paddingTop: 64, transform: `translate(-50%, ${y * -0.18}px)` }}>
+        <div style={{ ...track, gap: 64, paddingTop: 64, transform: `translate(calc(-50% - 5px), ${y * -0.18}px)` }}>
           {LEFT_LABELS.map((lbl, i) => (
             <span key={i} style={{ ...labelStyle(lbl, i), transform: "rotate(180deg)" }}>{lbl}</span>
           ))}
@@ -91,7 +91,7 @@ export default function SideRails({ on = true }: { on?: boolean }) {
             <span key={i} className={"rail__tick" + (i % 4 === 0 ? " rail__tick--lg" : "")} />
           ))}
         </span>
-        <div style={{ ...track, gap: 56, paddingTop: 96, transform: `translate(-50%, ${y * -0.12}px)` }}>
+        <div style={{ ...track, gap: 56, paddingTop: 96, transform: `translate(calc(-50% + 5px), ${y * -0.12}px)` }}>
           {RIGHT_LABELS.map((lbl, i) => (
             <span key={i} style={labelStyle(lbl, i)}>{lbl}</span>
           ))}
