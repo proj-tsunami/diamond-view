@@ -1152,58 +1152,16 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
         </div>
 
         {/* ─── Content sections — parallax out from underneath the header ─── */}
+        {/* Redesign home flow: Hero+Makers (above) → Marquee → Statement →
+            Capabilities → Stats → Showreel → Work → Process → Footer CTA. */}
         <div className="relative z-0 -mt-1">
           <MarqueeBand />
-
-          <Slideshow />
-
-          <div className="bg-background py-16 md:py-20 text-charcoal">
-            <div className="max-w-6xl mx-auto px-6 md:px-12">
-              <SectionDivider variant="diamond" />
-            </div>
-          </div>
-
-          <Portfolio projects={projects} />
           <StatementBand />
-
-          {/* Interstitial A: between Portfolio and Stats — BTS placeholder */}
-          <PlaceholderInterstitial
-            image="/images/bts/orlando_magic_2025_bts-1.jpg"
-            alt="Orlando Magic shoot — behind the scenes"
-            height="90vh"
-          />
-
-          <Stats />
-
-          <ShowreelBand />
-
-          <div className="bg-charcoal py-12 md:py-16 text-cream">
-            <div className="max-w-6xl mx-auto px-6 md:px-12">
-              <SectionDivider variant="triple" />
-            </div>
-          </div>
-
           <Services />
-
-          {/* Interstitial B: replaces ParallaxBreak — BTS placeholder */}
-          <PlaceholderInterstitial
-            image="/images/bts/tb_lightning_bw_2025-3.jpg"
-            alt="Tampa Bay Lightning shoot — behind the scenes"
-            text="Dream Bigger."
-            height="100vh"
-          />
-
+          <Stats />
+          <ShowreelBand />
+          <Portfolio projects={projects} />
           <Process />
-
-          {/* Interstitial C: between Process and Team — BTS placeholder */}
-          <PlaceholderInterstitial
-            image="/images/bts/braves_2025_bts-5.jpg"
-            alt="Braves shoot — behind the scenes"
-            height="90vh"
-          />
-
-          <Team />
-
           <FooterCTA />
         </div>
       </>
