@@ -180,7 +180,7 @@ function Hero({ demoReelUrl, demoReelPoster }: { demoReelUrl: string | null; dem
               <div className="group cursor-default relative text-cream">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/brand/dv-FIM-stacked-light.svg"
+                  src="/images/brand/logos/FIM-stacked__primary-dark.svg"
                   alt="Feeling in Motion"
                   className="block mx-auto w-[60vw] md:w-[45vw] lg:w-[41vw] xl:w-[38vw] max-w-[900px] h-auto transition-[filter] duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:blur-[4px]"
                   draggable={false}
