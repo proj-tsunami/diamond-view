@@ -43,7 +43,6 @@ export default function Nav({
         <a className="nav__brand" onClick={() => onNav("Home")}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="nav__logo" src={NAV_LOGO} alt="Diamond View" />
-          <span className="nav__tag">Feeling in Motion</span>
         </a>
         <div className="nav__links">
           {links.map((l) => (
