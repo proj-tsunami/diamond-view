@@ -1065,6 +1065,62 @@ function ShowreelBand() {
   );
 }
 
+/* ──────────────────── FOOTER CTA (redesign) ────────────── */
+
+function FooterCTA() {
+  const cols = [
+    { h: "Studio", links: [["Work", "/work"], ["Capabilities", "#capabilities"], ["Process", "#process"], ["The Makers", "/team"]] },
+    { h: "Capabilities", links: [["Live-Action", "#capabilities"], ["Virtual Production", "#capabilities"], ["Visual Effects", "#capabilities"], ["AI Workflow", "#capabilities"]] },
+    { h: "Connect", links: [["Instagram", "https://www.instagram.com/diamondviewstudios/"], ["LinkedIn", "https://www.linkedin.com/company/diamond-view-studios/"], ["Vimeo", "https://vimeo.com/diamondview"], ["hello@diamondviewstudios.com", "mailto:hello@diamondviewstudios.com"]] },
+  ];
+  return (
+    <footer id="contact" data-theme="dark" className="relative flex flex-col" style={{ background: "var(--charcoal)", borderTop: "1px solid var(--av-10)" }}>
+      {/* CTA hero */}
+      <div className="relative flex items-center justify-center overflow-hidden" style={{ minHeight: "60vh" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/footer-dreambig-2200.jpg" alt="Diamond View — Dream Big studio mural, Tampa, Florida" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: "center 48%" }} loading="lazy" />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(0,0,0,0.46) 0%, rgba(0,0,0,0.14) 34%, rgba(0,0,0,0.36) 66%, rgba(0,0,0,0.70) 100%)" }} />
+        <div className="relative z-[2] text-center px-6">
+          <span className="dv-eyebrow inline-flex items-center gap-3 justify-center" style={{ color: "var(--accent-light)" }}>
+            <span className="inline-block rotate-45" style={{ width: 6, height: 6, background: "var(--accent)" }} />
+            Start a Project
+          </span>
+          <h2 className="mt-5 mb-8 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 700, fontSize: "clamp(40px,6vw,88px)", lineHeight: 0.92, letterSpacing: "-0.03em", color: "var(--avalanche)" }}>
+            Tell us<br />the <em style={{ fontStyle: "normal", color: "var(--accent-light)" }}>story.</em>
+          </h2>
+          <a href="mailto:hello@diamondviewstudios.com?subject=Start a Project" className="inline-flex items-center gap-2 uppercase transition-colors hover:opacity-90" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 12, letterSpacing: "0.18em", padding: "16px 30px", borderRadius: "var(--radius)", background: "var(--avalanche)", color: "var(--charcoal)" }}>
+            Start a Project
+          </a>
+        </div>
+      </div>
+      {/* lower sitemap */}
+      <div className="mx-auto w-full max-w-[1280px] px-6 md:px-12 py-14">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr] md:gap-14" style={{ borderTop: "1px solid var(--av-10)", paddingTop: 36 }}>
+          <div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/brand/logos/wordmark-FIM_left__primary-dark.svg" alt="Diamond View — Feeling in Motion" style={{ width: "min(360px,70vw)", height: "auto", display: "block" }} />
+            <div className="mt-5 uppercase" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 12, letterSpacing: "0.3em", color: "var(--accent-light)" }}>Tampa, Florida</div>
+          </div>
+          <div className="flex gap-12 md:justify-end flex-wrap">
+            {cols.map((col) => (
+              <div key={col.h}>
+                <h4 className="uppercase mb-4" style={{ fontFamily: "var(--font-owners-wide)", fontWeight: 500, fontSize: 11, letterSpacing: "0.2em", color: "var(--av-40)" }}>{col.h}</h4>
+                {col.links.map(([label, href]) => (
+                  <a key={label} href={href} className="block mb-3 hover:opacity-100" style={{ color: "var(--avalanche-3)", fontSize: 14, letterSpacing: "0.04em" }}>{label}</a>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-between items-center flex-wrap gap-4 mt-9 pt-6" style={{ borderTop: "1px solid var(--av-06)" }}>
+          <span style={{ fontSize: 12, letterSpacing: "0.05em", color: "var(--av-40)" }}>© 2026 Diamond View — The Makers · Tampa, Florida</span>
+          <span style={{ fontSize: 12, letterSpacing: "0.05em", color: "var(--av-40)" }}>Original creative · Unique production · Story at the heart</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 /* ───────────────────── PAGE ───────────────────────────── */
 
 export default function HomeClient({ projects, settings }: { projects: Project[]; settings: SiteSettings }) {
@@ -1148,7 +1204,7 @@ export default function HomeClient({ projects, settings }: { projects: Project[]
 
           <Team />
 
-          <Footer />
+          <FooterCTA />
         </div>
       </>
     </GSAPProvider>
