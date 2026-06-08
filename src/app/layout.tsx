@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+// Claude design system — faithful port (tokens, components, site styles)
+import "./redesign-css/_tokens.css";
+import "./redesign-css/_components.css";
+import "./redesign-css/_site.css";
 import PageTransition from "@/components/PageTransition";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";

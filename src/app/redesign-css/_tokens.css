@@ -1,0 +1,287 @@
+/* ============================================================================
+   DIAMOND VIEW — COLORS & TYPE
+   Canonical token layer for the Diamond View brand system (Brand Guidelines 2026).
+   Source of truth: https://dv-brand-guide.vercel.app/v2/
+   ----------------------------------------------------------------------------
+   FONT NOTE: The real licensed family is now SELF-HOSTED from fonts/ — the full
+   Owners width range (Production Type): XXNarrow · XNarrow · Narrow · Owners ·
+   Wide · XWide · XXWide — each in 7 weights (XLight 200 · Light 300 · Regular 400 ·
+   Medium 500 · Bold 700 · Black 900 · XBlack 950). Hierarchy through WIDTH:
+   Owners Wide = display/labels, Owners = body. The Archivo substitute is removed.
+   Weights map by file name; --font-* vars below select each width family.
+   ========================================================================== */
+
+/* ---- Owners (normal width) — body, page headings, stats ----------------- */
+
+/* ---- Owners Wide — display, headings, labels ---------------------------- */
+
+/* ---- Owners XWide — extra-wide display accents -------------------------- */
+
+/* ---- Owners Narrow — dense labels / compact UI -------------------------- */
+
+/* ---- Owners XNarrow — extra-narrow compact labels ---------------------- */
+
+/* ---- Owners XXNarrow — densest condensed -------------------------------- */
+
+/* ---- Owners XXWide — widest display banner accents --------------------- */
+
+/* ---- IBM Plex Mono — technical captions / data (--font-mono) ------------ */
+@font-face { font-family:'IBM Plex Mono'; src:url('https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'IBM Plex Mono'; src:url('https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-500-normal.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+
+:root {
+  /* ======================================================================
+     COLOR — base palette (8 brand tokens, Brand Guide §3.1)
+     Warm and grounded. Never pure black, never pure white.
+     ====================================================================== */
+
+  /* Primary · Charcoal */
+  --charcoal:        #1a1a1a;  /* primary dark surface / background           */
+  --charcoal-mid:    #303133;  /* secondary surface, cards, panels            */
+  --charcoal-soft:   #494a4c;  /* borders, tertiary surface, dividers         */
+
+  /* Primary · Avalanche (formerly "Cream") */
+  --avalanche:       #e5e5e3;  /* primary light surface / body text on dark   */
+  --avalanche-mid:   #cccbc9;  /* secondary light surface, soft dividers      */
+  --avalanche-deep:  #b2b2b0;  /* tertiary, muted on light, captions          */
+
+  /* Accent · Taupe */
+  --accent:          #968a79;  /* brand accent, interactive states            */
+  --accent-light:    #b1a89b;  /* secondary accent, hover, soft highlight     */
+
+  /* Backward-compat aliases (deprecated — do not use in new work) */
+  --cream:           var(--avalanche);
+  --cream-dark:      var(--avalanche-mid);
+  --charcoal-light:  var(--charcoal-mid);
+
+  /* ----------------------------------------------------------------------
+     Avalanche-on-charcoal transparency scale (Brand Guide §3.1)
+     Used for hairlines, glass fills, hover washes on dark surfaces.
+     ---------------------------------------------------------------------- */
+  --av-03:  rgba(229, 229, 227, 0.03);
+  --av-06:  rgba(229, 229, 227, 0.06);
+  --av-10:  rgba(229, 229, 227, 0.10);
+  --av-16:  rgba(229, 229, 227, 0.16);
+  --av-24:  rgba(229, 229, 227, 0.24);
+  --av-40:  rgba(229, 229, 227, 0.40);
+  --av-60:  rgba(229, 229, 227, 0.60);
+  --av-80:  rgba(229, 229, 227, 0.80);
+
+  /* Charcoal-on-avalanche (for light mode hairlines/washes) */
+  --ch-06:  rgba(26, 26, 26, 0.06);
+  --ch-10:  rgba(26, 26, 26, 0.10);
+  --ch-16:  rgba(26, 26, 26, 0.16);
+
+  /* ----------------------------------------------------------------------
+     STATUS colors — dashboard UI states (Brand Guide §3.5).
+     NOTE: exact hex not specified in guide; these are derived to stay warm
+     and grounded (olive greens, bronze, brick — never neon). Flag for review.
+     ---------------------------------------------------------------------- */
+  --status-draft:     #8a8a86;   /* neutral grey — in progress               */
+  --status-approved:  #7c8a5a;   /* olive green — greens stay olive          */
+  --status-final:     #9a8255;   /* warm bronze — locked / shipped           */
+  --status-rejected:  #9a5f57;   /* muted brick — needs rework               */
+  --status-draft-bg:    rgba(138, 138, 134, 0.14);
+  --status-approved-bg: rgba(124, 138, 90, 0.16);
+  --status-final-bg:    rgba(154, 130, 85, 0.16);
+  --status-rejected-bg: rgba(154, 95, 87, 0.16);
+
+  /* ======================================================================
+     SEMANTIC SURFACE / TEXT (dark-first; see [data-theme="light"] below)
+     ====================================================================== */
+  --bg:          var(--charcoal);
+  --surface-1:   var(--charcoal-mid);
+  --surface-2:   var(--charcoal-soft);
+  --border:      var(--av-10);
+  --border-strong: var(--av-16);
+
+  --fg1:         var(--avalanche);       /* primary text                     */
+  --fg2:         var(--avalanche-deep);  /* secondary text                   */
+  --fg3:         var(--av-40);           /* tertiary / captions              */
+  --fg-accent:   var(--accent-light);    /* accent text on dark              */
+  --link:        var(--accent-light);
+
+  /* ======================================================================
+     TYPOGRAPHY (Brand Guide §3.2)
+     ====================================================================== */
+
+  /* Families — real self-hosted Owners width family (see @font-face above) */
+  --font-display: var(--font-owners-wide), system-ui, sans-serif;  /* display / labels  */
+  --font-body:    var(--font-owners), system-ui, sans-serif;       /* body / stats      */
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Extra width families (available for special-use display + dense UI) */
+  --font-xwide:    var(--font-owners-wide), var(--font-owners-wide), system-ui, sans-serif;
+  --font-xxwide:   var(--font-owners-wide), var(--font-owners-wide), system-ui, sans-serif;
+  --font-narrow:   var(--font-owners), var(--font-owners), system-ui, sans-serif;
+  --font-xnarrow:  var(--font-owners), var(--font-owners), system-ui, sans-serif;
+  --font-xxnarrow: var(--font-owners), var(--font-owners), system-ui, sans-serif;
+
+  /* Legacy width-axis targets (no-ops on the static Owners faces) */
+  --width-wide:   125;  /* @kind font */
+  --width-normal: 100;  /* @kind font */
+
+  /* Weights */
+  --w-light:   300;  /* @kind font */
+  --w-regular: 400;  /* @kind font */
+  --w-medium:  500;  /* @kind font */
+  --w-bold:    700;  /* @kind font */
+  --w-black:   900;  /* @kind font */
+
+  /* Tracking */
+  --track-tight:  -0.02em;  /* display headlines                            */
+  --track-page:    0.055em; /* page headings                                */
+  --track-label:   0.3em;   /* labels / tags                                */
+  --track-micro:   0.2em;   /* micro labels                                 */
+  --track-button:  0.18em;  /* buttons                                      */
+
+  /* ======================================================================
+     SPACING SCALE (Brand Guide §3.6) — 8-based, with editorial half-steps
+     ====================================================================== */
+  --space-xxs: 8px;
+  --space-xs:  12px;
+  --space-xs2: 18px;
+  --space-sm:  28px;
+  --space-sm2: 36px;
+  --space-md:  48px;
+  --space-lg:  60px;
+  --space-xl:  80px;
+
+  /* ======================================================================
+     RADIUS (Brand Guide §3.5) — single 3px radius everywhere; 50% for circles
+     ====================================================================== */
+  --radius:        3px;
+  --radius-pill:   999px;
+  --radius-circle: 50%;
+
+  /* ======================================================================
+     MOTION (Brand Guide §3.7)
+     ====================================================================== */
+  --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1);  /* @kind other */
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);  /* @kind other */
+  --dur-quick:    0.3s;   /* @kind other */
+  --dur-standard: 0.5s;   /* @kind other */
+  --dur-medium:   0.7s;   /* @kind other */
+  --dur-slow:     1.4s;   /* @kind other */
+  --dur-kenburns: 12s;    /* @kind other */
+
+  /* ======================================================================
+     EFFECTS (Brand Guide §3.4) — glass L1, grain
+     ====================================================================== */
+  --glass-blur: 6px;
+  --glass-fill: var(--av-03);
+  --grain-opacity: 0.05;  /* @kind other */
+  --shadow-lift: 0 18px 48px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 1px 0 var(--av-06) inset, 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ==========================================================================
+   LIGHT MODE — inverted theme (Brand Guide §3.8)
+   ========================================================================== */
+[data-theme="light"] {
+  --bg:          var(--avalanche);
+  --surface-1:   #f1f1ef;
+  --surface-2:   var(--avalanche-mid);
+  --border:      var(--ch-10);
+  --border-strong: var(--ch-16);
+
+  --fg1:         var(--charcoal);
+  --fg2:         var(--charcoal-soft);
+  --fg3:         rgba(26, 26, 26, 0.45);
+  --fg-accent:   var(--accent);
+  --link:        var(--accent);
+
+  --glass-fill:  var(--ch-06);
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.6) inset, 0 12px 32px rgba(26,26,26,0.12);
+  --shadow-lift: 0 18px 48px rgba(26, 26, 26, 0.16);
+}
+
+/* ==========================================================================
+   SEMANTIC TYPE CLASSES — apply the Brand Guide §3.2 type scale directly.
+   Use these, or copy the values into component CSS.
+   ========================================================================== */
+
+.dv-hero {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-bold);
+  font-size: clamp(40px, 5.5vw, 88px);
+  letter-spacing: var(--track-tight);
+  line-height: 0.98;
+  text-transform: uppercase;
+  color: var(--fg1);
+}
+
+.dv-section-title {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-bold);
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: var(--track-tight);
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--fg1);
+}
+
+.dv-page-heading {
+  font-family: var(--font-body);
+  font-stretch: 100%;
+  font-weight: var(--w-regular);
+  font-size: 28px;
+  letter-spacing: var(--track-page);
+  line-height: 1.25;
+  color: var(--fg1);
+}
+
+.dv-body {
+  font-family: var(--font-body);
+  font-stretch: 100%;
+  font-weight: var(--w-regular);
+  font-size: 18px;
+  line-height: 1.7;
+  letter-spacing: 0.07em;
+  color: var(--fg2);
+}
+
+.dv-label {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-medium);
+  font-size: 16px;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-accent);
+}
+
+.dv-micro {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-medium);
+  font-size: 14px;
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--fg3);
+}
+
+.dv-stat {
+  font-family: var(--font-body);
+  font-stretch: 100%;
+  font-weight: var(--w-bold);
+  font-size: 34px;
+  line-height: 1.0;
+  color: var(--fg1);
+  font-variant-numeric: tabular-nums;
+}
+
+.dv-button-text {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-medium);
+  font-size: 12px;
+  letter-spacing: var(--track-button);
+  text-transform: uppercase;
+}
+
+/* Convenience width helpers */
+.dv-wide   { font-family: var(--font-display); font-stretch: 125%; }
+.dv-normal { font-family: var(--font-body);    font-stretch: 100%; }
