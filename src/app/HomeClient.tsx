@@ -111,7 +111,7 @@ export default function HomeClient({
       />
       <div className="sheet">
         <MakersTeam onReel={() => setReel(true)} />
-        <MakersSlider onReel={() => setReel(true)} />
+        <MakersSlider />
         <Marquee />
         <div className="stack">
           <Statement theme={th("statement")} />

@@ -7,13 +7,7 @@ import { useEffect, useState } from "react";
 import { Icon, useReveal } from "@/components/site/primitives";
 import { MAKER_SLIDES } from "@/components/site/media";
 
-export default function MakersSlider({
-  cycle = true,
-  onReel,
-}: {
-  cycle?: boolean;
-  onReel: () => void;
-}) {
+export default function MakersSlider({ cycle = true }: { cycle?: boolean }) {
   const ref = useReveal<HTMLElement>();
   const [idx, setIdx] = useState(0);
   const [okMap, setOkMap] = useState<boolean[]>(() => MAKER_SLIDES.map((s) => Boolean(s.src)));
@@ -62,10 +56,6 @@ export default function MakersSlider({
       <div className="makers-slider__scrim" />
       <span className="hero__corner hero__corner--tl" />
       <span className="hero__corner hero__corner--br" />
-
-      <button className="makers-slider__play" onClick={onReel} aria-label="Play the showreel">
-        <Icon name="play" size={26} />
-      </button>
 
       <div className="makers-slider__hud" data-parallax="0.05">
         <span className="hud__rec" />
