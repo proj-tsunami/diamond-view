@@ -11,6 +11,7 @@ import {
   useReveal,
   useScrollEngine,
 } from "@/components/site/primitives";
+import Footer from "@/components/site/Footer";
 
 interface ProjectPageClientProps {
   project: Project;
@@ -489,7 +490,7 @@ export default function ProjectPageClient({
         <PrevNext prev={prev} next={next} />
       </main>
 
-      <BareFooter />
+      <Footer cta={false} />
       <Lightbox
         open={reel}
         onClose={() => setReel(false)}

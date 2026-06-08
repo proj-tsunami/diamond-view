@@ -12,7 +12,7 @@ export default function Footer({
   onContact,
   cta = true,
 }: {
-  onContact: () => void;
+  onContact?: () => void;
   cta?: boolean;
 }) {
   const ref = useReveal<HTMLElement>();
@@ -55,15 +55,15 @@ export default function Footer({
       )}
       <div className="wrap footer__lower">
         <div className="footer__top">
-          <div style={{ textAlign: "left" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="footer__logo"
               src={FOOTER_LOGO}
               alt="Diamond View — Feeling in Motion"
-              style={{ display: "block", marginLeft: 0, marginRight: "auto", maxWidth: 340 }}
+              style={{ display: "block", margin: 0, maxWidth: 340 }}
             />
-            <div className="footer__tag" style={{ textAlign: "left" }}>Tampa, Florida</div>
+            <div className="footer__tag" style={{ textAlign: "left", marginLeft: 0 }}>Tampa, Florida</div>
           </div>
           <div className="footer__cols">
             <div className="footer__col">

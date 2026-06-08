@@ -18,6 +18,7 @@ import {
   useReveal,
   useScrollEngine,
 } from "@/components/site/primitives";
+import Footer from "@/components/site/Footer";
 import type { Project } from "@/sanity/queries";
 
 // The work-page reel — DV Demo Reel 2026, hosted on Vimeo (matches the repo).
@@ -164,7 +165,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
         </section>
       </main>
 
-      <BareFooter />
+      <Footer cta={false} />
     </>
   );
 }
