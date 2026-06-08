@@ -54,3 +54,6 @@ next-env.d.ts
 
 # Video assets — commit for now, move to CDN later if repo size is a concern
 # public/video/
+
+# Claude design handoff packages (reference only; canonical DS lives in dv-brand/design-system)
+Claude_Design/
