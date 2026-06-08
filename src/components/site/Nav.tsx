@@ -22,7 +22,8 @@ export default function Nav({
   const [open, setOpen] = useState(false);
   const [stuck, setStuck] = useState(false);
   const [prog, setProg] = useState(0);
-  const links: NavLink[] = ["Work", "Capabilities", "Process", "Studio"];
+  // Ordered to match the page flow: Makers/Studio → Capabilities → Work → Process.
+  const links: NavLink[] = ["Studio", "Capabilities", "Work", "Process"];
 
   useEffect(() => {
     const onScroll = () => {

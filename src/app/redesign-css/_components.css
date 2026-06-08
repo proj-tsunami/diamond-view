@@ -76,12 +76,12 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 16px;
+  padding: 7px 14px;
   border-radius: var(--radius);
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: var(--w-medium);
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: var(--track-button);
   text-transform: uppercase;
   cursor: pointer;

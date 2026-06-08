@@ -228,7 +228,7 @@ section[data-theme], footer[data-theme] {
 .nav__link:hover { color: var(--avalanche); }
 .nav__link:hover::after, .nav__link.is-active::after { right: 0; }
 .nav__link.is-active { color: var(--avalanche); }
-.nav__cta { padding: 11px 20px !important; }
+.nav__cta { padding: 7px 16px !important; }
 .nav__toggle { display: none; background: none; border: none; color: var(--avalanche); cursor: pointer; padding: 4px; }
 .nav__mobile {
   position: absolute; top: 100%; left: 0; right: 0;
@@ -240,8 +240,8 @@ section[data-theme], footer[data-theme] {
    SIDE RAILS — vertical scroll-line graphics (film-gate reference)
    ========================================================================== */
 .rail { position: fixed; top: 0; bottom: 0; width: var(--gutter); z-index: 30; pointer-events: none; display: flex; align-items: stretch; }
-.rail--l { left: 0; justify-content: center; }
-.rail--r { right: 0; justify-content: center; }
+.rail--l { left: 20px; justify-content: center; }
+.rail--r { right: 20px; justify-content: center; }
 .rail__line { position: absolute; top: 0; bottom: 0; width: 1px; left: 50%; background: rgba(150,138,121,0.22); }
 .rail__ticks { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; justify-content: space-between; padding: 120px 0 60px; }
 .rail__tick { width: 7px; height: 1px; background: rgba(150,138,121,0.34); transform: translateX(-50%); }
@@ -918,6 +918,7 @@ section[data-theme], footer[data-theme] {
 .proc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; align-items: start; min-height: 250px; }
 .proc__step {
   position: relative; padding: 0 34px 0 0; cursor: default; outline: none;
+  transition: transform 0.5s var(--ease-spring, cubic-bezier(0.34,1.56,0.64,1));
 }
 /* compact at rest — the timeline reads as a clean row of phase names */
 .proc__top { display: flex; align-items: center; gap: 0; margin-bottom: 28px; }
@@ -932,7 +933,8 @@ section[data-theme], footer[data-theme] {
     border-color 0.22s var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1)),
     box-shadow 0.34s var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1));
 }
-.proc__seg { height: 1.5px; flex: 1; background: var(--dir-rule); transition: background 0.3s var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1)); }
+.proc__seg { position: relative; overflow: hidden; height: 1.5px; flex: 1; background: var(--dir-rule); transition: background 0.3s var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1)); }
+.proc__seg::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.55s var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1)); }
 .proc__no {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em;
   color: var(--accent-light); margin-bottom: 14px; display: block;
@@ -941,7 +943,8 @@ section[data-theme], footer[data-theme] {
 .proc__name {
   font-family: var(--font-display); font-stretch: 125%; font-weight: 700; font-size: 19px;
   letter-spacing: 0.02em; text-transform: uppercase; color: var(--avalanche); margin: 0;
-  transition: color var(--dur-standard, 0.3s) var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1));
+  transition: color var(--dur-standard, 0.3s) var(--ease-standard, cubic-bezier(0.25,0.1,0.25,1)),
+              transform 0.45s var(--ease-spring, cubic-bezier(0.34,1.56,0.64,1));
 }
 /* description collapsed by default; smooth 0fr→1fr grid-row reveal on hover */
 .proc__reveal {
@@ -960,8 +963,8 @@ section[data-theme], footer[data-theme] {
 /* HOVER / FOCUS — phase expands down, diamond fills taupe + magnifies */
 .proc__step:hover .proc__gate, .proc__step:focus-visible .proc__gate {
   background: var(--accent); border-color: var(--accent-light);
-  transform: rotate(45deg) scale(1.42);
-  box-shadow: 0 0 16px 1px rgba(150,138,121,0.5);
+  transform: rotate(135deg) scale(1.5);
+  box-shadow: 0 0 18px 2px rgba(150,138,121,0.55);
 }
 .proc__step:hover .proc__seg, .proc__step:focus-visible .proc__seg { background: var(--av-40); }
 .proc__step:hover .proc__no, .proc__step:focus-visible .proc__no { color: var(--accent); }
@@ -969,6 +972,10 @@ section[data-theme], footer[data-theme] {
 .proc__step:hover .proc__reveal, .proc__step:focus-visible .proc__reveal { grid-template-rows: 1fr; }
 /* fade the text in slightly after the height starts opening, so it tracks the expand */
 .proc__step:hover .proc__desc, .proc__step:focus-visible .proc__desc { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+/* enhanced dynamics — lift the step, draw the segment, nudge the name */
+.proc__step:hover, .proc__step:focus-visible { transform: translateY(-8px); }
+.proc__step:hover .proc__seg::after, .proc__step:focus-visible .proc__seg::after { transform: scaleX(1); }
+.proc__step:hover .proc__name, .proc__step:focus-visible .proc__name { transform: translateX(5px); }
 /* no-hover devices (touch): descriptions stay open, diamonds read filled */
 @media (hover: none) {
   .proc__reveal { grid-template-rows: 1fr; }
