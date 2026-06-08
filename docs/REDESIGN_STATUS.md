@@ -1,102 +1,99 @@
 # Diamond View — Redesign Status & Pickup Notes
 
-_Last updated: 2026-06-08 • Branch: `redesign/claude-2026`_
+_Last updated: 2026-06-08 • Branch: `main` (redesign is now live in production)_
 
-Working doc for the site redesign. Pairs with `docs/PROJECT_STATE.md` (operational
-source of truth). Read this to recall where the redesign is and what's next.
-
----
-
-## TL;DR
-
-- The site is being rebuilt as a **faithful 1:1 port of the Claude design prototype**
-  (`Claude_Design/website/design_handoff_diamond_view_site`).
-- All work is on **`redesign/claude-2026`** — **29 commits ahead of `main`**, ~11 committed
-  locally and **not yet pushed** (we're iterating locally first, per Kevin).
-- **`main` / production is untouched** and backed up at tag **`pre-redesign-2026-06-07`**.
-- Dev locally: Node is at `C:\Program Files\nodejs` (prepend to PATH), `npm run dev` → `http://localhost:3000`.
-- Verify before pushing: `npx tsc --noEmit` (the build does NOT lint-gate this Next variant).
-
-### Working style
-Build **locally** and keep iterating until "dialed in" — **hold the push**. When ready:
-push the branch (Vercel auto-builds a preview) → review → **merge to `main`** for production.
+Working doc for the site redesign. Read this to recall where things stand and what's next.
 
 ---
 
-## Architecture of the port
+## TL;DR — Current State
+
+- **Redesign is live.** `redesign/claude-2026` was merged to `main` and pushed on 2026-06-08.
+- **Production URL** = the main Vercel deployment (connected to `main`).
+- **Backup** at branch `backup/live-2026-06-07` + tag `pre-redesign-2026-06-07` (commit `8c33514`). Both exist on remote.
+- **Fine-tuning continues on `main`** (or a new feature branch — small changes can go direct to main).
+- Dev locally: `npm run dev` → `http://localhost:3000`.
+
+---
+
+## Architecture
 
 | Concern | Where |
 |---|---|
-| Prototype tokens (fonts remapped to next/font Owners; IBM Plex kept) | `src/app/redesign-css/_tokens.css` |
-| Prototype components CSS | `src/app/redesign-css/_components.css` |
-| Prototype site CSS (art-direction, per-section light/dark theme, `.wrap/.section/.reveal`, sheet/sticky-hero) | `src/app/redesign-css/_site.css` |
-| Global import of the three above | `src/app/layout.tsx` |
-| Scroll engine + primitives (Lenis ↔ GSAP ScrollTrigger, parallax, reveal, Icon/Eyebrow/Section/Drift/smoothTo) | `src/components/site/primitives.tsx` |
-| Home sections + chrome | `src/components/site/*` (Nav, SideRails, Hero, MakersTeam, MakersSlider, Marquee, Statement, Capabilities, StatsBand, Showreel, Work, Process, Footer, ContactModal, ReelModal) |
-| Home composition (App.jsx order, sticky hero + `.sheet`) | `src/app/HomeClient.tsx` |
-| Re-ported pages (Sanity-wired) | `src/app/work/WorkPageClient.tsx`, `src/app/work/[slug]/ProjectPageClient.tsx`, `src/app/team/TeamPageClient.tsx` |
+| Prototype tokens (fonts, colors, spacing) | `src/app/redesign-css/_tokens.css` |
+| Component CSS | `src/app/redesign-css/_components.css` |
+| Site CSS (art-direction, per-section dark/light, sheet/sticky-hero) | `src/app/redesign-css/_site.css` |
+| Scroll engine + primitives (Lenis ↔ GSAP ScrollTrigger, parallax, reveal, Icon/Eyebrow/Drift) | `src/components/site/primitives.tsx` |
+| Home sections + chrome | `src/components/site/*` |
+| Home composition | `src/app/HomeClient.tsx` |
+| Sub-pages (Sanity-wired) | `src/app/work/WorkPageClient.tsx`, `src/app/work/[slug]/ProjectPageClient.tsx`, `src/app/team/TeamPageClient.tsx` |
 
-**Unified across the whole site:** one `Nav` (`src/components/site/Nav.tsx`) and one `Footer`
-(`src/components/site/Footer.tsx`, `cta={false}` on sub-pages).
-
-Data contract unchanged: existing `src/sanity/queries.ts` fetch layer + cache tags.
+**Unified across the whole site:** one `Nav` + one `Footer` (`cta={false}` on sub-pages).
+Data contract unchanged: `src/sanity/queries.ts` fetch layer + cache tags.
 
 ---
 
-## Done
+## Locked decisions
 
-- ✅ Foundation: prototype CSS wired, fonts remapped, scroll engine/primitives ported.
-- ✅ **Home** rebuilt to the prototype's exact order + dynamics (sticky hero recede + `.sheet`,
-  smooth scroll, parallax, reveals, SideRails, BTS slider, showreel, pinned Work rail, Process pipeline).
-- ✅ **Work / Project / Team** re-ported to the prototype DOM + `site.css`, wired to Sanity.
-- ✅ Unified Nav + Footer everywhere.
-
-### Decisions locked this session
-- **Footer mark:** `wordmark-fim-footer-left.svg` — packaged left-justified **dark-ink** footer
-  lockup (viewBox cropped to ink → flush-left). Other packaged site marks copied into
-  `public/images/brand/logos/`: `wordmark-fim-footer`, `wordmark-fim-dark/light`, `fim-stacked-dark/light`.
-- **Nav brand:** `wordmark-inline_noaccent__primary-dark` — wordmark only, **no tagline**.
-- **Nav links** ordered to page flow: **Studio → Capabilities → Work → Process**
-  (sub-pages route to `/#section`; CTA → `/#contact`, modal on home).
-- **Buttons** compact: `.dv-btn` 7px 14px / 10px; `.nav__cta` 6px 13px / 9px; nav link text 10px.
-- **Side rails:** film-gate (line + ticks + scroll dot/percent) **blended** with the prior site's
-  parallax vertical **text rulers** (coordinates/disciplines/brand, Tampa). 10px inset; text +5px outward.
-- **Makers section** ground = dark primary charcoal `#1a1a1a`.
-- **Showreel/reel** = DV 2026 demo reel on **Vimeo** (`1191542036?h=aecf929b97`) via `ReelModal` iframe.
-- **Native cursor** restored (custom-cursor system removed).
-- **Motion:** Lenis ↔ ScrollTrigger synced; added `--ease-out` for smoother reveal settles.
+- **Footer mark:** `wordmark-fim-footer-left.svg` — left-justified dark-ink lockup on cream footer
+- **Nav brand:** `wordmark-inline_noaccent__primary-dark` — wordmark only, no tagline
+- **Nav order:** Studio → Capabilities → Work → Process (sub-pages route to `/#section`)
+- **Side rails:** film-gate (line + ticks + scroll dot/percent) blended with parallax vertical text rulers
+- **Showreel:** DV 2026 reel on Vimeo (`1191542036?h=aecf929b97`) via `ReelModal` iframe
+- **Est. date:** 2007 (SideRails + MakersTeam eyebrow)
+- **Makers eyebrow:** "Tampa, FL · Est. 2007" (removed "The Makers ·" prefix)
+- **Stats:** 3K+ / 10K+ — number+K charcoal, + sign in taupe accent
+- **Footer capabilities:** Creative Development / Production / Post Production + VFX / AI Integration
+- **Footer contact:** `info@diamondviewstudios.com` + `careers@diamondviewstudios.com`
+- **Footer address:** 1616 E. Bearss Ave, Tampa FL 33613 · 813.972.5400 · 800.613.9693
+- **Hero recede:** capped at `p * 0.7` (30% max dim, 5% max scale reduction)
+- **Work rail lerp:** 0.08 (cinematic drag)
+- **Native cursor** (custom cursor removed)
 
 ---
 
-## Next / pending
+## Fine-tuning to pick up
 
-1. **Motion polish (in progress).** Reveal easing done. Levers left to tune by feel:
-   Lenis weight, hero recede / sheet timing, work-rail scrub, card hovers (work/vault/crew),
-   marquee + stats timing, route page transitions.
-2. **Dead-code cleanup.** Now unused: `src/components/Navbar.tsx`, the pages' old `BareFooter`
-   functions, `src/components/SelectedWorkRail.tsx`, and orphaned legacy home/motion components.
-3. **Push** the branch for a Vercel preview once dialed in → review → **merge to `main`** (production).
+These are known items — not blocking, just pending feel/polish passes:
+
+1. **ContactModal backend** — form currently shows UI only; needs email/endpoint wired up
+2. **Statement word-reveal timing** — scroll speed vs. word opacity cadence still to dial in
+3. **Page transitions** — route changes are instant; could add a subtle fade/slide
+4. **Virtual Production capability** — discussed as a 5th capability card (currently 4)
+5. **StatsBand copy** — "Countries visited" stat placeholder; confirm final copy with Kevin
+6. **Motion polish** — Lenis weight, marquee timing, card hover tuning by feel in the browser
 
 ---
 
-## Session commit log (newest first)
+## Rollback
+
+If production needs to roll back to the pre-redesign site:
+
+```bash
+git checkout main
+git reset --hard backup/live-2026-06-07
+git push origin main --force
+```
+
+Or via Vercel dashboard: redeploy the commit `8c33514`.
+
+---
+
+## Session commit log (newest first — full history on `main`)
 
 ```
-c87f704 polish: smoother ease-out on scroll reveals
-7f490f5 fix: unify nav across the whole site
-a40823c tweak: smaller nav link text + smaller Start a Project button
-4111d19 tweak: nav brand = wordmark only (drop tagline)
-67da6f9 tweak: rails 10px inset, text 5px further out
-ee98820 feat: nav order=page flow, compact buttons, inset rails, dynamic Process hover
-8aaa7c6 fix: packaged left-justified footer mark (wordmark-fim-footer-left)
-38cac49 fix: unify footer + left-justify brand mark across all pages
-edd0893 feat: sync Lenis with GSAP ScrollTrigger in scroll engine
-c150298 feat: blend side rails — film-gate + parallax text rulers
-f345c90 fix: footer logo left-justified; showreel plays DV 2026 Vimeo
-68b506f fix: footer mark = dark-ink left wordmark on cream footer
-58b94d3 fix: restore native cursor
-04b864e feat: faithful port of the Claude design (home + all pages)
-f37a040 feat: port prototype scroll engine + primitives
-7f00738 chore: wire prototype stylesheet (faithful-port foundation)
-... (earlier: approximation-phase commits d50d021 → bc6d16a)
+5ea6b94 feat: promote redesign/claude-2026 to production (merge commit)
+a8d5295 fix(redesign): sweep — remove stale BareFooter duplicates, fix emails
+2da4264 fix(redesign): est. date 2010 → 2007, remove The Makers from eyebrow label
+54ce358 polish(redesign): stat suffix — number+K charcoal, + sign accent
+b795195 fix(redesign): sync footer capabilities with capabilities section
+d5e7caf polish(redesign): stats 3,000+ → 3K+, 10,000+ → 10K+
+94e4281 polish(redesign): footer rule + slider play button removal
+b0f8d28 polish(redesign): full-width section separators in footer
+8465eed polish(redesign): brand-styled address, remove redundant Tampa tag
+ac652d5 feat(redesign): footer layout + contact info update
+69496ff polish(redesign): motion tuning pass 1
+5526bf1 chore(redesign): delete all legacy components + dead code
+414c87a docs(redesign): add REDESIGN_STATUS pickup notes
+... (earlier design port commits on redesign/claude-2026)
 ```
