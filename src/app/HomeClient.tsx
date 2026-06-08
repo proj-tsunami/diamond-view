@@ -136,13 +136,7 @@ export default function HomeClient({
       </div>
 
       {contact && <ContactModal onClose={() => setContact(false)} onSent={sent} />}
-      {reel && (
-        <ReelModal
-          onClose={() => setReel(false)}
-          src={settings.demoReelUrl}
-          poster={settings.demoReelPoster}
-        />
-      )}
+      {reel && <ReelModal onClose={() => setReel(false)} />}
       {toast && (
         <div className="toast">
           <span className="toast__d" /> Thanks — we&apos;ll be in touch

@@ -55,14 +55,15 @@ export default function Footer({
       )}
       <div className="wrap footer__lower">
         <div className="footer__top">
-          <div>
+          <div style={{ textAlign: "left" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="footer__logo"
               src={FOOTER_LOGO}
               alt="Diamond View — Feeling in Motion"
+              style={{ display: "block", marginLeft: 0, marginRight: "auto", maxWidth: 340 }}
             />
-            <div className="footer__tag">Tampa, Florida</div>
+            <div className="footer__tag" style={{ textAlign: "left" }}>Tampa, Florida</div>
           </div>
           <div className="footer__cols">
             <div className="footer__col">
