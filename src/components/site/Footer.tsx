@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { Icon, useReveal } from "@/components/site/primitives";
 
-const FOOTER_LOGO = "/images/brand/logos/wordmark-FIM_left__primary-dark.svg";
+const FOOTER_LOGO = "/images/brand/logos/wordmark-FIM_left__primary-light.svg";
 const FOOTER_HERO = "/images/footer-dreambig-2200.jpg";
 
 export default function Footer({
