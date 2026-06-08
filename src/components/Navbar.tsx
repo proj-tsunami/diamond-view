@@ -6,15 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { label: "Work", href: "/work" },
   { label: "Team", href: "/team" },
-  { label: "Services", href: "#capabilities" },
+  { label: "Capabilities", href: "#capabilities" },
   { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" },
 ];
 
 const sectionIds = ["work", "capabilities", "process", "contact"];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [prog, setProg] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isHome, setIsHome] = useState(true);
@@ -34,7 +34,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const y = window.scrollY;
+      setScrolled(y > 50);
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setProg(h > 0 ? Math.min(100, (y / h) * 100) : 0);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -98,11 +101,16 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo — DIAMOND VIEW wordmark, text only (no superscript diamond, nav override) */}
-          <a href={isHome ? "#" : "/"} className="flex items-center">
+          <a href={isHome ? "#" : "/"} className="flex flex-col gap-[3px] leading-none">
             <span
               className={`${textColor} font-display font-bold uppercase tracking-[0.04em] text-base md:text-lg transition-colors duration-700`}
             >
               Diamond View
+            </span>
+            <span
+              className={`font-display uppercase tracking-[0.34em] text-[8px] transition-colors duration-700 ${scrolled ? "text-taupe" : "text-taupe-light"}`}
+            >
+              Feeling in Motion
             </span>
           </a>
 
@@ -173,7 +181,7 @@ export default function Navbar() {
                       : "text-cream border-cream/25 hover:bg-cream hover:text-charcoal"
                   }`}
                 >
-                  Let&apos;s Talk
+                  Start a Project
                 </a>
               </>
             )}
@@ -199,6 +207,11 @@ export default function Navbar() {
             />
           </button>
         </div>
+        {/* scroll-progress hairline */}
+        <span
+          className="absolute bottom-0 left-0 h-[1.5px] bg-taupe transition-[width] duration-150 ease-linear"
+          style={{ width: `${prog}%` }}
+        />
       </motion.nav>
 
       {/* Mobile menu overlay */}
@@ -246,7 +259,7 @@ export default function Navbar() {
                   transition={{ delay: navLinks.length * 0.1 }}
                   className="text-charcoal text-lg tracking-[0.15em] uppercase border border-charcoal/20 px-8 py-4 mt-4 hover:bg-charcoal hover:text-cream transition-all duration-300"
                 >
-                  Let&apos;s Talk
+                  Start a Project
                 </motion.a>
               </nav>
             )}
