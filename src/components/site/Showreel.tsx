@@ -24,7 +24,7 @@ export default function Showreel({ onReel }: { onReel: () => void }) {
       <span className="reel__corner reel__corner--br" />
       <div className="reel__inner reveal">
         <Eyebrow center style={{ marginBottom: 28 }}>
-          2025 Showreel
+          2026 Showreel
         </Eyebrow>
         <button className="reel__play" onClick={onReel} aria-label="Play showreel">
           <Icon name="play" size={34} />

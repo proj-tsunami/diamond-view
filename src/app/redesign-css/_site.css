@@ -284,7 +284,7 @@ section[data-theme], footer[data-theme] {
 .fcard__title { font-family: var(--font-display); font-stretch: 125%; font-weight: 700; font-size: clamp(26px, 2.6vw, 40px); letter-spacing: 0.005em; text-transform: uppercase; color: var(--avalanche); margin: 10px 0 0; line-height: 1.02; }
 .fcard__view { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--font-display); font-stretch: 125%; font-weight: 500; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--avalanche); opacity: 0; transform: translateY(6px); transition: opacity var(--dur-standard) var(--ease-standard), transform var(--dur-standard) var(--ease-standard); }
 .fcard:hover .fcard__view { opacity: 1; transform: none; }
-.fcard__rule { position: absolute; left: 0; bottom: 0; height: 2px; width: 0; background: var(--accent); transition: width var(--dur-slow) var(--ease-standard); z-index: 3; }
+.fcard__rule { position: absolute; left: 0; bottom: 0; height: 2px; width: 0; background: var(--accent); transition: width var(--dur-standard) var(--ease-standard); z-index: 3; }
 .fcard:hover .fcard__rule { width: 100%; }
 
 /* end cards */

@@ -37,7 +37,7 @@ export default function Hero({
     const upd = () => {
       const vh = window.innerHeight;
       const p = Math.max(0, Math.min(1, window.scrollY / (vh * 0.95)));
-      el.style.setProperty("--recede", p.toFixed(4));
+      el.style.setProperty("--recede", (p * 0.7).toFixed(4));
       raf = requestAnimationFrame(upd);
     };
     raf = requestAnimationFrame(upd);

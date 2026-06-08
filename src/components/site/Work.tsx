@@ -95,7 +95,7 @@ function PinnedRail({ items }: { items: Card[] }) {
         const p = Math.max(0, Math.min(1, drive > 0 ? top / drive : 0));
         target.current = p;
         const max = r.scrollWidth - window.innerWidth;
-        current.current += (target.current - current.current) * 0.12;
+        current.current += (target.current - current.current) * 0.08;
         if (Math.abs(target.current - current.current) < 0.0002)
           current.current = target.current;
         r.style.transform = "translate3d(" + -current.current * max + "px,0,0)";
