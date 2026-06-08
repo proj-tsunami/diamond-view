@@ -760,7 +760,7 @@ section[data-theme], footer[data-theme] {
 .section.award { min-height: 50vh; display: flex; flex-direction: column; justify-content: center; padding-top: 24px; padding-bottom: 24px; }
 .award__text { max-width: 30ch; font-size: clamp(30px, 4.2vw, 60px); line-height: 1.16; }
 .srw { display: inline-block; margin-right: 0.26em; opacity: 0.28; will-change: opacity; }
-.srw--hl { color: var(--accent); font-weight: 700; }
+.srw--hl { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .srw { opacity: 1 !important; } }
 .statement__grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 64px; align-items: start; }
 .statement__aside { display: flex; flex-direction: column; gap: 26px; padding-top: 10px; }
@@ -1122,7 +1122,7 @@ section[data-theme], footer[data-theme] {
     linear-gradient(180deg, rgba(0,0,0,0.46) 0%, rgba(0,0,0,0.14) 34%, rgba(0,0,0,0.36) 66%, rgba(0,0,0,0.66) 100%),
     radial-gradient(82% 64% at 50% 52%, rgba(0,0,0,0.36), rgba(0,0,0,0) 72%); }
 /* BOTTOM HALF — light sitemap content */
-.footer__lower { width: 100%; flex: 1 1 50%; min-height: 50vh; display: flex; flex-direction: column; justify-content: center; padding-top: 44px; padding-bottom: 40px; }
+.footer__lower { width: 100%; flex: 1 1 50%; min-height: 50vh; display: flex; flex-direction: column; justify-content: space-between; padding-top: 0; padding-bottom: 40px; }
 .footer__cta { position: relative; z-index: 2; text-align: center; padding: 0; }
 .footer__cta-title {
   font-family: var(--dir-display-family); font-stretch: var(--dir-display-stretch);
@@ -1133,7 +1133,10 @@ section[data-theme], footer[data-theme] {
 .footer__cta-title em { font-style: normal; color: var(--accent-light); }
 .footer .dv-btn--primary:hover { background: #000; color: #fff; }
 
-.footer__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; padding-top: 36px; border-top: 1px solid var(--av-10); }
+.footer__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; padding-top: 40px; border-top: 1px solid var(--av-10); }
+.footer__addr { margin-top: 20px; }
+.footer__addr p { font-size: 13px; color: var(--avalanche-deep); letter-spacing: 0.02em; line-height: 1.75; margin: 0; }
+.footer__addr p + p { margin-top: 8px; }
 .footer__logo { width: min(380px, 70vw); height: auto; display: block; }
 .footer__tag { font-family: var(--font-display); font-stretch: 125%; font-weight: 500; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-light); margin-top: 22px; }
 .footer__cols { display: flex; gap: 56px; flex-wrap: nowrap; justify-content: flex-end; }

@@ -64,6 +64,10 @@ export default function Footer({
               style={{ display: "block", margin: 0, maxWidth: 340 }}
             />
             <div className="footer__tag" style={{ textAlign: "left", marginLeft: 0 }}>Tampa, Florida</div>
+            <address className="footer__addr" style={{ fontStyle: "normal" }}>
+              <p>1616 E. Bearss Ave<br />Tampa, FL 33613</p>
+              <p>1 (813) 972 5400<br />1 (800) 613 9693</p>
+            </address>
           </div>
           <div className="footer__cols">
             <div className="footer__col">
@@ -100,7 +104,8 @@ export default function Footer({
               <a href="https://vimeo.com/diamondview" target="_blank" rel="noopener noreferrer">
                 Vimeo
               </a>
-              <a href="mailto:hello@diamondviewstudios.com">hello@diamondviewstudios.com</a>
+              <a href="mailto:info@diamondviewstudios.com">info@diamondviewstudios.com</a>
+              <a href="mailto:careers@diamondviewstudios.com">careers@diamondviewstudios.com</a>
             </div>
           </div>
         </div>
