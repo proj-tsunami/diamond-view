@@ -8,8 +8,8 @@
    by the shared engine. */
 
 import { useEffect, useState } from "react";
-import { useScrollEngine, smoothTo } from "@/components/site/primitives";
-import Nav, { type NavLink } from "@/components/site/Nav";
+import { useScrollEngine } from "@/components/site/primitives";
+import Nav from "@/components/site/Nav";
 import SideRails from "@/components/site/SideRails";
 import Hero from "@/components/site/Hero";
 import MakersTeam from "@/components/site/MakersTeam";
@@ -41,7 +41,6 @@ export default function HomeClient({
   projects: Project[];
   settings: SiteSettings;
 }) {
-  const [active, setActive] = useState<NavLink>("Home");
   const [contact, setContact] = useState(false);
   const [reel, setReel] = useState(false);
   const [toast, setToast] = useState(false);
@@ -94,16 +93,6 @@ export default function HomeClient({
     };
   }, []);
 
-  const nav = (l: NavLink) => {
-    setActive(l);
-    const map: Record<string, string> = {
-      Work: "work",
-      Capabilities: "capabilities",
-      Process: "process",
-      Studio: "studio",
-    };
-    smoothTo(map[l] || "top");
-  };
   const sent = () => {
     setContact(false);
     setToast(true);
@@ -113,7 +102,7 @@ export default function HomeClient({
 
   return (
     <>
-      <Nav active={active} onNav={nav} onContact={() => setContact(true)} />
+      <Nav onContact={() => setContact(true)} />
       <SideRails on />
       <Hero
         active

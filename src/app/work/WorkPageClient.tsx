@@ -10,7 +10,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
+import Nav from "@/components/site/Nav";
 import {
   Eyebrow,
   Icon,
@@ -117,7 +117,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
 
   return (
     <>
-      <Navbar />
+      <Nav />
 
       <main className="vault">
         <section className="vault-hero">

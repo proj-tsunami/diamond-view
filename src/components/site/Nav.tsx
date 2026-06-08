@@ -1,29 +1,32 @@
 "use client";
 
-/* Top header — nav that solidifies on scroll, with a scroll-progress hairline.
-   Faithful port of the prototype Nav.jsx. */
+/* Top header — the single nav used across the whole site. On the home page the
+   section links smooth-scroll; on any other route they navigate to /#section.
+   Wordmark only (no tagline). Solidifies on scroll with a progress hairline. */
 
 import { useEffect, useState } from "react";
-import { Icon } from "@/components/site/primitives";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Icon, smoothTo } from "@/components/site/primitives";
 
 const NAV_LOGO = "/images/brand/logos/wordmark-inline_noaccent__primary-dark.svg";
 
-type NavLink = "Home" | "Work" | "Capabilities" | "Process" | "Studio";
+// Ordered to match the page flow: Makers/Studio → Capabilities → Work → Process.
+const LINKS = [
+  { label: "Studio", id: "studio" },
+  { label: "Capabilities", id: "capabilities" },
+  { label: "Work", id: "work" },
+  { label: "Process", id: "process" },
+];
 
-export default function Nav({
-  active,
-  onNav,
-  onContact,
-}: {
-  active: NavLink;
-  onNav: (l: NavLink) => void;
-  onContact: () => void;
-}) {
+export default function Nav({ onContact }: { onContact?: () => void }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
   const [stuck, setStuck] = useState(false);
   const [prog, setProg] = useState(0);
-  // Ordered to match the page flow: Makers/Studio → Capabilities → Work → Process.
-  const links: NavLink[] = ["Studio", "Capabilities", "Work", "Process"];
+  const [active, setActive] = useState("");
 
   useEffect(() => {
     const onScroll = () => {
@@ -37,24 +40,54 @@ export default function Nav({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Active-section highlight (home only).
+  useEffect(() => {
+    if (!isHome) return;
+    const els = LINKS.map((l) => document.getElementById(l.id)).filter(
+      (el): el is HTMLElement => !!el
+    );
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [isHome]);
+
+  const go = (id: string) => {
+    setOpen(false);
+    if (isHome) smoothTo(id);
+    else router.push(`/#${id}`);
+  };
+  const contact = () => {
+    setOpen(false);
+    if (onContact) onContact();
+    else router.push("/#contact");
+  };
+
   return (
     <header className={"header" + (stuck ? " is-stuck" : "")}>
       <nav className="nav" style={{ opacity: 1 }}>
-        <a className="nav__brand" onClick={() => onNav("Home")}>
+        <Link className="nav__brand" href="/">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="nav__logo" src={NAV_LOGO} alt="Diamond View" />
-        </a>
+        </Link>
         <div className="nav__links">
-          {links.map((l) => (
+          {LINKS.map((l) => (
             <button
-              key={l}
-              className={"nav__link" + (active === l ? " is-active" : "")}
-              onClick={() => onNav(l)}
+              key={l.id}
+              className={"nav__link" + (isHome && active === l.id ? " is-active" : "")}
+              onClick={() => go(l.id)}
             >
-              {l}
+              {l.label}
             </button>
           ))}
-          <button className="dv-btn dv-btn--primary nav__cta" onClick={onContact}>
+          <button className="dv-btn dv-btn--primary nav__cta" onClick={contact}>
             Start a Project
           </button>
         </div>
@@ -63,26 +96,20 @@ export default function Nav({
         </button>
         {open && (
           <div className="nav__mobile">
-            {links.map((l) => (
+            {LINKS.map((l) => (
               <button
-                key={l}
+                key={l.id}
                 className="nav__link"
                 style={{ textAlign: "left" }}
-                onClick={() => {
-                  setOpen(false);
-                  onNav(l);
-                }}
+                onClick={() => go(l.id)}
               >
-                {l}
+                {l.label}
               </button>
             ))}
             <button
               className="dv-btn dv-btn--primary"
               style={{ justifyContent: "center" }}
-              onClick={() => {
-                setOpen(false);
-                onContact();
-              }}
+              onClick={contact}
             >
               Start a Project
             </button>
@@ -93,5 +120,3 @@ export default function Nav({
     </header>
   );
 }
-
-export type { NavLink };

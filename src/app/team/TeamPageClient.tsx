@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
+import Nav from "@/components/site/Nav";
 import { Eyebrow, Drift, useReveal, useScrollEngine } from "@/components/site/primitives";
 import Footer from "@/components/site/Footer";
 import type { TeamMember } from "@/sanity/queries";
@@ -50,7 +50,7 @@ export default function TeamPageClient({ team }: { team: TeamMember[] }) {
 
   return (
     <>
-      <Navbar />
+      <Nav />
 
       <main className="vault">
         <section className="vault-hero">

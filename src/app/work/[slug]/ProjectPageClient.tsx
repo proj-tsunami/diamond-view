@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { Project, GalleryItem } from "@/sanity/queries";
-import Navbar from "@/components/Navbar";
+import Nav from "@/components/site/Nav";
 import {
   Eyebrow,
   Icon,
@@ -479,7 +479,7 @@ export default function ProjectPageClient({
 
   return (
     <>
-      <Navbar />
+      <Nav />
 
       <main className="pj" data-layout="cinematic">
         <Hero p={project} onPlay={() => setReel(true)} canPlay={Boolean(film)} />
