@@ -5,7 +5,6 @@ import "./globals.css";
 import "./redesign-css/_tokens.css";
 import "./redesign-css/_components.css";
 import "./redesign-css/_site.css";
-import PageTransition from "@/components/PageTransition";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -91,7 +90,7 @@ export default function RootLayout({
       className={`${ownersWide.variable} ${owners.variable} antialiased`}
     >
       <body>
-        <PageTransition>{children}</PageTransition>
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>
