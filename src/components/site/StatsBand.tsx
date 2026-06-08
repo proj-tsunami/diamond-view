@@ -55,11 +55,14 @@ function MakerStat({ s, i }: { s: { v: string; l: string }; i: number }) {
       if (raf) cancelAnimationFrame(raf);
     };
   }, [target]);
+  const unit = suffix.replace(/\+/g, "");
+  const plus = suffix.includes("+") ? "+" : "";
   return (
     <div className="stat reveal" ref={ref} style={stagger(i, 80)}>
       <div className="stat__v">
         {Math.round(val).toLocaleString()}
-        <span className="u">{suffix}</span>
+        {unit && <span className="u">{unit}</span>}
+        {plus && <span className="u u--plus">{plus}</span>}
       </div>
       <div className="stat__l">{s.l}</div>
     </div>
