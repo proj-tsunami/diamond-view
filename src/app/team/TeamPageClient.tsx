@@ -58,7 +58,7 @@ export default function TeamPageClient({ team }: { team: TeamMember[] }) {
           <div className="wrap">
             <div className="vault-head">
               <Eyebrow style={{ marginBottom: 22 }}>The Makers · Tampa, FL</Eyebrow>
-              <h1 className="vault-title" data-parallax="0.06">
+              <h1 className="vault-title">
                 The Makers.
               </h1>
               <p className="vault-lead">

@@ -25,9 +25,7 @@
 
 /* ---- Owners XXWide — widest display banner accents --------------------- */
 
-/* ---- IBM Plex Mono — technical captions / data (--font-mono) ------------ */
-@font-face { font-family:'IBM Plex Mono'; src:url('https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
-@font-face { font-family:'IBM Plex Mono'; src:url('https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-500-normal.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+/* ---- Mono — technical captions / data (--font-mono) -------------------- */
 
 :root {
   /* ======================================================================
@@ -108,7 +106,7 @@
   /* Families — real self-hosted Owners width family (see @font-face above) */
   --font-display: var(--font-owners-wide), system-ui, sans-serif;  /* display / labels  */
   --font-body:    var(--font-owners), system-ui, sans-serif;       /* body / stats      */
-  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-mono:    ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Extra width families (available for special-use display + dense UI) */
   --font-xwide:    var(--font-owners-wide), var(--font-owners-wide), system-ui, sans-serif;

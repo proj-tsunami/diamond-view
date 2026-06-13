@@ -86,10 +86,11 @@
   text-transform: uppercase;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: background var(--dur-quick) var(--ease-standard),
-              color var(--dur-quick) var(--ease-standard),
-              border-color var(--dur-quick) var(--ease-standard),
-              transform var(--dur-quick) var(--ease-standard);
+  transition: background 0.35s var(--ease-standard),
+              color 0.35s var(--ease-standard),
+              border-color 0.35s var(--ease-standard),
+              box-shadow 0.35s var(--ease-standard),
+              transform 0.35s var(--ease-standard);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -97,7 +98,12 @@
   background: var(--avalanche);
   color: var(--charcoal);
 }
-.dv-btn--primary:hover { background: #fff; }
+.dv-btn--primary:hover {
+  background: var(--accent);
+  color: var(--avalanche);
+  box-shadow: 0 6px 24px rgba(150, 138, 121, 0.35);
+  transform: translateY(-2px);
+}
 .dv-btn--primary:active { transform: scale(0.98); }
 
 .dv-btn--secondary {
@@ -105,7 +111,12 @@
   color: var(--fg1);
   border-color: var(--border-strong);
 }
-.dv-btn--secondary:hover { border-color: var(--accent-light); color: var(--accent-light); }
+.dv-btn--secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 6px 24px rgba(150, 138, 121, 0.2);
+  transform: translateY(-2px);
+}
 .dv-btn--secondary:active { transform: scale(0.98); }
 
 .dv-btn--ghost {
@@ -113,7 +124,10 @@
   color: var(--fg2);
   padding-inline: 6px;
 }
-.dv-btn--ghost:hover { color: var(--fg1); }
+.dv-btn--ghost:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
 
 /* ---- Status badges (Brand Guide §3.5) ---------------------------------- */
 .dv-badge {

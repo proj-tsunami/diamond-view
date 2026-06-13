@@ -7,7 +7,7 @@
 import Link from "next/link";
 import { Icon, Eyebrow, Drift, useReveal } from "@/components/site/primitives";
 
-const PORTRAIT = "/images/DV_00066.jpg";
+const PORTRAIT = "/images/team-group-2026.jpg";
 
 export default function MakersTeam({
   onReel,

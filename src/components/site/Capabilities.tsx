@@ -37,9 +37,9 @@ const SERVICES: Service[] = [
   },
   {
     number: "04",
-    title: "AI Integration",
+    title: "AI-Enhanced Production",
     description:
-      "Practical AI that accelerates creative. Enhancing concepting and visualization, AI-assisted VFX, environment development, and scalable content creation.",
+      "AI that accelerates creative. Enhancing concepting and visualization, AI-assisted VFX, environment development, and scalable content creation.",
     tags: ["Visualization", "AI VFX", "Environments", "Scalable", "Pipelines"],
   },
 ];
@@ -101,10 +101,6 @@ export default function Capabilities({ theme }: { theme?: "dark" | "light" }) {
               <h2 className="section-title reveal" style={{ marginTop: 0 }}>
                 What we do.
               </h2>
-              <p className="section-lead reveal" style={Object.assign({ marginTop: 22 }, stagger(1))}>
-                Producing original creative, providing a singular production experience and exploring
-                new technology all while keeping storytelling at the heart.
-              </p>
             </div>
           </aside>
           <div className="wwd__list reveal" style={stagger(1)} onMouseLeave={() => setOpen(-1)}>

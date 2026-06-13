@@ -41,7 +41,7 @@ export default function Process({ theme }: { theme?: "dark" | "light" }) {
       <div className="wrap">
         <div className="section-head">
           <div>
-            <Eyebrow style={{ marginBottom: 18 }}>How We Work</Eyebrow>
+            <Eyebrow style={{ marginBottom: 18 }}>Process</Eyebrow>
             <h2 className="section-title reveal">
               The beginning,
               <br />

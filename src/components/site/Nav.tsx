@@ -5,6 +5,7 @@
    Wordmark only (no tagline). Solidifies on scroll with a progress hairline. */
 
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Icon, smoothTo } from "@/components/site/primitives";
@@ -12,10 +13,11 @@ import { Icon, smoothTo } from "@/components/site/primitives";
 const NAV_LOGO = "/images/brand/logos/wordmark-inline_noaccent__primary-dark.svg";
 
 // Ordered to match the page flow: Makers/Studio → Capabilities → Work → Process.
+// href overrides scroll behaviour — renders as a Link instead of a button.
 const LINKS = [
   { label: "Studio", id: "studio" },
   { label: "Capabilities", id: "capabilities" },
-  { label: "Work", id: "work" },
+  { label: "Work", id: "work", href: "/work" },
   { label: "Process", id: "process" },
 ];
 
@@ -74,19 +76,33 @@ export default function Nav({ onContact }: { onContact?: () => void }) {
     <header className={"header" + (stuck ? " is-stuck" : "")}>
       <nav className="nav" style={{ opacity: 1 }}>
         <Link className="nav__brand" href="/">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="nav__logo" src={NAV_LOGO} alt="Diamond View" />
+          <span
+            className="nav__logo"
+            style={{ "--src": `url("${NAV_LOGO}")` } as CSSProperties}
+            role="img"
+            aria-label="Diamond View"
+          />
         </Link>
         <div className="nav__links">
-          {LINKS.map((l) => (
-            <button
-              key={l.id}
-              className={"nav__link" + (isHome && active === l.id ? " is-active" : "")}
-              onClick={() => go(l.id)}
-            >
-              {l.label}
-            </button>
-          ))}
+          {LINKS.map((l) =>
+            l.href ? (
+              <Link
+                key={l.id}
+                className={"nav__link" + (pathname === l.href ? " is-active" : "")}
+                href={l.href}
+              >
+                {l.label}
+              </Link>
+            ) : (
+              <button
+                key={l.id}
+                className={"nav__link" + (isHome && active === l.id ? " is-active" : "")}
+                onClick={() => go(l.id)}
+              >
+                {l.label}
+              </button>
+            )
+          )}
           <button className="dv-btn dv-btn--primary nav__cta" onClick={contact}>
             Start a Project
           </button>
@@ -96,16 +112,28 @@ export default function Nav({ onContact }: { onContact?: () => void }) {
         </button>
         {open && (
           <div className="nav__mobile">
-            {LINKS.map((l) => (
-              <button
-                key={l.id}
-                className="nav__link"
-                style={{ textAlign: "left" }}
-                onClick={() => go(l.id)}
-              >
-                {l.label}
-              </button>
-            ))}
+            {LINKS.map((l) =>
+              l.href ? (
+                <Link
+                  key={l.id}
+                  className="nav__link"
+                  style={{ textAlign: "left" }}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <button
+                  key={l.id}
+                  className="nav__link"
+                  style={{ textAlign: "left" }}
+                  onClick={() => go(l.id)}
+                >
+                  {l.label}
+                </button>
+              )
+            )}
             <button
               className="dv-btn dv-btn--primary"
               style={{ justifyContent: "center" }}
