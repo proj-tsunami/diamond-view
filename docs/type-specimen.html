@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diamond View — Brand Style System</title>
+<style>
+
+/* ── Owners font faces ─────────────────────────────────────────────────── */
+@font-face { font-family: 'OwnersWide'; src: url('../src/fonts/OwnersWide-Light.otf');  font-weight: 300; }
+@font-face { font-family: 'OwnersWide'; src: url('../src/fonts/OwnersWide-Regular.otf'); font-weight: 400; }
+@font-face { font-family: 'OwnersWide'; src: url('../src/fonts/OwnersWide-Medium.otf'); font-weight: 500; }
+@font-face { font-family: 'OwnersWide'; src: url('../src/fonts/OwnersWide-Bold.otf');   font-weight: 700; }
+@font-face { font-family: 'OwnersWide'; src: url('../src/fonts/OwnersWide-Black.otf');  font-weight: 900; }
+@font-face { font-family: 'OwnersWide'; src: url('../src/fonts/OwnersWide-XBlack.otf'); font-weight: 950; }
+@font-face { font-family: 'Owners'; src: url('../src/fonts/Owners-Light.otf');   font-weight: 300; }
+@font-face { font-family: 'Owners'; src: url('../src/fonts/Owners-Regular.otf'); font-weight: 400; }
+@font-face { font-family: 'Owners'; src: url('../src/fonts/Owners-Medium.otf');  font-weight: 500; }
+@font-face { font-family: 'Owners'; src: url('../src/fonts/Owners-Bold.otf');    font-weight: 700; }
+@font-face { font-family: 'Owners'; src: url('../src/fonts/Owners-Black.otf');   font-weight: 900; }
+@font-face { font-family: 'OwnersNarrow'; src: url('../src/fonts/OwnersNarrow-Light.otf');   font-weight: 300; }
+@font-face { font-family: 'OwnersNarrow'; src: url('../src/fonts/OwnersNarrow-Regular.otf'); font-weight: 400; }
+@font-face { font-family: 'OwnersNarrow'; src: url('../src/fonts/OwnersNarrow-Medium.otf');  font-weight: 500; }
+@font-face { font-family: 'OwnersNarrow'; src: url('../src/fonts/OwnersNarrow-Bold.otf');    font-weight: 700; }
+@font-face { font-family: 'OwnersNarrow'; src: url('../src/fonts/OwnersNarrow-Black.otf');   font-weight: 900; }
+
+/* ── Tokens ────────────────────────────────────────────────────────────── */
+:root {
+  --charcoal:       #1a1a1a;
+  --charcoal-mid:   #303133;
+  --charcoal-soft:  #494a4c;
+  --avalanche:      #e5e5e3;
+  --avalanche-mid:  #cccbc9;
+  --avalanche-deep: #b2b2b0;
+  --accent:         #968a79;
+  --accent-light:   #b1a89b;
+
+  --av-06:  rgba(229,229,227,.06);
+  --av-10:  rgba(229,229,227,.10);
+  --av-16:  rgba(229,229,227,.16);
+  --av-24:  rgba(229,229,227,.24);
+  --av-40:  rgba(229,229,227,.40);
+
+  --font-wide:   'OwnersWide', system-ui, sans-serif;
+  --font-body:   'Owners',     system-ui, sans-serif;
+  --font-narrow: 'OwnersNarrow', system-ui, sans-serif;
+  --font-mono:   ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --w-light:   300;
+  --w-regular: 400;
+  --w-medium:  500;
+  --w-bold:    700;
+  --w-black:   900;
+
+  --track-tight:  -0.02em;
+  --track-page:    0.055em;
+  --track-label:   0.3em;
+  --track-micro:   0.2em;
+  --track-button:  0.18em;
+}
+
+/* ── Reset & base ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  background: var(--charcoal);
+  color: var(--avalanche);
+  font-family: var(--font-body);
+  font-weight: 400;
+  padding: 0;
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+.page { max-width: 1200px; margin: 0 auto; padding: 80px 48px 160px; }
+
+.sheet-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  border-bottom: 1px solid var(--av-10); padding-bottom: 32px; margin-bottom: 72px;
+}
+/* .sheet-header__title → .dv-eyebrow */
+.sheet-header__title {
+  font-family: var(--font-wide); font-weight: 500; font-size: 16px;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-light);
+  display: inline-flex; align-items: center; gap: 12px;
+}
+/* .sheet-header__name → .dv-section-title */
+.sheet-header__name {
+  font-family: var(--font-wide); font-weight: 700;
+  font-size: clamp(30px, 4vw, 58px);
+  letter-spacing: -0.02em; text-transform: uppercase; color: var(--avalanche);
+  margin-top: 14px; line-height: 1.02;
+}
+/* .sheet-header__meta → .dv-caption */
+.sheet-header__meta {
+  font-family: var(--font-wide); font-weight: 400; font-size: 12px;
+  letter-spacing: 0.12em; color: var(--av-40); line-height: 1.8; text-align: right;
+}
+
+.section { margin-bottom: 80px; }
+/* .section-label → .dv-eyebrow + trailing rule */
+.section-label {
+  font-family: var(--font-wide); font-weight: 500; font-size: 16px;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-light);
+  margin-bottom: 24px; display: flex; align-items: center; gap: 16px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--av-10);
+}
+
+/* ── Conflict + single cards ───────────────────────────────────────────── */
+.row { display: flex; gap: 2px; margin-bottom: 2px; }
+.card {
+  flex: 1; background: var(--charcoal-mid);
+  padding: 32px 32px 28px; position: relative; overflow: hidden;
+}
+.card--full { flex: none; width: 100%; }
+.card--conflict { background: #211d1a; }
+.card--conflict-b { background: #1a1d21; }
+
+/* .card__badge → .dv-micro */
+.card__badge {
+  position: absolute; top: 14px; right: 14px;
+  font-family: var(--font-wide); font-weight: 500; font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 8px; border-radius: 2px;
+}
+.badge--conflict-a {
+  background: rgba(180, 80, 60, 0.18); color: #d4745a; border: 1px solid rgba(180,80,60,0.3);
+}
+.badge--conflict-b {
+  background: rgba(60, 100, 180, 0.18); color: #7a9fd4; border: 1px solid rgba(60,100,180,0.3);
+}
+.badge--canonical {
+  background: rgba(100, 150, 80, 0.18); color: #8aba6e; border: 1px solid rgba(100,150,80,0.3);
+}
+.badge--info {
+  background: rgba(150,138,121,0.14); color: var(--accent-light); border: 1px solid rgba(150,138,121,0.2);
+}
+
+/* .card__source → .dv-caption */
+.card__source {
+  font-family: var(--font-wide); font-weight: 400; font-size: 12px;
+  letter-spacing: 0.12em; line-height: 1.6;
+  color: var(--av-40); margin-bottom: 20px;
+}
+.card__specimen { margin-bottom: 16px; }
+.card__props {
+  font-family: 'OwnersWide', system-ui, sans-serif; font-size: 12px; font-weight: 400;
+  letter-spacing: 0.12em; line-height: 1.9;
+  color: var(--av-40); border-top: 1px solid var(--av-06); padding-top: 16px; margin-top: 20px;
+}
+
+.spec-dv-caption {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  color: var(--av-40);
+}
+.card__props span { color: var(--accent-light); }
+
+.conflict-label {
+  font-family: var(--font-wide); font-weight: 700; font-size: 9px;
+  letter-spacing: 0.3em; text-transform: uppercase; text-align: center;
+  padding: 10px 4px; background: rgba(180, 80, 60, 0.1);
+  color: rgba(212, 116, 90, 0.8); writing-mode: vertical-rl;
+  min-width: 32px; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Color palette ─────────────────────────────────────────────────────── */
+.palette { display: flex; gap: 2px; }
+.swatch {
+  flex: 1; height: 64px; position: relative; display: flex;
+  align-items: flex-end; padding: 8px 10px;
+}
+/* .swatch__label → .dv-caption */
+.swatch__label {
+  font-family: var(--font-wide); font-weight: 400; font-size: 12px;
+  letter-spacing: 0.12em; line-height: 1.5; opacity: 0.7;
+}
+
+/* ── Weight showcase ───────────────────────────────────────────────────── */
+.weights { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.weight-cell {
+  background: var(--charcoal-mid); padding: 20px 24px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+}
+.weight-cell__sample {
+  font-size: 32px; letter-spacing: -0.01em; line-height: 1; flex: 1;
+}
+/* .weight-cell__meta → .dv-caption */
+.weight-cell__meta {
+  font-family: var(--font-wide); font-weight: 400; font-size: 12px; color: var(--av-40);
+  letter-spacing: 0.12em; flex: 0 0 auto; text-align: right; line-height: 1.7;
+}
+
+/* ── Tracking scale ────────────────────────────────────────────────────── */
+.tracking-rows { display: flex; flex-direction: column; gap: 2px; }
+.tracking-row {
+  background: var(--charcoal-mid); padding: 18px 24px;
+  display: flex; align-items: center; gap: 32px;
+}
+/* .tracking-row__sample → .dv-label */
+.tracking-row__sample {
+  font-family: var(--font-wide); font-weight: 500; font-size: 16px;
+  text-transform: uppercase; color: var(--avalanche); flex: 1;
+}
+/* .tracking-row__meta → .dv-caption */
+.tracking-row__meta {
+  font-family: var(--font-wide); font-weight: 400; font-size: 12px; color: var(--av-40);
+  letter-spacing: 0.12em; flex: 0 0 auto; width: 220px; line-height: 1.7;
+}
+
+/* ── Specimen type classes — as declared in each CSS file ──────────────── */
+
+/* FROM _tokens.css — updated to match _site.css */
+.spec-dv-hero-tokens {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(52px, 9vw, 148px);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+.spec-dv-section-title-tokens {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 58px);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+.spec-dv-page-heading-tokens {
+  font-family: 'Owners', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.055em;
+  line-height: 1.25;
+  color: var(--avalanche);
+}
+.spec-dv-body-tokens {
+  font-family: 'Owners', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.7;
+  letter-spacing: 0.07em;
+  color: var(--avalanche-deep);
+}
+.spec-dv-label-tokens {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+.spec-dv-micro-tokens {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--av-40);
+}
+.spec-dv-stat-tokens {
+  font-family: 'Owners', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.0;
+  color: var(--avalanche);
+}
+.spec-dv-button-tokens {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+
+/* FROM globals.css */
+.spec-dv-hero-title-globals {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(48px, 8vw, 128px);
+  letter-spacing: -0.02em;
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+.spec-dv-h2-globals {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(32px, 4vw, 56px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+.spec-dv-h1-globals {
+  /* NOTE: uses Georgia serif fallback — only serif ref in the system */
+  font-family: 'Owners', Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.055em;
+  line-height: 1;
+  color: var(--avalanche);
+}
+.spec-dv-body-globals {
+  font-family: 'Owners', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--avalanche-deep);
+}
+.spec-dv-label-globals {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.255em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+.spec-dv-eyebrow-globals {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--accent-light);
+}
+.spec-dv-micro-label-globals {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--av-40);
+}
+
+/* FROM _components.css */
+.spec-dv-eyebrow-components {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+
+/* FROM _site.css */
+.spec-hero-title-site {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(52px, 9vw, 148px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+.spec-section-title-site {
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--avalanche);
+}
+.spec-eyebrow-site {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'OwnersWide', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+
+/* ── Selection conflict demo ───────────────────────────────────────────── */
+.sel-demo-a {
+  padding: 16px 20px; margin-bottom: 2px;
+  background: rgba(180,80,60,0.08); border: 1px solid rgba(180,80,60,0.15);
+  font-family: 'Owners', system-ui, sans-serif; font-size: 15px; letter-spacing: 0.04em;
+  line-height: 1.6; color: var(--avalanche);
+  user-select: text;
+}
+.sel-demo-b {
+  padding: 16px 20px;
+  background: rgba(60,100,180,0.08); border: 1px solid rgba(60,100,180,0.15);
+  font-family: 'Owners', system-ui, sans-serif; font-size: 15px; letter-spacing: 0.04em;
+  line-height: 1.6; color: var(--avalanche);
+  user-select: text;
+}
+.sel-demo-a ::selection { background: var(--charcoal); color: var(--avalanche); }
+.sel-demo-b ::selection { background: var(--accent); color: var(--charcoal); }
+
+/* ── Spacing demo ─────────────────────────────────────────────────── */
+.space-rows { display: flex; flex-direction: column; gap: 16px; }
+.space-row { display: flex; align-items: center; gap: 20px; }
+.space-bar { height: 3px; background: var(--accent); border-radius: 1px; flex-shrink: 0; }
+.space-meta { font-family: var(--font-wide); font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: var(--av-40); }
+.space-meta strong { color: var(--accent-light); font-weight: 500; }
+
+/* ── Radius + line weights ─────────────────────────────────────────── */
+.radius-row { display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap; }
+.radius-box { width: 100px; height: 80px; background: var(--charcoal-mid); border: 1px solid var(--av-16); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.radius-label { font-family: var(--font-wide); font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--av-40); text-align: center; margin-top: 8px; }
+.line-demos { display: flex; flex-direction: column; gap: 20px; margin-top: 32px; }
+.line-rule { width: 100%; background: var(--avalanche); }
+.line-meta { font-family: var(--font-wide); font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: var(--av-40); margin-top: 6px; }
+.line-meta strong { color: var(--accent-light); }
+
+/* ── Buttons ───────────────────────────────────────────────────────── */
+.btn-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.dv-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: 3px;
+  font-family: var(--font-wide); font-weight: 500; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  border: 1px solid transparent; text-decoration: none; white-space: nowrap;
+  transition: all 0.35s ease; cursor: pointer;
+}
+.dv-btn--primary { background: var(--avalanche); color: var(--charcoal); }
+.dv-btn--primary:hover { background: var(--accent); color: var(--avalanche); }
+.dv-btn--secondary { background: transparent; color: var(--avalanche); border-color: var(--av-16); }
+.dv-btn--secondary:hover { border-color: var(--accent); color: var(--accent); }
+.dv-btn--ghost { background: transparent; color: var(--av-40); padding-inline: 6px; border: none; }
+.dv-btn--ghost:hover { color: var(--accent); }
+
+/* ── Status badges ─────────────────────────────────────────────────── */
+.badge-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.dv-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px 5px 9px; border-radius: 3px;
+  font-family: var(--font-wide); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.dv-badge::before { content: ""; width: 6px; height: 6px; transform: rotate(45deg); flex: 0 0 auto; }
+.dv-badge--draft    { color: #8a8a86; background: rgba(138,138,134,.14); }
+.dv-badge--draft::before    { background: #8a8a86; }
+.dv-badge--approved { color: #7c8a5a; background: rgba(124,138,90,.16); }
+.dv-badge--approved::before { background: #7c8a5a; }
+.dv-badge--final    { color: #9a8255; background: rgba(154,130,85,.16); }
+.dv-badge--final::before    { background: #9a8255; }
+.dv-badge--rejected { color: #9a5f57; background: rgba(154,95,87,.16); }
+.dv-badge--rejected::before { background: #9a5f57; }
+
+/* ── Diamond motif ─────────────────────────────────────────────────── */
+.diamond-row { display: flex; gap: 40px; align-items: flex-end; flex-wrap: wrap; }
+.diamond-demo { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.dv-diamond { display: inline-block; background: var(--accent); transform: rotate(45deg); }
+.dv-diamond--xl  { width: 24px; height: 24px; }
+.dv-diamond--lg  { width: 16px; height: 16px; }
+.dv-diamond--md  { width: 8px; height: 8px; }
+.dv-diamond--sm  { width: 6px; height: 6px; }
+.dv-diamond--xs  { width: 4px; height: 4px; }
+.dv-diamond--outline { background: transparent; border: 1.5px solid var(--accent); }
+.dv-diamond--xl.dv-diamond--outline  { border-width: 3px; }
+.dv-diamond--lg.dv-diamond--outline  { border-width: 2px; }
+.dv-diamond--12.dv-diamond--outline  { border-width: 1.5px; }
+.dv-diamond--md.dv-diamond--outline  { border-width: 1.25px; }
+.dv-diamond--sm.dv-diamond--outline  { border-width: 1px; }
+.dv-diamond--xs.dv-diamond--outline  { border-width: 0.75px; }
+.dv-diamond--12  { width: 12px; height: 12px; }
+
+/* ── Frame marks ───────────────────────────────────────────────────── */
+.frame-demos { display: flex; gap: 48px; flex-wrap: wrap; }
+.frame-demo-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.dv-frame { position: relative; }
+.dv-frame::before, .dv-frame::after {
+  content: ""; position: absolute; width: 14px; height: 14px;
+  border: 1.5px solid var(--av-40); pointer-events: none;
+}
+.dv-frame::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.dv-frame::after  { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+.dv-frame__tr, .dv-frame__bl {
+  position: absolute; width: 14px; height: 14px; border: 1.5px solid var(--av-40); pointer-events: none;
+}
+.dv-frame__tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.dv-frame__bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.frame-inner { padding: 40px 60px; font-family: var(--font-wide); font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: var(--av-24); text-align: center; }
+
+/* ── Wordmark ──────────────────────────────────────────────────────── */
+.wordmark-demos { display: flex; gap: 64px; align-items: flex-start; flex-wrap: wrap; }
+.dv-wordmark { display: inline-flex; flex-direction: column; gap: 6px; line-height: 1; }
+.dv-wordmark__name { font-family: var(--font-wide); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--avalanche); }
+.dv-wordmark__tag  { font-family: var(--font-wide); font-weight: 500; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent-light); }
+.wordmark-meta { font-family: var(--font-wide); font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: var(--av-40); margin-top: 12px; }
+
+/* ── Glass surfaces ────────────────────────────────────────────────── */
+.glass-stage {
+  position: relative; border-radius: 3px; overflow: hidden; padding: 32px;
+  background: linear-gradient(135deg, #1a2a1a 0%, #0e1a2e 35%, #2e1a0e 65%, #1a0e2e 100%);
+}
+.glass-blob {
+  position: absolute; border-radius: 50%; pointer-events: none;
+}
+.glass-demos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; z-index: 1; }
+.glass-demo { padding: 28px; border-radius: 3px; min-height: 140px; }
+.glass-l1 { -webkit-backdrop-filter: blur(8px) saturate(120%);  backdrop-filter: blur(8px) saturate(120%);  background: rgba(229,229,227,.03); border: 0.5px solid rgba(229,229,227,.06); }
+.glass-l2 { -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%); background: rgba(229,229,227,.05); border: 0.5px solid rgba(229,229,227,.08); }
+.glass-l3 { -webkit-backdrop-filter: blur(24px) saturate(200%); backdrop-filter: blur(24px) saturate(200%); background: rgba(229,229,227,.08); border: 0.5px solid rgba(229,229,227,.12); }
+.glass-demo-label { font-family: var(--font-wide); font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--av-40); margin-bottom: 6px; }
+.glass-demo-value { font-family: var(--font-wide); font-size: 10px; font-weight: 400; letter-spacing: 0.1em; color: rgba(229,229,227,.5); line-height: 1.9; }
+
+/* ── KPI card ──────────────────────────────────────────────────────── */
+.kpi-demos { display: flex; gap: 16px; flex-wrap: wrap; }
+.dv-kpi-card { background: var(--charcoal-mid); border: 1px solid var(--av-10); border-radius: 3px; padding: 28px; min-width: 160px; }
+.dv-kpi__label { font-family: var(--font-wide); font-weight: 500; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--av-40); }
+.dv-kpi__value { font-family: var(--font-body); font-weight: 700; font-size: 34px; line-height: 1; color: var(--avalanche); margin: 12px 0 6px; font-variant-numeric: tabular-nums; }
+.dv-kpi__sub   { font-family: var(--font-body); font-size: 13px; color: var(--av-40); }
+
+/* ── Pipeline bar ──────────────────────────────────────────────────── */
+.pipeline-demo { margin-bottom: 8px; display: flex; flex-direction: column; gap: 10px; }
+.dv-pipeline { display: flex; align-items: center; width: 100%; }
+.dv-pipeline__seg { height: 2px; flex: 1; background: var(--av-16); flex-shrink: 1; }
+.dv-pipeline__seg--done { background: var(--accent); }
+.dv-pipeline__gate { width: 9px; height: 9px; transform: rotate(45deg); background: var(--charcoal); border: 1.5px solid var(--av-24); flex: 0 0 auto; }
+.dv-pipeline__gate--done    { background: var(--accent); border-color: var(--accent); }
+.dv-pipeline__gate--current { background: var(--avalanche); border-color: var(--avalanche); }
+/* Labels row — mirrors gate/seg flex structure; labels overflow right from each anchor */
+.pipeline-labels { display: flex; align-items: flex-start; width: 100%; }
+.pipeline-label-anchor { width: 9px; flex-shrink: 0; height: 1em; position: relative; overflow: visible; }
+.pipeline-label-anchor span { position: absolute; left: 0; top: 0; white-space: nowrap; font-family: var(--font-wide); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--av-40); }
+.pipeline-label-anchor span.done    { color: var(--accent); }
+.pipeline-label-anchor span.current { color: var(--avalanche); }
+.pipeline-label-spacer { flex: 1; }
+
+/* ── Motion tokens ─────────────────────────────────────────────────── */
+.motion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.motion-row { display: flex; align-items: baseline; gap: 20px; border-bottom: 1px solid var(--av-06); padding: 12px 0; }
+.motion-token { font-family: var(--font-mono); font-size: 11px; color: rgba(122,159,212,.8); width: 200px; flex-shrink: 0; }
+.motion-value { font-family: var(--font-wide); font-size: 12px; font-weight: 400; letter-spacing: 0.1em; color: var(--accent-light); flex: 1; }
+.motion-use   { font-family: var(--font-wide); font-size: 11px; font-weight: 400; letter-spacing: 0.08em; color: var(--av-40); }
+
+/* ── Effects ───────────────────────────────────────────────────────── */
+.effects-demos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.effect-box { border-radius: 3px; overflow: hidden; position: relative; }
+.grain-demo { height: 100px; background: var(--charcoal-mid); position: relative; display: flex; align-items: center; justify-content: center; }
+.grain-demo::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.scrim-demo { height: 160px; background: linear-gradient(180deg, #494a4c 0%, #303133 50%, #1a1a1a 100%); position: relative; }
+.scrim-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(26,26,26,.10) 0%, rgba(26,26,26,.00) 30%, rgba(26,26,26,.55) 78%, rgba(26,26,26,.92) 100%);
+}
+.effect-label { font-family: var(--font-wide); font-size: 12px; font-weight: 400; letter-spacing: 0.12em; color: var(--av-40); padding: 10px 0 0; }
+.effect-label strong { color: var(--accent-light); }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header class="sheet-header">
+    <div>
+      <div class="sheet-header__title">Design Reference</div>
+      <div class="sheet-header__name">Brand Style System</div>
+    </div>
+    <div class="sheet-header__meta">
+      Diamond View Brand System 2026<br>
+      Owners / Owners Wide / Owners Narrow<br>
+      Production Type · Self-hosted<br>
+      <br>
+      Typography · Color · Components · Motion<br>
+      Canonical reference · all conflicts resolved
+    </div>
+  </header>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       COLOR PALETTE
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Color Palette</div>
+    <div class="palette">
+      <div class="swatch" style="background:#1a1a1a">
+        <div class="swatch__label" style="color:rgba(229,229,227,.5)">Charcoal<br>#1a1a1a</div>
+      </div>
+      <div class="swatch" style="background:#303133">
+        <div class="swatch__label" style="color:rgba(229,229,227,.5)">Charcoal Mid<br>#303133</div>
+      </div>
+      <div class="swatch" style="background:#494a4c">
+        <div class="swatch__label" style="color:rgba(229,229,227,.5)">Charcoal Soft<br>#494a4c</div>
+      </div>
+      <div class="swatch" style="background:#e5e5e3">
+        <div class="swatch__label" style="color:rgba(26,26,26,.5)">Avalanche<br>#e5e5e3</div>
+      </div>
+      <div class="swatch" style="background:#cccbc9">
+        <div class="swatch__label" style="color:rgba(26,26,26,.5)">Avalanche Mid<br>#cccbc9</div>
+      </div>
+      <div class="swatch" style="background:#b2b2b0">
+        <div class="swatch__label" style="color:rgba(26,26,26,.5)">Avalanche Deep<br>#b2b2b0</div>
+      </div>
+      <div class="swatch" style="background:#968a79">
+        <div class="swatch__label" style="color:rgba(229,229,227,.7)">Accent<br>#968a79</div>
+      </div>
+      <div class="swatch" style="background:#b1a89b">
+        <div class="swatch__label" style="color:rgba(26,26,26,.5)">Accent Light<br>#b1a89b</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FONT FAMILIES — weight showcase
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Owners Wide — Display / Labels</div>
+    <div class="weights">
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersWide';font-weight:300;color:var(--avalanche-deep)">Diamond View</div>
+        <div class="weight-cell__meta">OwnersWide<br>Light · 300</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersWide';font-weight:400">Diamond View</div>
+        <div class="weight-cell__meta">OwnersWide<br>Regular · 400</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersWide';font-weight:500">Diamond View</div>
+        <div class="weight-cell__meta">OwnersWide<br>Medium · 500</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersWide';font-weight:700">Diamond View</div>
+        <div class="weight-cell__meta">OwnersWide<br>Bold · 700</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersWide';font-weight:900">Diamond View</div>
+        <div class="weight-cell__meta">OwnersWide<br>Black · 900</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersWide';font-weight:950">Diamond View</div>
+        <div class="weight-cell__meta">OwnersWide<br>XBlack · 950</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Owners — Body / Stats</div>
+    <div class="weights">
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'Owners';font-weight:300;color:var(--avalanche-deep)">Diamond View Studios</div>
+        <div class="weight-cell__meta">Owners<br>Light · 300</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'Owners';font-weight:400">Diamond View Studios</div>
+        <div class="weight-cell__meta">Owners<br>Regular · 400</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'Owners';font-weight:500">Diamond View Studios</div>
+        <div class="weight-cell__meta">Owners<br>Medium · 500</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'Owners';font-weight:700">Diamond View Studios</div>
+        <div class="weight-cell__meta">Owners<br>Bold · 700</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'Owners';font-weight:900">Diamond View Studios</div>
+        <div class="weight-cell__meta">Owners<br>Black · 900</div>
+      </div>
+      <div class="weight-cell">
+        <div class="weight-cell__sample" style="font-family:'OwnersNarrow';font-weight:500;color:var(--avalanche-deep)">Diamond View Studios</div>
+        <div class="weight-cell__meta">OwnersNarrow<br>Medium · 500</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       CONFLICT 1 — HERO TITLE  (3 definitions)
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — Hero Title · all definitions unified to _site.css values</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--canonical">Canonical · clamp(52px, 9vw, 148px) · lh 0.9 · ls -0.03em</div>
+      <div class="card__source">.dv-hero / .dv-hero-title / .hero__title — all now agree</div>
+      <div class="card__specimen spec-dv-hero-tokens">Dream Big.</div>
+      <div class="card__props">
+        font-family: OwnersWide · 700 &nbsp;|&nbsp;
+        size: <span>clamp(52px, 9vw, 148px)</span> &nbsp;|&nbsp;
+        line-height: <span>0.9</span> &nbsp;|&nbsp;
+        tracking: <span>-0.03em</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RESOLVED 2 — SECTION TITLE
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — Section Title · all definitions unified to _site.css values</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--canonical">Canonical · clamp(30px, 4vw, 58px) · lh 1.02 · ls -0.02em</div>
+      <div class="card__source">.dv-section-title / .dv-h2 / .section-title — all now agree</div>
+      <div class="card__specimen spec-dv-section-title-tokens">Selected Work</div>
+      <div class="card__props">
+        font-family: OwnersWide · 700 &nbsp;|&nbsp;
+        size: <span>clamp(30px, 4vw, 58px)</span> &nbsp;|&nbsp;
+        line-height: <span>1.02</span> &nbsp;|&nbsp;
+        tracking: <span>-0.02em</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RESOLVED 3 — PAGE HEADING
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — Page Heading · serif fallback removed, line-height unified</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--canonical">Canonical · Owners sans-serif · 28px · lh 1.25 · ls 0.055em</div>
+      <div class="card__source">.dv-page-heading / .dv-h1 — now agree</div>
+      <div class="card__specimen spec-dv-page-heading-tokens">Creative Production Studio · Tampa, FL</div>
+      <div class="card__props">
+        font-family: <span>Owners, Arial, Helvetica, sans-serif</span> &nbsp;|&nbsp;
+        size: 28px · weight: 400 &nbsp;|&nbsp;
+        tracking: <span>0.055em</span> · line-height: <span>1.25</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RESOLVED 4 — BODY TEXT
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — .dv-body · unified to tokens.css values</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--canonical">Canonical · 18px · lh 1.7 · ls 0.07em</div>
+      <div class="card__source">.dv-body — globals.css now matches _tokens.css</div>
+      <div class="card__specimen spec-dv-body-tokens">Story-driven creative production combining concept development, live-action production, visual effects, virtual production, and AI-enhanced workflows for the world's most ambitious brands.</div>
+      <div class="card__props">
+        line-height: <span>1.7</span> · letter-spacing: <span>0.07em</span> · weight: 400 · fg2 (avalanche-deep)
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RESOLVED 5 — LABEL
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — .dv-label · tracking unified to 0.3em</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--canonical">Canonical · OwnersWide 500 · 16px · ls 0.3em · uppercase</div>
+      <div class="card__source">.dv-label — globals.css now matches _tokens.css</div>
+      <div class="card__specimen spec-dv-label-tokens">Creative Development</div>
+      <div class="card__props">letter-spacing: <span>0.3em</span> (--track-label)</div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RESOLVED 6 — EYEBROW
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — Eyebrow · all definitions unified to 12px (_site.css)</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--canonical">Canonical · OwnersWide 500 · 16px · ls 0.3em · uppercase</div>
+      <div class="card__source">.dv-eyebrow (globals + components) now match .eyebrow (site)</div>
+      <div class="card__specimen">
+        <div class="spec-eyebrow-site">
+          <span style="width:6px;height:6px;background:var(--accent);transform:rotate(45deg);display:inline-block;flex-shrink:0"></span>
+          Tampa, FL · Est. 2007
+        </div>
+      </div>
+      <div class="card__props">font-size: <span>12px</span> · tracking: <span>0.3em</span> · color: accent-light</div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RESOLVED 7 — SELECTION COLOR
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">✓ Resolved — ::selection · accent background, charcoal text</div>
+    <div class="sel-demo-b">
+      <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;color:rgba(122,159,212,0.7);margin-bottom:8px">::selection { background: var(--accent) · color: var(--charcoal) } — both files now agree</div>
+      Select this text — taupe accent #968a79 background with charcoal text.
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       CLEAN TYPE SCALE — what the resolved values actually are
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Clean Type Scale — resolved</div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--info">Hero · .dv-hero / .dv-hero-title / .hero__title</div>
+      <div class="card__specimen spec-dv-hero-tokens">Dream Big.</div>
+      <div class="card__props">OwnersWide 700 · clamp(52px, 9vw, 148px) · lh 0.9 · ls -0.03em · uppercase</div>
+    </div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--info">Section Title · .dv-section-title / .dv-h2 / .section-title</div>
+      <div class="card__specimen spec-dv-section-title-tokens">Selected Work</div>
+      <div class="card__props">OwnersWide 700 · clamp(30px, 4vw, 58px) · lh 1.02 · ls -0.02em · uppercase</div>
+    </div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--info">Page Heading · .dv-page-heading / .dv-h1</div>
+      <div class="card__specimen spec-dv-page-heading-tokens">Creative Production Studio · Tampa, FL</div>
+      <div class="card__props">Owners 400 · 28px · lh 1.25 · ls 0.055em</div>
+    </div>
+
+    <div class="card card--full" style="margin-bottom:2px">
+      <div class="card__badge badge--info">Body · .dv-body</div>
+      <div class="card__specimen spec-dv-body-tokens">Story-driven creative production combining concept development, live-action production, visual effects, virtual production, and AI-enhanced workflows for the world's most ambitious brands.</div>
+      <div class="card__props">Owners 400 · 18px · lh 1.7 · ls 0.07em · fg2 (avalanche-deep)</div>
+    </div>
+
+    <div class="row" style="margin-bottom:2px">
+      <div class="card">
+        <div class="card__badge badge--info">Label · .dv-label</div>
+        <div class="card__specimen spec-dv-label-tokens">Creative Development</div>
+        <div class="card__props">OwnersWide 500 · 16px · ls 0.3em · uppercase · accent-light</div>
+      </div>
+      <div class="card">
+        <div class="card__badge badge--info">Eyebrow · .dv-eyebrow / .eyebrow</div>
+        <div class="card__specimen">
+          <div class="spec-eyebrow-site">
+            <span style="width:6px;height:6px;background:var(--accent);transform:rotate(45deg);display:inline-block;flex-shrink:0"></span>
+            Tampa, FL · Est. 2007
+          </div>
+        </div>
+        <div class="card__props">OwnersWide 500 · 16px · ls 0.3em · uppercase · accent-light</div>
+      </div>
+      <div class="card">
+        <div class="card__badge badge--info">Micro · .dv-micro</div>
+        <div class="card__specimen spec-dv-micro-tokens">Tampa, FL · Est. 2007</div>
+        <div class="card__props">OwnersWide 500 · 12px · ls 0.2em · uppercase · fg3</div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:2px">
+      <div class="card">
+        <div class="card__badge badge--info">Stat · .dv-stat</div>
+        <div class="card__specimen spec-dv-stat-tokens">3K+</div>
+        <div class="card__props">Owners 700 · 34px · lh 1.0 · tabular-nums · fg1</div>
+      </div>
+      <div class="card">
+        <div class="card__badge badge--info">Button · .dv-button-text</div>
+        <div class="card__specimen spec-dv-button-tokens" style="padding-top:18px">Start a Project →</div>
+        <div class="card__props">OwnersWide 500 · 12px · ls 0.18em · uppercase</div>
+      </div>
+      <div class="card">
+        <div class="card__badge badge--info">Caption · .dv-caption</div>
+        <div class="card__specimen spec-dv-caption">Timecodes · metadata · data readouts<br>01:14:22:08 · Tampa FL · Est. 2007</div>
+        <div class="card__props">OwnersWide 400 · 12px · ls 0.12em · lh 1.6 · fg3</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       TRACKING SCALE
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Tracking (Letter-Spacing) Scale — canonical</div>
+    <div class="tracking-rows">
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:-0.03em">Diamond View Studios</div>
+        <div class="tracking-row__meta"><span style="color:var(--accent-light)">-0.03em</span><br>Hero title</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:-0.02em">Diamond View Studios</div>
+        <div class="tracking-row__meta">--track-tight: <span style="color:var(--accent-light)">-0.02em</span><br>Section titles</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:0.055em">Diamond View Studios</div>
+        <div class="tracking-row__meta">--track-page: <span style="color:var(--accent-light)">0.055em</span><br>Page headings</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:0.07em">Diamond View Studios</div>
+        <div class="tracking-row__meta"><span style="color:var(--accent-light)">0.07em</span><br>Body text</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:0.18em">Diamond View Studios</div>
+        <div class="tracking-row__meta">--track-button: <span style="color:var(--accent-light)">0.18em</span><br>Buttons</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:0.2em">Diamond View Studios</div>
+        <div class="tracking-row__meta">--track-micro: <span style="color:var(--accent-light)">0.2em</span><br>Micro labels</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:0.3em">Diamond View Studios</div>
+        <div class="tracking-row__meta">--track-label: <span style="color:var(--accent-light)">0.3em</span><br>Labels / eyebrows</div>
+      </div>
+      <div class="tracking-row">
+        <div class="tracking-row__sample" style="letter-spacing:0.34em">Diamond View Studios</div>
+        <div class="tracking-row__meta"><span style="color:var(--accent-light)">0.34em</span><br>Wordmark tag / rail labels</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SPACING SCALE
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Spacing Scale — 8-based</div>
+    <div class="space-rows">
+      <div class="space-row">
+        <div class="space-bar" style="width:8px"></div>
+        <div class="space-meta"><strong>--space-xxs · 8px</strong> &nbsp;·&nbsp; tight gaps, icon padding</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:12px"></div>
+        <div class="space-meta"><strong>--space-xs · 12px</strong> &nbsp;·&nbsp; inline gap, badge padding</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:18px"></div>
+        <div class="space-meta"><strong>--space-xs2 · 18px</strong> &nbsp;·&nbsp; editorial half-step</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:28px"></div>
+        <div class="space-meta"><strong>--space-sm · 28px</strong> &nbsp;·&nbsp; card padding, section gap</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:36px"></div>
+        <div class="space-meta"><strong>--space-sm2 · 36px</strong> &nbsp;·&nbsp; editorial half-step</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:48px"></div>
+        <div class="space-meta"><strong>--space-md · 48px</strong> &nbsp;·&nbsp; section padding, column gap</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:60px"></div>
+        <div class="space-meta"><strong>--space-lg · 60px</strong> &nbsp;·&nbsp; section rhythm, content block</div>
+      </div>
+      <div class="space-row">
+        <div class="space-bar" style="width:80px"></div>
+        <div class="space-meta"><strong>--space-xl · 80px</strong> &nbsp;·&nbsp; hero padding, major section break</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       RADIUS + LINE WEIGHTS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Radius &amp; Line Weights</div>
+    <div class="radius-row">
+      <div>
+        <div class="radius-box" style="border-radius:3px">
+          <div style="width:48px;height:32px;background:var(--accent);border-radius:3px"></div>
+        </div>
+        <div class="radius-label">--radius · 3px<br>everywhere</div>
+      </div>
+      <div>
+        <div class="radius-box" style="border-radius:999px">
+          <div style="width:64px;height:28px;background:var(--accent);border-radius:999px"></div>
+        </div>
+        <div class="radius-label">--radius-pill · 999px<br>pills only</div>
+      </div>
+      <div>
+        <div class="radius-box" style="border-radius:3px">
+          <div style="width:40px;height:40px;background:var(--accent);border-radius:50%"></div>
+        </div>
+        <div class="radius-label">--radius-circle · 50%<br>avatars / icons</div>
+      </div>
+    </div>
+    <div class="line-demos">
+      <div>
+        <div class="line-rule" style="height:0.5px;opacity:.4"></div>
+        <div class="line-meta"><strong>--line-card · 0.5px</strong> &nbsp;·&nbsp; card borders, glass edges</div>
+      </div>
+      <div>
+        <div class="line-rule" style="height:1px;opacity:.5"></div>
+        <div class="line-meta"><strong>--line-geo · 1px</strong> &nbsp;·&nbsp; geometric accents, dividers</div>
+      </div>
+      <div>
+        <div class="line-rule" style="height:3.5px;background:var(--accent);opacity:.7"></div>
+        <div class="line-meta"><strong>--line-divider · 3.5px</strong> &nbsp;·&nbsp; section dividers, accent bars</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       BUTTONS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Buttons</div>
+    <div class="btn-row" style="margin-bottom:24px">
+      <a class="dv-btn dv-btn--primary">Start a Project</a>
+      <a class="dv-btn dv-btn--secondary">View Work</a>
+      <a class="dv-btn dv-btn--ghost">Learn More →</a>
+    </div>
+    <div class="card__props" style="margin-top:8px">
+      Primary — Avalanche bg / Charcoal text · hover: Accent bg / Avalanche text<br>
+      Secondary — transparent / Avalanche border · hover: Accent border + text<br>
+      Ghost — transparent / av-40 text · hover: Accent text<br>
+      All: OwnersWide 500 · 10px · ls 0.18em · uppercase · radius 3px
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       STATUS BADGES
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Status Badges</div>
+    <div class="badge-row" style="margin-bottom:24px">
+      <span class="dv-badge dv-badge--draft">Draft</span>
+      <span class="dv-badge dv-badge--approved">Approved</span>
+      <span class="dv-badge dv-badge--final">Final</span>
+      <span class="dv-badge dv-badge--rejected">Rejected</span>
+    </div>
+    <div class="card__props">
+      OwnersWide 500 · 11px · ls 0.14em · uppercase · radius 3px · diamond ::before bullet<br>
+      Draft #8a8a86 · Approved #7c8a5a (olive) · Final #9a8255 (bronze) · Rejected #9a5f57 (brick)
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       DIAMOND MOTIF
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Diamond Motif</div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:32px">
+      <!-- header row -->
+      <div style="padding:12px 0 8px;font-family:var(--font-wide);font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--av-40);text-align:center">XL · 24px</div>
+      <div style="padding:12px 0 8px;font-family:var(--font-wide);font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--av-40);text-align:center">LG · 16px</div>
+      <div style="padding:12px 0 8px;font-family:var(--font-wide);font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--av-40);text-align:center">12px</div>
+      <div style="padding:12px 0 8px;font-family:var(--font-wide);font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--av-40);text-align:center">MD · 8px</div>
+      <div style="padding:12px 0 8px;font-family:var(--font-wide);font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--av-40);text-align:center">SM · 6px</div>
+      <div style="padding:12px 0 8px;font-family:var(--font-wide);font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--av-40);text-align:center">XS · 4px</div>
+      <!-- filled row -->
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--xl"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Filled</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--lg"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Filled</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--12"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Filled</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--md"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Filled</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--sm"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Filled</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--xs"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Filled</div>
+      </div>
+      <!-- outline row -->
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--xl dv-diamond--outline"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Outline</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--lg dv-diamond--outline"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Outline</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--12 dv-diamond--outline"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Outline</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--md dv-diamond--outline"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Outline</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--sm dv-diamond--outline"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Outline</div>
+      </div>
+      <div style="padding:28px 0 16px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--av-06)">
+        <div class="dv-diamond dv-diamond--xs dv-diamond--outline"></div>
+        <div style="font-family:var(--font-wide);font-size:10px;font-weight:400;letter-spacing:0.1em;color:var(--av-40)">Outline</div>
+      </div>
+    </div>
+    <!-- eyebrow usage example -->
+    <div style="display:inline-flex;align-items:center;gap:12px;font-family:var(--font-wide);font-weight:500;font-size:16px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-light);margin-bottom:12px">
+      <div class="dv-diamond dv-diamond--md"></div>VFX &amp; AI Production
+    </div>
+    <div class="card__props">45° rotated square · filled: Accent (#968a79) · outline: 1.5px Accent border · used as dividers, gate indicators, eyebrow bullets, status markers</div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       FRAME MARKS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Frame Marks — Camera Gate Brackets</div>
+    <div class="frame-demos">
+      <div class="frame-demo-wrap">
+        <div class="dv-frame" style="width:220px;height:130px;border:1px solid var(--av-06);display:flex;align-items:center;justify-content:center">
+          <div class="frame-inner">2-corner (::before/::after)</div>
+        </div>
+        <div class="card__props">.dv-frame — pseudo only</div>
+      </div>
+      <div class="frame-demo-wrap">
+        <div class="dv-frame" style="width:220px;height:130px;border:1px solid var(--av-06);display:flex;align-items:center;justify-content:center">
+          <i class="dv-frame__tr"></i><i class="dv-frame__bl"></i>
+          <div class="frame-inner">4-corner (+ child i's)</div>
+        </div>
+        <div class="card__props">.dv-frame + .dv-frame__tr + .dv-frame__bl</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       WORDMARK
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Wordmark</div>
+    <div class="wordmark-demos">
+      <div>
+        <div class="dv-wordmark">
+          <div class="dv-wordmark__name" style="font-size:1.5rem">Diamond View</div>
+          <div class="dv-wordmark__tag" style="font-size:0.62rem">VFX &amp; AI Production</div>
+        </div>
+        <div class="wordmark-meta">Default · 1.5rem name / 0.62rem tag</div>
+      </div>
+      <div>
+        <div class="dv-wordmark">
+          <div class="dv-wordmark__name" style="font-size:2.4rem">Diamond View</div>
+          <div class="dv-wordmark__tag" style="font-size:0.75rem">VFX &amp; AI Production</div>
+        </div>
+        <div class="wordmark-meta">Large display · 2.4rem name</div>
+      </div>
+      <div>
+        <div class="dv-wordmark">
+          <div class="dv-wordmark__name" style="font-size:0.9rem">Diamond View</div>
+          <div class="dv-wordmark__tag" style="font-size:0.5rem">VFX &amp; AI Production</div>
+        </div>
+        <div class="wordmark-meta">Compact · nav / footer use</div>
+      </div>
+    </div>
+    <div class="card__props" style="margin-top:24px">
+      .dv-wordmark__name — OwnersWide 700 · ls 0.14em · uppercase · fg1<br>
+      .dv-wordmark__tag — OwnersWide 500 · ls 0.34em · uppercase · fg-accent
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       GLASS SURFACES
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Glass Surfaces</div>
+    <div class="glass-stage">
+      <!-- color blobs that show backdrop-filter working -->
+      <div class="glass-blob" style="width:320px;height:320px;top:-80px;left:-60px;background:radial-gradient(circle,rgba(150,138,121,0.75) 0%,transparent 70%)"></div>
+      <div class="glass-blob" style="width:260px;height:260px;top:20px;right:-40px;background:radial-gradient(circle,rgba(90,120,180,0.65) 0%,transparent 70%)"></div>
+      <div class="glass-blob" style="width:200px;height:200px;bottom:-60px;left:38%;background:radial-gradient(circle,rgba(180,90,90,0.6) 0%,transparent 70%)"></div>
+      <div class="glass-blob" style="width:150px;height:150px;bottom:0;left:10%;background:radial-gradient(circle,rgba(90,180,140,0.5) 0%,transparent 70%)"></div>
+      <div class="glass-demos">
+        <div class="glass-demo glass-l1">
+          <div class="glass-demo-label">L1 — Subtle</div>
+          <div class="glass-demo-value">
+            blur(8px) · saturate(120%)<br>
+            fill av-03 · border av-06<br>
+            Navigation · overlays
+          </div>
+        </div>
+        <div class="glass-demo glass-l2">
+          <div class="glass-demo-label">L2 — Standard</div>
+          <div class="glass-demo-value">
+            blur(12px) · saturate(180%)<br>
+            fill av-05 · border av-08<br>
+            Cards · panels · drawers
+          </div>
+        </div>
+        <div class="glass-demo glass-l3">
+          <div class="glass-demo-label">L3 — Prominent</div>
+          <div class="glass-demo-value">
+            blur(24px) · saturate(200%)<br>
+            fill av-08 · border av-12<br>
+            Modals · hero panels
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card__props" style="margin-top:16px">
+      All borders use 0.5px (--line-card) · radius 3px · always pair backdrop-filter with -webkit-backdrop-filter
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       KPI CARDS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">KPI Cards</div>
+    <div class="kpi-demos">
+      <div class="dv-kpi-card">
+        <div class="dv-kpi__label">Projects</div>
+        <div class="dv-kpi__value">142</div>
+        <div class="dv-kpi__sub">+12 this quarter</div>
+      </div>
+      <div class="dv-kpi-card">
+        <div class="dv-kpi__label">Revenue</div>
+        <div class="dv-kpi__value">$3.2M</div>
+        <div class="dv-kpi__sub">YTD · FY 2026</div>
+      </div>
+      <div class="dv-kpi-card">
+        <div class="dv-kpi__label">Shot Count</div>
+        <div class="dv-kpi__value">3,847</div>
+        <div class="dv-kpi__sub">Across 8 productions</div>
+      </div>
+      <div class="dv-kpi-card">
+        <div class="dv-kpi__label">Completion</div>
+        <div class="dv-kpi__value">94%</div>
+        <div class="dv-kpi__sub">On-time delivery rate</div>
+      </div>
+    </div>
+    <div class="card__props" style="margin-top:16px">
+      Label — OwnersWide 500 · 12px · ls 0.2em · uppercase · av-40<br>
+      Value — Owners 700 · 34px · lh 1.0 · tabular-nums · fg1<br>
+      Sub — Owners 400 · 13px · av-40
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       PIPELINE BAR
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Pipeline Bar</div>
+    <div class="pipeline-demo">
+      <div class="dv-pipeline">
+        <div class="dv-pipeline__gate dv-pipeline__gate--done"></div>
+        <div class="dv-pipeline__seg dv-pipeline__seg--done"></div>
+        <div class="dv-pipeline__gate dv-pipeline__gate--done"></div>
+        <div class="dv-pipeline__seg dv-pipeline__seg--done"></div>
+        <div class="dv-pipeline__gate dv-pipeline__gate--done"></div>
+        <div class="dv-pipeline__seg dv-pipeline__seg--done"></div>
+        <div class="dv-pipeline__gate dv-pipeline__gate--current"></div>
+        <div class="dv-pipeline__seg"></div>
+        <div class="dv-pipeline__gate"></div>
+        <div class="dv-pipeline__seg"></div>
+        <div class="dv-pipeline__gate"></div>
+        <div class="dv-pipeline__seg"></div>
+        <div class="dv-pipeline__gate"></div>
+      </div>
+      <div class="pipeline-labels">
+        <div class="pipeline-label-anchor"><span class="done">Dev</span></div>
+        <div class="pipeline-label-spacer"></div>
+        <div class="pipeline-label-anchor"><span class="done">Previs</span></div>
+        <div class="pipeline-label-spacer"></div>
+        <div class="pipeline-label-anchor"><span class="done">Shoot</span></div>
+        <div class="pipeline-label-spacer"></div>
+        <div class="pipeline-label-anchor"><span class="current">VFX</span></div>
+        <div class="pipeline-label-spacer"></div>
+        <div class="pipeline-label-anchor"><span>Color</span></div>
+        <div class="pipeline-label-spacer"></div>
+        <div class="pipeline-label-anchor"><span>Sound</span></div>
+        <div class="pipeline-label-spacer"></div>
+        <div class="pipeline-label-anchor"><span>Deliver</span></div>
+      </div>
+    </div>
+    <div class="card__props" style="margin-top:24px">
+      Gate (◇) — 9px diamond · done: Accent fill · current: Avalanche fill · pending: av-24 border<br>
+      Segment — 2px bar · done: Accent · pending: av-16<br>
+      Labels — OwnersWide 500 · 10px · ls 0.14em · uppercase
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MOTION TOKENS
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Motion Tokens</div>
+    <div class="motion-grid">
+      <div>
+        <div class="motion-row">
+          <div class="motion-token">--ease-standard</div>
+          <div>
+            <div class="motion-value">cubic-bezier(0.25, 0.1, 0.25, 1)</div>
+            <div class="motion-use">Default transitions · buttons · panels</div>
+          </div>
+        </div>
+        <div class="motion-row">
+          <div class="motion-token">--ease-spring</div>
+          <div>
+            <div class="motion-value">cubic-bezier(0.34, 1.56, 0.64, 1)</div>
+            <div class="motion-use">Hover lifts · interactive feedback</div>
+          </div>
+        </div>
+        <div class="motion-row">
+          <div class="motion-token">--ease-out</div>
+          <div>
+            <div class="motion-value">cubic-bezier(0.22, 1, 0.36, 1)</div>
+            <div class="motion-use">Premium settle · hero reveals</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="motion-row">
+          <div class="motion-token">--dur-quick</div>
+          <div>
+            <div class="motion-value">0.3s</div>
+            <div class="motion-use">Micro-interactions · hover</div>
+          </div>
+        </div>
+        <div class="motion-row">
+          <div class="motion-token">--dur-standard</div>
+          <div>
+            <div class="motion-value">0.5s</div>
+            <div class="motion-use">Panel transitions · reveals</div>
+          </div>
+        </div>
+        <div class="motion-row">
+          <div class="motion-token">--dur-medium</div>
+          <div>
+            <div class="motion-value">0.7s</div>
+            <div class="motion-use">Page transitions · scrolled reveals</div>
+          </div>
+        </div>
+        <div class="motion-row">
+          <div class="motion-token">--dur-slow</div>
+          <div>
+            <div class="motion-value">1.4s</div>
+            <div class="motion-use">Hero sequences · atmospheric</div>
+          </div>
+        </div>
+        <div class="motion-row">
+          <div class="motion-token">--dur-kenburns</div>
+          <div>
+            <div class="motion-value">12s</div>
+            <div class="motion-use">Ken Burns image drift</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card__props" style="margin-top:20px">
+      Keyframes: dvFadeUp · dvScaleIn · dvDiamondPulse · dvKenBurns<br>
+      All motion respects prefers-reduced-motion: animation/transition clamped to 0.01ms
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       EFFECTS — GRAIN + SCRIM
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">Effects &amp; Texture</div>
+    <div class="effects-demos">
+      <div class="effect-box">
+        <div class="grain-demo">
+          <div style="font-family:var(--font-wide);font-size:16px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:var(--av-40);position:relative;z-index:1">Grain Texture</div>
+        </div>
+        <div class="effect-label"><strong>Film Grain</strong> · opacity 0.05 · fractalNoise base 0.9 · applied via body::after (fixed, z-index 9999) and .dv-grain::after (scoped)</div>
+      </div>
+      <div class="effect-box">
+        <div class="scrim-demo">
+          <div class="scrim-overlay"></div>
+          <div style="position:absolute;bottom:16px;left:16px;font-family:var(--font-wide);font-size:12px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--avalanche);z-index:1">Hero Image</div>
+        </div>
+        <div class="effect-label"><strong>Hero Scrim</strong> · 10% → 0% → 55% → 92% gradient · protects text readability over media</div>
+      </div>
+      <div class="effect-box">
+        <div style="padding:28px;background:var(--charcoal-mid);border-radius:3px;display:flex;flex-direction:column;gap:12px">
+          <div style="padding:12px 16px;background:rgba(229,229,227,.03);border:0.5px solid rgba(229,229,227,.06);border-radius:3px;font-family:var(--font-wide);font-size:12px;font-weight:400;letter-spacing:0.12em;color:var(--av-40)">Glass L1 · blur 8px</div>
+          <div style="padding:12px 16px;background:rgba(229,229,227,.05);border:0.5px solid rgba(229,229,227,.08);border-radius:3px;font-family:var(--font-wide);font-size:12px;font-weight:400;letter-spacing:0.12em;color:var(--av-60)">Glass L2 · blur 12px</div>
+          <div style="padding:12px 16px;background:rgba(229,229,227,.08);border:0.5px solid rgba(229,229,227,.12);border-radius:3px;font-family:var(--font-wide);font-size:12px;font-weight:400;letter-spacing:0.12em;color:var(--avalanche)">Glass L3 · blur 24px</div>
+        </div>
+        <div class="effect-label"><strong>Glass Layers</strong> · always pair backdrop-filter with -webkit-backdrop-filter · fallback: solid surface-1</div>
+      </div>
+      <div class="effect-box">
+        <div style="padding:28px;background:var(--charcoal-mid);border-radius:3px">
+          <div style="display:inline-block;background:rgba(229,229,227,.92);color:#1a1a1a;padding:4px 10px;border-radius:3px;font-family:var(--font-wide);font-size:12px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:16px">◆ &nbsp;Selected text</div>
+          <div style="font-family:var(--font-body);font-size:16px;letter-spacing:0.04em;color:var(--avalanche);line-height:1.7">
+            Highlight to see selection:<br>
+            <span style="user-select:text">Diamond View · VFX &amp; AI Production · Tampa FL · Est. 2007 · 142 productions delivered on time and on spec.</span>
+          </div>
+        </div>
+        <div class="effect-label"><strong>Selection</strong> · background: --accent (#968a79) · color: --charcoal (#1a1a1a) · warm taupe highlight, never pure black/white</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- footer rule -->
+  <div style="border-top:1px solid var(--av-10); padding-top:24px; margin-top:40px; display:flex; justify-content:space-between; align-items:center">
+    <div style="font-family:'OwnersWide',sans-serif;font-weight:500;font-size:16px;letter-spacing:0.3em;text-transform:uppercase;color:var(--av-40)">Diamond View · Brand Style System · 2026</div>
+    <div style="font-family:'OwnersWide',sans-serif;font-weight:400;font-size:12px;letter-spacing:0.12em;color:var(--av-40)">docs/brand-style-system.html</div>
+  </div>
+
+</div>
+</body>
+</html>

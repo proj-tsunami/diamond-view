@@ -157,7 +157,7 @@ section[data-theme], footer[data-theme] {
 .eyebrow {
   display: inline-flex; align-items: center; gap: 12px;
   font-family: var(--font-display); font-stretch: 125%;
-  font-weight: 500; font-size: 12px; letter-spacing: 0.3em;
+  font-weight: 500; font-size: 16px; letter-spacing: 0.3em;
   text-transform: uppercase; color: var(--dir-accent-ink);
 }
 .eyebrow__d { width: 6px; height: 6px; transform: rotate(45deg); background: var(--accent); flex: 0 0 auto; }

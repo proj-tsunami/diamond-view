@@ -44,8 +44,15 @@
   background: transparent;
   border: 1.5px solid var(--accent);
 }
+.dv-diamond--xl.dv-diamond--outline  { border-width: 3px; }
+.dv-diamond--lg.dv-diamond--outline  { border-width: 2px; }
+.dv-diamond--12.dv-diamond--outline  { border-width: 1.5px; }
+.dv-diamond--md.dv-diamond--outline  { border-width: 1.25px; }
+.dv-diamond--sm.dv-diamond--outline  { border-width: 1px; }
+.dv-diamond--xs.dv-diamond--outline  { border-width: 0.75px; }
 .dv-diamond--sm { width: 6px; height: 6px; }
 .dv-diamond--xs { width: 4px; height: 4px; }
+.dv-diamond--12 { width: 12px; height: 12px; }
 
 /* ---- Corner registration marks (camera-gate brackets) ------------------ */
 /* Wrap any block; L-brackets frame the four corners. */
@@ -56,8 +63,8 @@
 .dv-frame::after {
   content: "";
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   border: 1.5px solid var(--av-40);
   pointer-events: none;
 }
@@ -65,7 +72,7 @@
 .dv-frame::after  { bottom: 10px; right: 10px; border-left: none;   border-top: none;    }
 /* Add .dv-frame--quad with two child <i class="dv-frame__c"> for all 4 corners */
 .dv-frame__tr, .dv-frame__bl {
-  position: absolute; width: 18px; height: 18px; border: 1.5px solid var(--av-40);
+  position: absolute; width: 14px; height: 14px; border: 1.5px solid var(--av-40);
   pointer-events: none;
 }
 .dv-frame__tr { top: 10px;    right: 10px; border-left: none;  border-bottom: none; }
@@ -235,7 +242,7 @@
 .dv-eyebrow {
   display: inline-flex; align-items: center; gap: 12px;
   font-family: var(--font-display); font-stretch: 125%;
-  font-weight: var(--w-medium); font-size: 13px;
+  font-weight: var(--w-medium); font-size: 16px;
   letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-accent);
 }
 

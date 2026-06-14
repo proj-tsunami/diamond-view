@@ -204,9 +204,9 @@
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: var(--w-bold);
-  font-size: clamp(40px, 5.5vw, 88px);
-  letter-spacing: var(--track-tight);
-  line-height: 0.98;
+  font-size: clamp(52px, 9vw, 148px);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
   text-transform: uppercase;
   color: var(--fg1);
 }
@@ -215,9 +215,9 @@
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: var(--w-bold);
-  font-size: clamp(26px, 3vw, 40px);
-  letter-spacing: var(--track-tight);
-  line-height: 1.05;
+  font-size: clamp(30px, 4vw, 58px);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
   text-transform: uppercase;
   color: var(--fg1);
 }
@@ -256,7 +256,7 @@
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: var(--w-medium);
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: var(--track-micro);
   text-transform: uppercase;
   color: var(--fg3);
@@ -279,6 +279,16 @@
   font-size: 12px;
   letter-spacing: var(--track-button);
   text-transform: uppercase;
+}
+
+.dv-caption {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: var(--w-regular);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  color: var(--fg3);
 }
 
 /* Convenience width helpers */
