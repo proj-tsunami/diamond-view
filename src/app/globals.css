@@ -125,8 +125,6 @@ body {
   line-height: 1.6;
 }
 
-/* (Custom cursor removed in the redesign — use the native cursor.) */
-
 /* Headings default to Owners */
 h1, h2, h3 {
   font-family: var(--font-heading), Arial, Helvetica, sans-serif;
@@ -134,69 +132,7 @@ h1, h2, h3 {
   letter-spacing: -0.02em;
 }
 
-/* Display headings - Owners Wide, uppercase, tight */
-.font-display {
-  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 0.88;
-}
-
-/* Heading font - Owners */
-.font-heading {
-  font-family: var(--font-owners), Arial, Helvetica, sans-serif;
-  letter-spacing: -0.015em;
-}
-
-/* Body font - Owners (standard, legible) */
-.font-body {
-  font-family: var(--font-owners), Arial, Helvetica, sans-serif;
-}
-
 /* ── Brand Typography Classes (Brand Guide 2026) ───────────────── */
-
-/* Body — 18px / 1.7 / 0.07em — per brand spec */
-.dv-body {
-  font-size: 18px;
-  line-height: 1.7;
-  letter-spacing: 0.07em;
-  font-weight: 400;
-}
-
-/* Body medium — same size, medium weight */
-.dv-body-medium {
-  font-size: 18px;
-  line-height: 1.5;
-  letter-spacing: 0.025em;
-  font-weight: 500;
-}
-
-/* Label / Tag — 16px / 0.3em — uppercase */
-.dv-label {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-/* Micro label — 12px / 0.2em — uppercase */
-.dv-micro-label {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-/* Caption — 12px / 0.12em — technical metadata, timecodes, data readouts */
-.dv-caption {
-  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  line-height: 1.6;
-}
 
 /* Section eyebrow — pairs with a small taupe diamond */
 .dv-eyebrow {
@@ -206,35 +142,6 @@ h1, h2, h3 {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   line-height: 1;
-}
-
-/* Page heading — 28px / 0.055em */
-.dv-h1 {
-  font-family: var(--font-owners), Arial, Helvetica, sans-serif;
-  font-size: 28px;
-  font-weight: 400;
-  letter-spacing: 0.055em;
-  line-height: 1.25;
-}
-
-/* Section title — 36px bold uppercase */
-.dv-h2 {
-  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
-  font-size: clamp(30px, 4vw, 58px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.02;
-  text-transform: uppercase;
-}
-
-/* Hero title — fluid 64px+ */
-.dv-hero-title {
-  font-family: var(--font-owners-wide), Arial, Helvetica, sans-serif;
-  font-size: clamp(52px, 9vw, 148px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 0.9;
-  text-transform: uppercase;
 }
 
 /* Subtle grain texture overlay */
@@ -306,47 +213,6 @@ a, button {
   height: var(--line-divider);
   background: var(--charcoal);
   opacity: 0.12;
-}
-
-/* Glassmorphism — 3 layer system */
-.glass-l1 {
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
-  background: rgba(244, 243, 241, 0.03);
-  border: var(--line-card) solid rgba(244, 243, 241, 0.06);
-}
-
-.glass-l2 {
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  background: rgba(244, 243, 241, 0.05);
-  border: var(--line-card) solid rgba(244, 243, 241, 0.08);
-}
-
-.glass-l3 {
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
-  background: rgba(244, 243, 241, 0.08);
-  border: var(--line-card) solid rgba(244, 243, 241, 0.12);
-}
-
-/* Light mode glass — inverted */
-[data-theme="light"] .glass-l1,
-.light .glass-l1 {
-  background: rgba(17, 18, 18, 0.03);
-  border-color: rgba(17, 18, 18, 0.06);
-}
-
-[data-theme="light"] .glass-l2,
-.light .glass-l2 {
-  background: rgba(17, 18, 18, 0.05);
-  border-color: rgba(17, 18, 18, 0.08);
-}
-
-[data-theme="light"] .glass-l3,
-.light .glass-l3 {
-  background: rgba(17, 18, 18, 0.08);
-  border-color: rgba(17, 18, 18, 0.12);
 }
 
 /* Thin geometric accent line */
