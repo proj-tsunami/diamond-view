@@ -1,8 +1,8 @@
 "use client";
 
-/* "Trusted By" client-logo marquee. Logos are recolored to brand taupe with
-   CSS mask-image (--src), so we never touch <img src> for the visible mark.
-   Faithful port of Marquee from the prototype Statement.jsx. */
+/* "Trusted By" client-logo marquee. Logos are rendered as PNGs and colored
+   with a duotone SVG filter: darks → brand charcoal (#1a1715),
+   lights → brand taupe (#968a79). */
 
 import type { CSSProperties } from "react";
 
@@ -28,9 +28,13 @@ const CLIENTS = CLIENT_SLUGS.map((slug) => ({
 function ClientLogo({ c }: { c: (typeof CLIENTS)[number] }) {
   return (
     <div className="trust__cell" role="img" aria-label={c.name}>
-      <span
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         className="trust__mark"
-        style={{ ["--src"]: `url("${c.src}")` } as CSSProperties}
+        src={c.src}
+        alt={c.name}
+        loading="lazy"
+        style={{ filter: "url(#dv-duotone)" } as CSSProperties}
       />
     </div>
   );
@@ -40,6 +44,20 @@ export default function Marquee() {
   const row = [...CLIENTS, ...CLIENTS];
   return (
     <section className="trust" data-theme="light" aria-label="Trusted by">
+      {/* Duotone filter: desaturate → remap darks to charcoal, lights to taupe */}
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+        <defs>
+          <filter id="dv-duotone" colorInterpolationFilters="sRGB">
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              {/* shadows → #1a1715 (charcoal), highlights → #968a79 (taupe) */}
+              <feFuncR type="table" tableValues="0.102 0.588" />
+              <feFuncG type="table" tableValues="0.094 0.541" />
+              <feFuncB type="table" tableValues="0.082 0.475" />
+            </feComponentTransfer>
+          </filter>
+        </defs>
+      </svg>
       <div className="trust__viewport">
         <div className="trust__track">
           {row.map((c, i) => (
