@@ -39,9 +39,9 @@ export default function Footer({
               Start a Project
             </span>
             <h2 className="footer__cta-title">
-              Tell us
+              Let&apos;s Make
               <br />
-              the <em>story.</em>
+              <em>Something.</em>
             </h2>
             <button
               className="dv-btn dv-btn--primary"
