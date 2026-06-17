@@ -1,4 +1,14 @@
+import imageUrlBuilder from "@sanity/image-url";
 import { client } from "./client";
+
+const builder = imageUrlBuilder(client);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function imgUrl(source: any, w: number, h?: number): string {
+  let b = builder.image(source).width(w).fit("crop").auto("format");
+  if (h) b = b.height(h);
+  return b.url();
+}
 
 export type GalleryItem = {
   src: string;
@@ -19,12 +29,9 @@ export type Project = {
   heroSrc: string;
   heroPoster: string;
   cardImage: string;
-  /** Optional numeric Vimeo ID — when present, the hero renders an embedded player */
   vimeoId?: string;
-  /** Hash token for unlisted videos (the h= parameter in the embed URL) */
   vimeoHash?: string;
   gallery: GalleryItem[];
-  /** Optional scroll sequence — present on some projects */
   sequence?: {
     path: string;
     desktopFrames: number;
@@ -40,12 +47,45 @@ async function sanityFetch<T>(
   { tags }: FetchOpts,
 ): Promise<T> {
   return client.fetch<T>(query, params, {
-    next: { tags, revalidate: 3600 },
+    next: { tags, revalidate: 300 },
   });
 }
 
-// Append `?auto=format&w=XXXX` — forces Sanity's image pipeline which
-// respects EXIF orientation and converts to modern formats.
+// Raw image ref shape returned from GROQ
+type ImageRef = {
+  asset: { _id: string; url: string };
+  crop?: { top: number; bottom: number; left: number; right: number };
+  hotspot?: { x: number; y: number; width: number; height: number };
+} | null;
+
+type RawProject = Omit<Project, "cardImage" | "heroPoster" | "heroSrc"> & {
+  cardImageRef: ImageRef;
+  heroImageRef: ImageRef;
+  heroVideo?: string;
+  gallery: GalleryItem[];
+};
+
+function mapProject(raw: RawProject): Project {
+  return {
+    slug: raw.slug,
+    title: raw.title,
+    category: raw.category,
+    year: raw.year,
+    client: raw.client,
+    tagline: raw.tagline,
+    summary: raw.summary,
+    services: raw.services,
+    heroType: raw.heroType,
+    vimeoId: raw.vimeoId,
+    vimeoHash: raw.vimeoHash,
+    sequence: raw.sequence,
+    gallery: raw.gallery,
+    cardImage: raw.cardImageRef ? imgUrl(raw.cardImageRef, 1600, 900) : "",
+    heroPoster: raw.heroImageRef ? imgUrl(raw.heroImageRef, 2400, 1350) : "",
+    heroSrc: raw.heroVideo || (raw.heroImageRef ? imgUrl(raw.heroImageRef, 2400) : ""),
+  };
+}
+
 const PROJECT_FIELDS = `
   "slug": slug.current,
   title,
@@ -58,9 +98,9 @@ const PROJECT_FIELDS = `
   heroType,
   vimeoId,
   vimeoHash,
-  "heroSrc": coalesce(heroVideo, heroImage.asset->url + "?auto=format&w=2400"),
-  "heroPoster": heroImage.asset->url + "?auto=format&w=2400&h=1350&fit=crop&crop=center",
-  "cardImage": cardImage.asset->url + "?auto=format&w=1600&h=900&fit=crop&crop=center",
+  heroVideo,
+  "cardImageRef": cardImage { asset->{_id, url}, crop, hotspot },
+  "heroImageRef": heroImage { asset->{_id, url}, crop, hotspot },
   gallery[] {
     "src": image.asset->url + "?auto=format&w=2000",
     alt,
@@ -69,19 +109,21 @@ const PROJECT_FIELDS = `
 `;
 
 export async function getProjects(): Promise<Project[]> {
-  return sanityFetch<Project[]>(
+  const raw = await sanityFetch<RawProject[]>(
     `*[_type == "project"] | order(order asc) { ${PROJECT_FIELDS} }`,
     {},
     { tags: ["project"] },
   );
+  return raw.map(mapProject);
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  return sanityFetch<Project | null>(
+  const raw = await sanityFetch<RawProject | null>(
     `*[_type == "project" && slug.current == $slug][0] { ${PROJECT_FIELDS} }`,
     { slug },
     { tags: ["project", `project:${slug}`] },
   );
+  return raw ? mapProject(raw) : null;
 }
 
 export async function getProjectSlugs(): Promise<string[]> {
