@@ -75,7 +75,12 @@ export default function Statement({ theme }: { theme?: "dark" | "light" }) {
         <ScrollRevealWords
           className="statement__big award__text"
           accent={["feeling", "through", "video"]}
-          text="An award-winning creative agency reimagining what it means to create feeling through video."
+          text="An award-winning creative agency reimagining what it means to create"
+        />
+        <ScrollRevealWords
+          className="statement__big award__text"
+          accent={["feeling", "through", "video"]}
+          text="feeling through video."
         />
       </div>
     </Section>

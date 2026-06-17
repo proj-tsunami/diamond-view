@@ -1321,8 +1321,8 @@ section[data-theme], footer[data-theme] {
 /* ---- Overview ------------------------------------------------------------ */
 .pj-overview { position: relative; padding: clamp(70px, 12vh, 148px) 0; overflow: hidden; }
 .pj-overview__grid { display: grid; grid-template-columns: 0.4fr 1fr; gap: 56px; position: relative; z-index: 1; }
-.pj-overview__lead { font-family: var(--dir-display-family); font-stretch: var(--dir-display-stretch); font-weight: 300;
-  font-size: clamp(22px, 2.7vw, 36px); line-height: 1.3; letter-spacing: -0.01em; color: var(--avalanche); margin: 0; text-wrap: pretty; }
+.pj-overview__lead { font-family: var(--font-body); font-weight: 400;
+  font-size: clamp(16px, 1.4vw, 18px); line-height: 1.75; letter-spacing: 0.05em; color: var(--avalanche-deep); margin: 0; text-wrap: pretty; }
 .pj-overview__placeholder { border: 1px dashed var(--av-16); border-radius: var(--radius); padding: 34px 38px; }
 .pj-ph__tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-light); }
 .pj-ph__line { font-size: 17px; line-height: 1.75; letter-spacing: 0.04em; color: var(--avalanche-deep); margin: 14px 0 0; max-width: 52ch; }

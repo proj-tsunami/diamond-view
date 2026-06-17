@@ -39,6 +39,36 @@ export default function ContactModal({
 }) {
   const [consent, setConsent] = useState(false);
   const [emailList, setEmailList] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    const form = e.currentTarget;
+    const data = {
+      firstName: (form.elements.namedItem("cf-first") as HTMLInputElement).value,
+      lastName: (form.elements.namedItem("cf-last") as HTMLInputElement).value,
+      email: (form.elements.namedItem("cf-email") as HTMLInputElement).value,
+      phone: (form.elements.namedItem("cf-phone") as HTMLInputElement).value,
+      industry: (form.elements.namedItem("cf-industry") as HTMLSelectElement).value,
+      source: (form.elements.namedItem("cf-source") as HTMLSelectElement).value,
+      message: (form.elements.namedItem("cf-message") as HTMLTextAreaElement).value,
+      emailList,
+    };
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    setSubmitting(false);
+    if (!res.ok) {
+      setError("Something went wrong. Please try again or email us directly.");
+      return;
+    }
+    onSent();
+  }
 
   return (
     <div className="overlay" onClick={onClose}>
@@ -53,12 +83,7 @@ export default function ContactModal({
           No matter the scale, we&apos;d love to bring your vision to life.
         </p>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSent();
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           {/* Name */}
           <div className="field-row">
             <div className="field">
@@ -148,12 +173,19 @@ export default function ContactModal({
             </label>
           </div>
 
+          {error && (
+            <p style={{ color: "var(--color-error, #e53e3e)", marginTop: 12, fontSize: 14 }}>
+              {error}
+            </p>
+          )}
+
           <button
             className="dv-btn dv-btn--primary"
             type="submit"
-            style={{ marginTop: 28, width: "100%", justifyContent: "center" }}
+            disabled={submitting}
+            style={{ marginTop: 28, width: "100%", justifyContent: "center", opacity: submitting ? 0.6 : 1 }}
           >
-            Send It <Icon name="arrow-right" size={15} />
+            {submitting ? "Sending…" : <>Send It <Icon name="arrow-right" size={15} /></>}
           </button>
         </form>
 

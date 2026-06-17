@@ -83,7 +83,7 @@ export default function Footer({
               <a href="#capabilities">Creative Development</a>
               <a href="#capabilities">Production</a>
               <a href="#capabilities">Post Production + VFX</a>
-              <a href="#capabilities">AI Integration</a>
+              <a href="#capabilities">AI-Enhanced Production</a>
             </div>
             <div className="footer__col">
               <h4>Connect</h4>

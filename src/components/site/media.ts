@@ -13,4 +13,4 @@ export const MAKER_SLIDES: Slide[] = [
 ];
 
 /* The full-bleed showreel backdrop (IMG.prime in the prototype). */
-export const SHOWREEL_BG = "/images/bts/dscf5574.jpg";
+export const SHOWREEL_BG = "/images/bts/showreel-cover.png";

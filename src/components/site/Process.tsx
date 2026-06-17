@@ -48,10 +48,6 @@ export default function Process({ theme }: { theme?: "dark" | "light" }) {
               middle and end.
             </h2>
           </div>
-          <p className="section-lead reveal" style={stagger(1)}>
-            Every project moves through the same four gates — visualized fast, developed deep, and
-            never handed off between vendors.
-          </p>
         </div>
         <div className="proc">
           {STEPS.map((s, i) => (

@@ -25,7 +25,7 @@ import type { Project } from "@/sanity/queries";
 const REEL_VIMEO =
   "https://player.vimeo.com/video/1191542036?h=aecf929b97&byline=0&title=0&portrait=0&color=968a79&dnt=1";
 
-const REEL_POSTER = "/images/generated/hero.jpg";
+const REEL_POSTER = "/images/bts/showreel-cover.png";
 
 const CATS = [
   "All",
@@ -126,16 +126,11 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
             <ReelEmbed />
             <div className="vault-head">
               <Eyebrow style={{ marginBottom: 22 }}>
-                Selected Work · The Vault
+                Selected Work
               </Eyebrow>
               <h1 className="vault-title" data-parallax="0.06">
                 The Vault.
               </h1>
-              <p className="vault-lead">
-                A collection of our commercial, branded, and VFX work across
-                sports, hospitality, healthcare, and entertainment — every frame
-                made in Tampa.
-              </p>
             </div>
             <div className="vault-filter">
               {CATS.map((c) => (

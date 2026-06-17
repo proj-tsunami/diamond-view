@@ -18,7 +18,6 @@ import Marquee from "@/components/site/Marquee";
 import Statement from "@/components/site/Statement";
 import Capabilities from "@/components/site/Capabilities";
 import StatsBand from "@/components/site/StatsBand";
-import Showreel from "@/components/site/Showreel";
 import Work from "@/components/site/Work";
 import Process from "@/components/site/Process";
 import Footer from "@/components/site/Footer";
@@ -118,7 +117,6 @@ export default function HomeClient({
           <Capabilities theme={th("capabilities")} />
         </div>
         <StatsBand />
-        <Showreel onReel={() => setReel(true)} />
         <Work projects={projects} theme={th("work")} />
         <Process theme={th("process")} />
         <Footer onContact={() => setContact(true)} />

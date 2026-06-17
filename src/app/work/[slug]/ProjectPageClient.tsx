@@ -159,16 +159,8 @@ function Overview({ p }: { p: Project }) {
           <Eyebrow>The Brief</Eyebrow>
         </div>
         <div className="pj-overview__body">
-          {p.summary ? (
+          {p.summary && (
             <p className="pj-overview__lead reveal">{p.summary}</p>
-          ) : (
-            <div className="pj-overview__placeholder reveal">
-              <span className="pj-ph__tag">Case write-up</span>
-              <p className="pj-ph__line">
-                Story coming soon &mdash; an overview for <em>{p.title}</em> will
-                appear here. Until then, the work leads.
-              </p>
-            </div>
           )}
           <div className="pj-overview__rule reveal" />
         </div>

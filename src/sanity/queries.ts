@@ -59,8 +59,8 @@ const PROJECT_FIELDS = `
   vimeoId,
   vimeoHash,
   "heroSrc": coalesce(heroVideo, heroImage.asset->url + "?auto=format&w=2400"),
-  "heroPoster": heroImage.asset->url + "?auto=format&w=2400",
-  "cardImage": cardImage.asset->url + "?auto=format&w=1600",
+  "heroPoster": heroImage.asset->url + "?auto=format&w=2400&h=1350&fit=crop&crop=center",
+  "cardImage": cardImage.asset->url + "?auto=format&w=1600&h=900&fit=crop&crop=center",
   gallery[] {
     "src": image.asset->url + "?auto=format&w=2000",
     alt,
