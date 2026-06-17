@@ -1,7 +1,7 @@
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import { client } from "./client";
 
-const builder = imageUrlBuilder(client);
+const builder = createImageUrlBuilder({ projectId: "mytelucw", dataset: "production" });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function imgUrl(source: any, w: number, h?: number): string {

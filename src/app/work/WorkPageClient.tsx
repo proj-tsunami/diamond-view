@@ -128,7 +128,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
               <Eyebrow style={{ marginBottom: 22 }}>
                 Selected Work
               </Eyebrow>
-              <h1 className="vault-title" data-parallax="0.06">
+              <h1 className="vault-title">
                 The Vault.
               </h1>
             </div>

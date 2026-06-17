@@ -1335,7 +1335,7 @@ section[data-theme], footer[data-theme] {
 .pj-slot { display: block; width: 100%; aspect-ratio: 4 / 3; border: 1px solid var(--av-10); border-radius: var(--radius); overflow: hidden; }
 .pj-slot--wide { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
 /* CMS stills (real gallery images) — same rhythm as the fillable slots */
-.pj-shot { margin: 0; position: relative; width: 100%; aspect-ratio: 4 / 3; border: 1px solid var(--av-10); border-radius: var(--radius); overflow: hidden; background: linear-gradient(150deg, #241f1b, #141312 72%); }
+.pj-shot { margin: 0; position: relative; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--av-10); border-radius: var(--radius); overflow: hidden; background: linear-gradient(150deg, #241f1b, #141312 72%); }
 .pj-shot--wide { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
 .pj-shot__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.9s var(--ease-standard); }
 .pj-shot:hover .pj-shot__img { transform: scale(1.03); }
