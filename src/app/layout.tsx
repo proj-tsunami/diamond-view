@@ -10,26 +10,28 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const ownersWide = localFont({
   src: [
-    { path: "../fonts/OwnersWide-Light.otf", weight: "300" },
-    { path: "../fonts/OwnersWide-Regular.otf", weight: "400" },
     { path: "../fonts/OwnersWide-Medium.otf", weight: "500" },
     { path: "../fonts/OwnersWide-Bold.otf", weight: "700" },
+    { path: "../fonts/OwnersWide-Regular.otf", weight: "400" },
+    { path: "../fonts/OwnersWide-Light.otf", weight: "300" },
     { path: "../fonts/OwnersWide-Black.otf", weight: "900" },
   ],
   variable: "--font-owners-wide",
   display: "swap",
+  preload: true,
 });
 
 const owners = localFont({
   src: [
-    { path: "../fonts/Owners-Light.otf", weight: "300" },
     { path: "../fonts/Owners-Regular.otf", weight: "400" },
     { path: "../fonts/Owners-Medium.otf", weight: "500" },
     { path: "../fonts/Owners-Bold.otf", weight: "700" },
+    { path: "../fonts/Owners-Light.otf", weight: "300" },
     { path: "../fonts/Owners-Black.otf", weight: "900" },
   ],
   variable: "--font-owners",
   display: "swap",
+  preload: true,
 });
 
 const SITE_URL = "https://diamondview.io";
