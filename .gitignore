@@ -57,3 +57,8 @@ next-env.d.ts
 
 # Claude design handoff packages (reference only; canonical DS lives in dv-brand/design-system)
 Claude_Design/
+
+# Dev session artifacts
+.superpowers/
+screenshots/
+scripts/screenshot-pages.js
