@@ -1,8 +1,7 @@
 "use client";
 
 /* Start a Project form modal. Fields: name, contact, industry, referral source,
-   message, consent + email list opt-in, and a studio contact info strip.
-   TODO: wire onSent() to a real backend (Formspree / Resend / API route) before launch. */
+   message, consent + email list opt-in, and a studio contact info strip. */
 
 import { useState } from "react";
 import { Icon, Eyebrow } from "@/components/site/primitives";

@@ -1181,14 +1181,14 @@ section[data-theme], footer[data-theme] {
 .field select option { background: var(--charcoal-mid); }
 /* Checkbox fields */
 .field--check { margin-top: 14px; }
-.field--check label { display: block; font-family: inherit; font-size: inherit; letter-spacing: inherit; text-transform: none; color: inherit; margin-bottom: 0; }
-.check-label { display: flex; align-items: flex-start; gap: 16px; cursor: pointer; font-family: var(--font-body); font-size: 12px; font-weight: 400; letter-spacing: 0.03em; line-height: 1.6; color: var(--avalanche-deep); }
+.field--check label:not(.check-label) { display: block; font-family: inherit; font-size: inherit; letter-spacing: inherit; text-transform: none; color: inherit; margin-bottom: 0; }
+.field--check .check-label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-family: var(--font-body); font-size: 14px; font-weight: 400; letter-spacing: 0.01em; line-height: 1.55; color: var(--avalanche-deep); }
 .check-label input[type="checkbox"] { flex-shrink: 0; width: 15px; height: 15px; margin-top: 2px; accent-color: var(--accent); cursor: pointer; }
 .check-label a { color: var(--accent-light); text-decoration: underline; }
 .check-label a:hover { color: var(--avalanche); }
 /* Studio contact strip at bottom of modal */
-.modal__contact-strip { margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--av-10); display: flex; flex-direction: column; gap: 9px; }
-.modal__contact-item { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 0.04em; color: var(--avalanche-deep); }
+.modal__contact-strip { margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--av-10); display: flex; flex-direction: column; gap: 5px; }
+.modal__contact-item { display: flex; align-items: center; gap: 10px; font-size: 12px; line-height: 1.3; letter-spacing: 0.04em; color: var(--avalanche-deep); }
 .modal__contact-item a { color: var(--avalanche-deep); text-decoration: none; }
 .modal__contact-item a:hover { color: var(--accent-light); }
 .modal__contact-label { font-family: var(--font-display); font-stretch: 125%; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--av-40); min-width: 42px; }
