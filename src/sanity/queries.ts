@@ -140,8 +140,7 @@ export async function getAdjacentProjects(slug: string) {
     {},
     { tags: ["project"] },
   );
-  const index = slugs.indexOf(slug);
-  if (index === -1) return { prev: null, next: null };
+  const index = slugs.indexOf(slug) === -1 ? 0 : slugs.indexOf(slug);
   const prevSlug = slugs[(index - 1 + slugs.length) % slugs.length];
   const nextSlug = slugs[(index + 1) % slugs.length];
   const [prev, next] = await Promise.all([

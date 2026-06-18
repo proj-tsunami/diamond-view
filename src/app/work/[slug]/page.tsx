@@ -52,7 +52,7 @@ export default async function ProjectPage({
 }) {
   const { slug } = await params;
   const project = await getProjectBySlug(slug);
-  if (!project) notFound();
+  if (!project) return notFound();
   const { prev, next } = await getAdjacentProjects(slug);
   return <ProjectPageWrapper project={project} prev={prev} next={next} />;
 }
