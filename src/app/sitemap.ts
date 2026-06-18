@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getProjectSlugs } from "@/sanity/queries";
 
-const SITE_URL = "https://diamond-view-site.vercel.app";
+const SITE_URL = "https://diamondview.io";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const slugs = await getProjectSlugs();
@@ -11,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
     { url: `${SITE_URL}/work`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/team`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   const projectRoutes: MetadataRoute.Sitemap = slugs

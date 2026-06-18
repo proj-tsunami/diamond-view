@@ -22,7 +22,7 @@ export async function generateMetadata({
   const title = project.title;
   const description = [project.tagline, project.summary].filter(Boolean).join(" — ");
   const ogImage = project.heroPoster || project.cardImage;
-  const url = `/work/${slug}`;
+  const url = `https://diamondview.io/work/${slug}`;
 
   return {
     title,

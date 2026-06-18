@@ -136,11 +136,12 @@ export async function getProjectSlugs(): Promise<string[]> {
 
 export async function getAdjacentProjects(slug: string) {
   const slugs = await sanityFetch<string[]>(
-    `*[_type == "project"] | order(order asc).slug.current`,
+    `*[_type == "project"] | order(order asc) { "slug": slug.current }.slug`,
     {},
     { tags: ["project"] },
   );
   const index = slugs.indexOf(slug);
+  if (index === -1) return { prev: null, next: null };
   const prevSlug = slugs[(index - 1 + slugs.length) % slugs.length];
   const nextSlug = slugs[(index + 1) % slugs.length];
   const [prev, next] = await Promise.all([

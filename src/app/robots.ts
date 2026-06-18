@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://diamond-view-site.vercel.app";
+const SITE_URL = "https://diamondview.io";
 
 export default function robots(): MetadataRoute.Robots {
   return {

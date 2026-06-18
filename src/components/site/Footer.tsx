@@ -73,17 +73,17 @@ export default function Footer({
             <div className="footer__col">
               <h4>Studio</h4>
               <Link href="/work">Work</Link>
-              <a href="#capabilities">Capabilities</a>
-              <a href="#process">Process</a>
+              <a href="/#capabilities">Capabilities</a>
+              <a href="/#process">Process</a>
               <Link href="/team">The Makers</Link>
               <a href="mailto:careers@diamondviewstudios.com">Careers</a>
             </div>
             <div className="footer__col">
               <h4>Capabilities</h4>
-              <a href="#capabilities">Creative Development</a>
-              <a href="#capabilities">Production</a>
-              <a href="#capabilities">Post Production + VFX</a>
-              <a href="#capabilities">AI-Enhanced Production</a>
+              <a href="/#capabilities">Creative Development</a>
+              <a href="/#capabilities">Production</a>
+              <a href="/#capabilities">Post Production + VFX</a>
+              <a href="/#capabilities">AI-Enhanced Production</a>
             </div>
             <div className="footer__col">
               <h4>Connect</h4>
