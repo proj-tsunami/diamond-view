@@ -1335,7 +1335,7 @@ section[data-theme], footer[data-theme] {
 .pj-gallery__head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 28px; flex-wrap: wrap; }
 .pj-gallery__hint { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--av-40); }
 .pj-gallery__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-.pj-slot { display: block; width: 100%; aspect-ratio: 4 / 3; border: 1px solid var(--av-10); border-radius: var(--radius); overflow: hidden; }
+.pj-slot { display: block; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--av-10); border-radius: var(--radius); overflow: hidden; }
 .pj-slot--wide { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
 /* CMS stills (real gallery images) — same rhythm as the fillable slots */
 .pj-shot { margin: 0; position: relative; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--av-10); border-radius: var(--radius); overflow: hidden; background: linear-gradient(150deg, #241f1b, #141312 72%); }

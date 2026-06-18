@@ -4,7 +4,7 @@ import WorkPageWrapper from "./WorkPageWrapper";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "The Vault — Diamond View",
+  title: "The Vault",
   description: "The Vault — selected commercial, branded, and VFX work from Diamond View across sports, hospitality, healthcare, and entertainment.",
 };
 

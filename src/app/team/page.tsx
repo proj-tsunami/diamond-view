@@ -1,8 +1,10 @@
 import TeamPageWrapper from "./TeamPageWrapper";
 import { getTeamMembers } from "@/sanity/queries";
 
+export const revalidate = 300;
+
 export const metadata = {
-  title: "The Makers — Diamond View",
+  title: "The Makers",
   description:
     "A collective of directors, designers, producers, artists, and technologists behind Diamond View.",
 };

@@ -32,7 +32,7 @@ function ClientLogo({ c }: { c: (typeof CLIENTS)[number] }) {
       <img
         className="trust__mark"
         src={c.src}
-        alt={c.name}
+        alt=""
         loading="lazy"
         style={{ filter: "url(#dv-duotone)" } as CSSProperties}
       />

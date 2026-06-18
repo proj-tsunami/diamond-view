@@ -4,8 +4,20 @@ import { NextRequest, NextResponse } from "next/server";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
-  const { firstName, lastName, email, phone, industry, source, message, emailList } =
-    await req.json();
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+  const firstName = body.firstName as string;
+  const lastName = body.lastName as string;
+  const email = body.email as string;
+  const phone = body.phone as string | undefined;
+  const industry = body.industry as string | undefined;
+  const source = body.source as string | undefined;
+  const message = body.message as string | undefined;
+  const emailList = body.emailList as boolean | undefined;
 
   const { error } = await resend.emails.send({
     from: "Diamond View Site <noreply@diamondviewstudios.com>",
