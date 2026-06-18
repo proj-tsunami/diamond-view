@@ -88,14 +88,14 @@ export default function Footer({
             <div className="footer__col">
               <h4>Connect</h4>
               <a
-                href="https://www.instagram.com/diamondview/"
+                href="https://www.instagram.com/diamondview"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Instagram
               </a>
               <a
-                href="https://www.linkedin.com/company/diamond-view-studios/"
+                href="https://www.linkedin.com/company/diamond-view-studios/posts/?feedView=all"
                 target="_blank"
                 rel="noopener noreferrer"
               >
