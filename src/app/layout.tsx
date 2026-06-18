@@ -32,7 +32,7 @@ const owners = localFont({
   display: "swap",
 });
 
-const SITE_URL = "https://diamond-view-site.vercel.app";
+const SITE_URL = "https://diamondview.io";
 const SITE_TITLE = "Diamond View — Creative Production Studio";
 const SITE_DESCRIPTION =
   "Story-driven creative production combining concept development, live-action production, visual effects, virtual production, and AI-enhanced workflows.";

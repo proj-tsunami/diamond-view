@@ -347,6 +347,7 @@ section[data-theme], footer[data-theme] {
 .archive-btn svg { transition: transform var(--dur-standard) var(--ease-standard); }
 .archive-btn:hover svg { transform: translateX(4px); }
 @media (prefers-reduced-motion: reduce) { .pin { height: auto; } .pin__sticky { position: static; height: auto; } }
+@media (max-width: 860px) { .pin { height: auto; } .pin__sticky { position: static; height: auto; overflow: visible; } }
 
 /* ============================================================================
    HERO — reel (sticky-recede: pins + scales back as the page sheet rises)
