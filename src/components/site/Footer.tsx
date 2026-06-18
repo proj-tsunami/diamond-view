@@ -101,7 +101,7 @@ export default function Footer({
               >
                 LinkedIn
               </a>
-              <a href="https://vimeo.com/diamondview" target="_blank" rel="noopener noreferrer">
+              <a href="https://vimeo.com/diamondviewstudios" target="_blank" rel="noopener noreferrer">
                 Vimeo
               </a>
               <a href="mailto:info@diamondviewstudios.com">info@diamondviewstudios.com</a>
