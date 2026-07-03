@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
+      { hostname: "cdn.sanity.io" },
       { hostname: "images.unsplash.com" },
     ],
   },

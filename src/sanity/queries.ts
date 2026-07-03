@@ -10,6 +10,18 @@ function imgUrl(source: any, w: number, h?: number): string {
   return b.url();
 }
 
+const DEMO_REEL_VIMEO_DEFAULT =
+  "https://player.vimeo.com/video/1191542036?h=aecf929b97&byline=0&title=0&portrait=0&color=968a79&dnt=1";
+
+export function buildReelVimeoUrl(
+  id: string | null,
+  hash: string | null,
+): string {
+  if (!id) return DEMO_REEL_VIMEO_DEFAULT;
+  const h = hash ? `&h=${hash}` : "";
+  return `https://player.vimeo.com/video/${id}?${h}&byline=0&title=0&portrait=0&color=968a79&dnt=1`;
+}
+
 export type GalleryItem = {
   src: string;
   alt: string;
@@ -32,11 +44,6 @@ export type Project = {
   vimeoId?: string;
   vimeoHash?: string;
   gallery: GalleryItem[];
-  sequence?: {
-    path: string;
-    desktopFrames: number;
-    mobileFrames: number;
-  };
 };
 
 type FetchOpts = { tags: string[] };
@@ -78,7 +85,6 @@ function mapProject(raw: RawProject): Project {
     heroType: raw.heroType,
     vimeoId: raw.vimeoId,
     vimeoHash: raw.vimeoHash,
-    sequence: raw.sequence,
     gallery: raw.gallery,
     cardImage: raw.cardImageRef ? imgUrl(raw.cardImageRef, 1600, 900) : "",
     heroPoster: raw.heroImageRef ? imgUrl(raw.heroImageRef, 2400, 1350) : "",
@@ -135,19 +141,16 @@ export async function getProjectSlugs(): Promise<string[]> {
 }
 
 export async function getAdjacentProjects(slug: string) {
-  const slugs = await sanityFetch<string[]>(
-    `*[_type == "project"] | order(order asc) { "slug": slug.current }.slug`,
+  const all = await sanityFetch<RawProject[]>(
+    `*[_type == "project"] | order(order asc) { ${PROJECT_FIELDS} }`,
     {},
     { tags: ["project"] },
   );
-  const index = slugs.indexOf(slug) === -1 ? 0 : slugs.indexOf(slug);
-  const prevSlug = slugs[(index - 1 + slugs.length) % slugs.length];
-  const nextSlug = slugs[(index + 1) % slugs.length];
-  const [prev, next] = await Promise.all([
-    getProjectBySlug(prevSlug),
-    getProjectBySlug(nextSlug),
-  ]);
-  return { prev: prev!, next: next! };
+  const i = all.findIndex((p) => p.slug === slug);
+  const idx = i === -1 ? 0 : i;
+  const prev = all[(idx - 1 + all.length) % all.length];
+  const next = all[(idx + 1) % all.length];
+  return { prev: mapProject(prev), next: mapProject(next) };
 }
 
 export type TeamMember = {
@@ -173,18 +176,22 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 export type SiteSettings = {
   demoReelUrl: string | null;
   demoReelPoster: string | null;
+  demoReelVimeoId: string | null;
+  demoReelVimeoHash: string | null;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   const result = await sanityFetch<SiteSettings | null>(
     `*[_id == "siteSettings"][0] {
       "demoReelUrl": demoReel.asset->url,
-      "demoReelPoster": demoReelPoster.asset->url + "?auto=format&w=2400"
+      "demoReelPoster": demoReelPoster.asset->url + "?auto=format&w=2400",
+      demoReelVimeoId,
+      demoReelVimeoHash
     }`,
     {},
     { tags: ["siteSettings"] },
   );
-  return result ?? { demoReelUrl: null, demoReelPoster: null };
+  return result ?? { demoReelUrl: null, demoReelPoster: null, demoReelVimeoId: null, demoReelVimeoHash: null };
 }
 
 export type Service = {

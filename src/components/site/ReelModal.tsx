@@ -5,12 +5,21 @@
 
 import { useEffect } from "react";
 import { Icon } from "@/components/site/primitives";
+import { buildReelVimeoUrl } from "@/sanity/queries";
 
-// Diamond View — 2026 Demo Reel (Vimeo).
-const REEL_VIMEO =
-  "https://player.vimeo.com/video/1191542036?h=aecf929b97&autoplay=1&byline=0&title=0&portrait=0&color=968a79&dnt=1";
-
-export default function ReelModal({ onClose }: { onClose: () => void }) {
+export default function ReelModal({
+  onClose,
+  vimeoId,
+  vimeoHash,
+}: {
+  onClose: () => void;
+  vimeoId?: string | null;
+  vimeoHash?: string | null;
+}) {
+  const src = buildReelVimeoUrl(vimeoId ?? null, vimeoHash ?? null).replace(
+    "?",
+    "?autoplay=1&",
+  );
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -25,7 +34,7 @@ export default function ReelModal({ onClose }: { onClose: () => void }) {
         <div className="reel-lb__plate" />
         <iframe
           className="reel-lb__iframe"
-          src={REEL_VIMEO}
+          src={src}
           title="Diamond View — 2026 Demo Reel"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen

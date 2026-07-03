@@ -19,11 +19,8 @@ import {
   useScrollEngine,
 } from "@/components/site/primitives";
 import Footer from "@/components/site/Footer";
-import type { Project } from "@/sanity/queries";
-
-// The work-page reel — DV Demo Reel 2026, hosted on Vimeo (matches the repo).
-const REEL_VIMEO =
-  "https://player.vimeo.com/video/1191542036?h=aecf929b97&byline=0&title=0&portrait=0&color=968a79&dnt=1";
+import type { Project, SiteSettings } from "@/sanity/queries";
+import { buildReelVimeoUrl } from "@/sanity/queries";
 
 const REEL_POSTER = "/images/bts/showreel-cover.png";
 
@@ -36,7 +33,7 @@ const CATS = [
   "Short Film",
 ] as const;
 
-function ReelEmbed() {
+function ReelEmbed({ vimeoUrl }: { vimeoUrl: string }) {
   const [play, setPlay] = useState(false);
   return (
     <div className="vault-reel">
@@ -44,7 +41,7 @@ function ReelEmbed() {
         {play ? (
           <iframe
             className="vault-reel__iframe"
-            src={REEL_VIMEO + "&autoplay=1"}
+            src={vimeoUrl + "&autoplay=1"}
             title="Diamond View — Demo Reel 2026"
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
             allowFullScreen
@@ -73,7 +70,8 @@ function ReelEmbed() {
 }
 
 function GCard({ p, i }: { p: Project; i: number }) {
-  const [ok, setOk] = useState(Boolean(p.cardImage));
+  const imgSrc = p.cardImage || p.heroPoster;
+  const [ok, setOk] = useState(Boolean(imgSrc));
   const ref = useReveal<HTMLAnchorElement>();
   return (
     <Link
@@ -89,7 +87,7 @@ function GCard({ p, i }: { p: Project; i: number }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             className="gcard__img"
-            src={p.cardImage}
+            src={imgSrc}
             alt={p.title}
             loading="lazy"
             onError={() => setOk(false)}
@@ -109,10 +107,17 @@ function GCard({ p, i }: { p: Project; i: number }) {
   );
 }
 
-export default function WorkPageClient({ projects }: { projects: Project[] }) {
+export default function WorkPageClient({
+  projects,
+  settings,
+}: {
+  projects: Project[];
+  settings: SiteSettings;
+}) {
   const [cat, setCat] = useState<string>("All");
   useScrollEngine();
 
+  const vimeoUrl = buildReelVimeoUrl(settings.demoReelVimeoId, settings.demoReelVimeoHash);
   const shown = projects.filter((w) => cat === "All" || w.category === cat);
 
   return (
@@ -123,7 +128,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
         <section className="vault-hero">
           <Drift size={440} speed={0.16} top={120} right={-130} opacity={0.55} />
           <div className="wrap">
-            <ReelEmbed />
+            <ReelEmbed vimeoUrl={vimeoUrl} />
             <div className="vault-head">
               <Eyebrow style={{ marginBottom: 22 }}>
                 Selected Work

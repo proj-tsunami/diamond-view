@@ -1,4 +1,4 @@
-import { getProjects } from "@/sanity/queries";
+import { getProjects, getSiteSettings } from "@/sanity/queries";
 import WorkPageWrapper from "./WorkPageWrapper";
 
 export const revalidate = 60;
@@ -9,6 +9,6 @@ export const metadata = {
 };
 
 export default async function WorkIndexPage() {
-  const projects = await getProjects();
-  return <WorkPageWrapper projects={projects} />;
+  const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()]);
+  return <WorkPageWrapper projects={projects} settings={settings} />;
 }

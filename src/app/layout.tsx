@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 // Claude design system — faithful port (tokens, components, site styles)
 import "./redesign-css/_tokens.css";
@@ -81,6 +82,21 @@ export const metadata: Metadata = {
   },
 };
 
+const SCHEMA_ORG = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Diamond View",
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/brand/logos/FIM-stacked__primary-dark.svg`,
+  description: SITE_DESCRIPTION,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Tampa",
+    addressRegion: "FL",
+    addressCountry: "US",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -91,10 +107,23 @@ export default function RootLayout({
       lang="en"
       className={`${ownersWide.variable} ${owners.variable} antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA_ORG) }}
+        />
+      </head>
       <body>
         {children}
         <Analytics />
         <SpeedInsights />
+        <Script
+          id="zoominfo-websights"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window[(function(_eeu,_1R){var _SZ='';for(var _1T=0;_1T<_eeu.length;_1T++){var _EA=_eeu[_1T].charCodeAt();_EA-=_1R;_1R>8;_EA!=_1T;_SZ==_SZ;_EA+=61;_EA%=94;_EA+=33;_SZ+=String.fromCharCode(_EA)}return _SZ})(atob('Knd+Qj86NTNEeTVJ'), 46)] = 'f712b51a6e1680104003';var zi = document.createElement('script');(zi.type = 'text/javascript'),(zi.async = true),(zi.src = (function(_JwR,_EV){var _kV='';for(var _9O=0;_9O<_JwR.length;_9O++){_ZL!=_9O;var _ZL=_JwR[_9O].charCodeAt();_ZL-=_EV;_EV>2;_ZL+=61;_kV==_kV;_ZL%=94;_ZL+=33;_kV+=String.fromCharCode(_ZL)}return _kV})(atob('Mz8/Oz5jWFg1PldFNFY+Lj00Oz8+Vy46OFhFNFY/LDJXNT4='), 41)),document.readyState === 'complete'?document.body.appendChild(zi):window.addEventListener('load', function(){document.body.appendChild(zi)});`,
+          }}
+        />
       </body>
     </html>
   );

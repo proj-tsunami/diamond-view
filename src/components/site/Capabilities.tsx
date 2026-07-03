@@ -33,7 +33,7 @@ const SERVICES: Service[] = [
     title: "Post Production + VFX",
     description:
       "Editorial, music, sound design, motion graphics, compositing, set extensions and VFX. Bringing the final vision to life.",
-    tags: ["Compositing", "VFX", "Motion", "Editorial", "Finishing"],
+    tags: ["Compositing", "VFX", "Motion", "Editorial", "Color Grading", "Finishing"],
   },
   {
     number: "04",

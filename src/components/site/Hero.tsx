@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const FIM_MARK = "/images/brand/logos/FIM-stacked__primary-dark.svg";
-const FALLBACK_REEL = "/video/demo-reel.mp4";
+const FALLBACK_REEL = "/video/hero-loop.mp4";
 
 export default function Hero({
   active = true,

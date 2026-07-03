@@ -6,8 +6,13 @@ import { notFound } from "next/navigation";
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const slugs = await getProjectSlugs();
-  return slugs.map((slug) => ({ slug }));
+  try {
+    const slugs = await getProjectSlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch {
+    // Sanity quota exceeded or unavailable — fall back to SSR
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -51,8 +56,10 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  const [project, { prev, next }] = await Promise.all([
+    getProjectBySlug(slug),
+    getAdjacentProjects(slug),
+  ]);
   if (!project) return notFound();
-  const { prev, next } = await getAdjacentProjects(slug);
   return <ProjectPageWrapper project={project} prev={prev} next={next} />;
 }

@@ -21,6 +21,19 @@ export const siteSettings = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: "demoReelVimeoId",
+      title: "Demo reel Vimeo ID",
+      description:
+        "Numeric Vimeo ID for the demo reel lightbox (Work page + home Reel modal). E.g. 1191542036",
+      type: "string",
+    }),
+    defineField({
+      name: "demoReelVimeoHash",
+      title: "Demo reel Vimeo hash",
+      description: "The h= token from the Vimeo embed URL (required for unlisted videos).",
+      type: "string",
+    }),
   ],
   preview: {
     prepare: () => ({ title: "Site Settings" }),
